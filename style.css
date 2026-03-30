@@ -1,6 +1,5 @@
 /* ============================================================
-   REVISED style.css — Darkest Dungeon Estate Optimizer
-   Integrated for: Dungeon.html / Master Guide Logic
+   FINAL style.css — Darkest Dungeon Estate Optimizer
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
@@ -18,6 +17,8 @@
 }
 
 /* ── APP WRAPPER ─────────────────────────────────────────── */
+body { background: #000; margin: 0; }
+
 .app {
   max-width: 1200px;
   margin: 0 auto;
@@ -25,18 +26,39 @@
   background: var(--bg);
   color: var(--text);
   font-family: 'Crimson Pro', serif;
+  min-height: 100vh;
 }
 
-/* ── NAV TABS (Matched to id="mainNav") ──────────────────── */
-#mainNav.nav-tabs {
+header {
+  text-align: center;
+  margin-bottom: 30px;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 20px;
+}
+
+h1 {
+  font-family: 'Cinzel Decorative', serif;
+  color: var(--gold);
+  margin: 0;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+/* ── NAV TABS ────────────────────────────────────────────── */
+.nav-tabs {
   display: flex;
   overflow-x: auto;
   gap: 8px;
   border-bottom: 1px solid var(--border);
   padding-bottom: 10px;
+  scrollbar-width: thin;
 }
 
-/* Targeted to your button-based tab system */
 .nav-tab {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -46,9 +68,12 @@
   font-family: 'Cinzel Decorative', serif;
   font-size: 0.7rem;
   text-transform: uppercase;
+  white-space: nowrap;
+  transition: 0.2s;
 }
 
-/* Logic for the .active class toggled by your script */
+.nav-tab:hover { border-color: var(--gold-dim); color: var(--text); }
+
 .nav-tab.active {
   border-color: var(--gold);
   color: var(--gold);
@@ -56,57 +81,153 @@
 }
 
 /* ── TAB PANES ────────────────────────────────────────────── */
-.tab-pane { 
-  display: none; 
-  padding-top: 20px; 
+.tab-pane { display: none; padding-top: 20px; }
+.tab-pane.active { display: block; animation: fadeIn 0.3s ease; }
+
+/* ── REGION STYLING ──────────────────────────────────────── */
+.region-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
 }
 
-.tab-pane.active { 
-  display: block; 
-  animation: fadeIn 0.3s ease; 
+.section-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.5rem;
+  color: var(--gold);
 }
 
-/* ── ROSTER GRID (id="tab-roster") ───────────────────────── */
-.roster-grid {
+.team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
-/* ── HERO CARDS ───────────────────────────────────────────── */
-.hero-card, .roster-card {
+/* ── HERO CARDS & SKILLS ─────────────────────────────────── */
+.hero-card {
   background: var(--panel);
   border: 1px solid #2a2020;
   padding: 15px;
   position: relative;
+  transition: 0.2s;
 }
 
 .hero-card:hover { border-color: var(--gold-dim); }
 
-/* Stress Bar Logic */
-.stress-bar {
-  height: 4px;
-  background: #222;
-  margin-top: 8px;
+.hero-name {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  border-bottom: 1px solid #222;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
 }
 
-.stress-fill {
-  height: 100%;
-  background: var(--red-dim);
-  transition: width 0.4s ease-in-out;
-}
-
-/* ── ESTATE TRACKER (id="tab-estate") ────────────────────── */
-.estate-grid {
+.skills-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.skill-item {
+  font-size: 0.8rem;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 4px;
+  border-left: 2px solid var(--gold-dim);
+}
+
+.swap-btn {
+  width: 100%;
+  background: var(--red-dim);
+  border: 1px solid var(--border);
+  color: #fff;
+  padding: 6px;
+  cursor: pointer;
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+}
+
+.swap-btn:hover { background: var(--red); }
+
+/* ── BADGES ──────────────────────────────────────────────── */
+.focus-badges { display: flex; gap: 8px; }
+.badge {
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.badge-holy    { background: #e2d08e; color: #000; }
+.badge-blight  { background: #4e6e35; color: #fff; }
+.badge-bleed   { background: #8a1a1a; color: #fff; }
+.badge-mark    { background: #c5a059; color: #000; }
+.badge-pierce  { background: #4b6b8a; color: #fff; }
+.badge-eldritch { background: #6b4b8a; color: #fff; }
+
+/* ── BOSS & DD CARDS ─────────────────────────────────────── */
+.boss-card, .dd-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 15px;
+  margin-bottom: 15px;
+  border-left: 4px solid var(--red-dim);
+}
+
+.boss-card.special { border-left-color: var(--gold); }
+
+.boss-card h3, .dd-card h3 {
+  margin: 0 0 10px 0;
+  font-family: 'Cinzel Decorative', serif;
+  color: var(--gold);
+}
+
+/* ── PROVISIONS ──────────────────────────────────────────── */
+.prov-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+.prov-tab {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 8px 20px;
+  cursor: pointer;
+  font-family: 'Cinzel Decorative', serif;
+}
+.prov-tab.active { background: var(--gold-dim); color: #000; }
+
+.prov-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
 }
 
-.building-card {
+.prov-card {
+  background: var(--panel);
   border: 1px solid var(--border);
   padding: 15px;
-  background: rgba(197, 160, 89, 0.02);
+}
+
+.prov-card ul { list-style: none; padding: 0; margin: 0; }
+.prov-card li { padding: 5px 0; border-bottom: 1px solid #222; font-size: 0.9rem; }
+
+/* ── TIPS & QUIRKS ───────────────────────────────────────── */
+.tips-box {
+  background: rgba(197, 160, 89, 0.05);
+  border: 1px dashed var(--gold-dim);
+  padding: 15px;
+  margin-top: 20px;
+}
+
+.quirk-item {
+  background: var(--panel);
+  padding: 10px;
+  margin-bottom: 5px;
+  border: 1px solid #222;
+  font-size: 0.9rem;
 }
 
 /* ── ANIMATIONS ───────────────────────────────────────────── */
@@ -117,7 +238,6 @@
 
 /* ── RESPONSIVE ───────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .roster-grid, .estate-grid {
-    grid-template-columns: 1fr;
-  }
+  .team-grid, .prov-grid { grid-template-columns: 1fr; }
+  .nav-tabs { padding-bottom: 15px; }
 }
