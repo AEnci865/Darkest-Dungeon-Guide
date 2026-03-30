@@ -1,218 +1,215 @@
-// Darkest Dungeon Estate Guide - Game Data
-// REGIONS, BOSSES, DD_RUNS, PROVISIONS, CLASSES, POS_QUIRKS, NEG_QUIRKS, BUILDINGS
+// -------------------- DATA.JS - FULL CAKE --------------------
 
+// -------------------- HEROES & TEAMS --------------------
 const REGIONS = {
   ruins: {
     teams: [
       {
-        label: "Team A - High Damage",
-        4: { main: "Arbalest", mS: ["Sniper Shot", "Rallying Flare", "Blindfire", "Bola"], sub: "Highwayman", sS: ["Point Blank Shot", "Pistol Shot", "Tracking Shot", "Open Vein"] },
-        3: { main: "Plague Doctor", mS: ["Noxious Blast", "Blinding Gas", "Battlefield Medicine", "Disorienting Blast"], sub: "Occultist", sS: ["Wyrd Reconstruction", "Weakening Curse", "Hands from Below", "Sacrificial Stab"] },
-        2: { main: "Hellion", mS: ["Wicked Hack", "Iron Swan", "If It Bleeds", "YAWP!"], sub: "Bounty Hunter", sS: ["Collect Bounty", "Mark for Death", "Flashbang", "Finish Him"] },
-        1: { main: "Crusader", mS: ["Smite", "Holy Lance", "Stunning Blow", "Inspiring Cry"], sub: "Flagellant", sS: ["Punish", "Rain of Sorrows", "Redeem", "Reclaim"] }
+        label: "Main Ruins Team",
+        description: "Balanced team for general Ruins encounters.",
+        heroes: [
+          { name: "Arbalest", skills: ["Sniper Shot","Rallying Flare","Blindfire","Bola"] },
+          { name: "Vestal", skills: ["Divine Grace","Judgment","Dazzling Light","Dazzling Light"] },
+          { name: "Highwayman", skills: ["Open Vein","Point Blank Shot","Duelist's Advance","Pistol Shot"] },
+          { name: "Plague Doctor", skills: ["Noxious Blast","Plague Grenade","Battlefield Medicine","Disorienting Blast"] }
+        ]
       },
       {
-        label: "Team B - Balanced Sustain",
-        4: { main: "Vestal", mS: ["Judgment", "Dazzling Light", "Divine Grace", "Divine Comfort"], sub: "Occultist", sS: ["Wyrd Reconstruction", "Weakening Curse", "Hands from Below", "Sacrificial Stab"] },
-        3: { main: "Occultist", mS: ["Wyrd Reconstruction", "Weakening Curse", "Hands from Below", "Sacrificial Stab"], sub: "Jester", sS: ["Battle Ballad", "Inspiring Tune", "Slice Off", "Harvest"] },
-        2: { main: "Crusader", mS: ["Smite", "Holy Lance", "Stunning Blow", "Inspiring Cry"], sub: "Leper", sS: ["Chop", "Hew", "Purge", "Withstand"] },
-        1: { main: "Man-at-Arms", mS: ["Crush", "Rampart", "Defender", "Retribution"], sub: "Leper", sS: ["Chop", "Hew", "Purge", "Withstand"] }
+        label: "Substitute Ruins Team",
+        description: "Alternative team if primary is unavailable.",
+        heroes: [
+          { name: "Leper", skills: ["Chop","Hack","Withstand","Solemnity"] },
+          { name: "Occultist", skills: ["Wyrd Reconstruction","Weakening Curse","Sacrificial Stab","Abyssal Arts"] },
+          { name: "Hellion", skills: ["Iron Swan","Barbaric Yell","If It Bleeds","Bleed Out"] },
+          { name: "Vestal", skills: ["Divine Grace","Judgment","Dazzling Light","Dazzling Light"] }
+        ]
       },
       {
-        label: "Team C - Antiquarian Loot",
-        4: { main: "Vestal", mS: ["Judgment", "Dazzling Light", "Divine Grace", "Divine Comfort"], sub: "Occultist", sS: ["Wyrd Reconstruction", "Weakening Curse", "Hands from Below", "Sacrificial Stab"] },
-        3: { main: "Highwayman", mS: ["Duelist’s Advance", "Point Blank Shot", "Pistol Shot", "Tracking Shot"], sub: "Houndmaster", sS: ["Hound’s Rush", "Target Whistle", "Guard Dog", "Lick Wounds"] },
-        2: { main: "Antiquarian", mS: ["Flashpowder", "Protect Me!", "Nervous Stab", "Invigorating Vapours"], sub: "Plague Doctor", sS: ["Noxious Blast", "Blinding Gas", "Battlefield Medicine", "Disorienting Blast"] },
-        1: { main: "Man-at-Arms", mS: ["Crush", "Rampart", "Defender", "Bolster"], sub: "Crusader", sS: ["Smite", "Holy Lance", "Stunning Blow", "Inspiring Cry"] }
+        label: "Loot Ruins Team",
+        description: "Optimized for treasure runs, includes Antiquarian.",
+        heroes: [
+          { name: "Antiquarian", skills: ["Protect Me","Collectibles","Gold Rush","Archaic Knowledge"] },
+          { name: "Arbalest", skills: ["Sniper Shot","Rallying Flare","Blindfire","Bola"] },
+          { name: "Highwayman", skills: ["Open Vein","Point Blank Shot","Duelist's Advance","Pistol Shot"] },
+          { name: "Plague Doctor", skills: ["Noxious Blast","Plague Grenade","Battlefield Medicine","Disorienting Blast"] }
+        ]
       }
     ]
   },
   weald: {
     teams: [
       {
-        label: "Team A - Bleed and Mark",
-        4: { main: "Plague Doctor", mS: ["Noxious Blast", "Blinding Gas", "Battlefield Medicine", "Disorienting Blast"], sub: "Arbalest", sS: ["Sniper Shot", "Rallying Flare", "Blindfire", "Bola"] },
-        3: { main: "Grave Robber", mS: ["Thrown Dagger", "Pick to the Face", "Shadow Fade", "Lunge"], sub: "Highwayman", sS: ["Duelist’s Advance", "Point Blank Shot", "Pistol Shot", "Tracking Shot"] },
-        2: { main: "Houndmaster", mS: ["Hound’s Rush", "Target Whistle", "Cry Havoc", "Lick Wounds"], sub: "Occultist", sS: ["Wyrd Reconstruction", "Weakening Curse", "Pull of the Abyss", "Sacrificial Stab"] },
-        1: { main: "Bounty Hunter", mS: ["Collect Bounty", "Mark for Death", "Flashbang", "Finish Him"], sub: "Hellion", sS: ["Wicked Hack", "Iron Swan", "If It Bleeds", "YAWP!"] }
+        label: "Main Weald Team",
+        description: "Balanced Weald clearing team.",
+        heroes: [
+          { name: "Leper", skills: ["Chop","Hack","Withstand","Solemnity"] },
+          { name: "Occultist", skills: ["Wyrd Reconstruction","Weakening Curse","Sacrificial Stab","Abyssal Arts"] },
+          { name: "Hellion", skills: ["Iron Swan","Barbaric Yell","If It Bleeds","Bleed Out"] },
+          { name: "Jester", skills: ["Inspiring Tune","Battle Ballad","Dirge","Solo"] }
+        ]
       },
       {
-        label: "Team B - Control and Ranged",
-        4: { main: "Jester", mS: ["Battle Ballad", "Inspiring Tune", "Slice Off", "Harvest"], sub: "Vestal", sS: ["Judgment", "Dazzling Light", "Divine Grace", "Divine Comfort"] },
-        3: { main: "Arbalest", mS: ["Sniper Shot", "Rallying Flare", "Blindfire", "Bola"], sub: "Occultist", sS: ["Wyrd Reconstruction", "Weakening Curse", "Pull of the Abyss", "Sacrificial Stab"] },
-        2: { main: "Occultist", mS: ["Wyrd Reconstruction", "Weakening Curse", "Pull of the Abyss", "Sacrificial Stab"], sub: "Crusader", sS: ["Smite", "Holy Lance", "Stunning Blow", "Inspiring Cry"] },
-        1: { main: "Man-at-Arms", mS: ["Crush", "Rampart", "Defender", "Bolster"], sub: "Houndmaster", sS: ["Hound’s Rush", "Target Whistle", "Cry Havoc", "Lick Wounds"] }
+        label: "Substitute Weald Team",
+        description: "Flexible alternative team.",
+        heroes: [
+          { name: "Vestal", skills: ["Divine Grace","Judgment","Dazzling Light","Dazzling Light"] },
+          { name: "Highwayman", skills: ["Open Vein","Point Blank Shot","Duelist's Advance","Pistol Shot"] },
+          { name: "Bounty Hunter", skills: ["Mark","Collect Bounty","Finish Him","Uppercut"] },
+          { name: "Grave Robber", skills: ["Pick to the Face","Lunge","Shadow Fade","Thrown Dagger"] }
+        ]
       },
       {
-        label: "Team C - Antiquarian Loot",
-        4: { main: "Vestal", mS: ["Judgment", "Dazzling Light", "Divine Grace", "Divine Comfort"], sub: "Occultist", sS: ["Wyrd Reconstruction", "Weakening Curse", "Pull of the Abyss", "Sacrificial Stab"] },
-        3: { main: "Highwayman", mS: ["Duelist’s Advance", "Point Blank Shot", "Pistol Shot", "Tracking Shot"], sub: "Bounty Hunter", sS: ["Collect Bounty", "Mark for Death", "Flashbang", "Finish Him"] },
-        2: { main: "Houndmaster", mS: ["Hound’s Rush", "Target Whistle", "Guard Dog", "Lick Wounds"], sub: "Bounty Hunter", sS: ["Collect Bounty", "Mark for Death", "Flashbang", "Finish Him"] },
-        1: { main: "Antiquarian", mS: ["Flashpowder", "Protect Me!", "Nervous Stab", "Invigorating Vapours"], sub: "Man-at-Arms", sS: ["Crush", "Rampart", "Defender", "Bolster"] }
+        label: "Loot Weald Team",
+        description: "Treasure-focused with Antiquarian.",
+        heroes: [
+          { name: "Antiquarian", skills: ["Protect Me","Collectibles","Gold Rush","Archaic Knowledge"] },
+          { name: "Hellion", skills: ["Iron Swan","Barbaric Yell","If It Bleeds","Bleed Out"] },
+          { name: "Highwayman", skills: ["Open Vein","Point Blank Shot","Duelist's Advance","Pistol Shot"] },
+          { name: "Plague Doctor", skills: ["Noxious Blast","Plague Grenade","Battlefield Medicine","Disorienting Blast"] }
+        ]
       }
     ]
   },
   warrens: {
     teams: [
       {
-        label: "Team A - Beast Bleed Core",
-        4: { main: "Highwayman", mS: ["Duelist’s Advance", "Point Blank Shot", "Pistol Shot", "Tracking Shot"], sub: "Grave Robber", sS: ["Thrown Dagger", "Pick to the Face", "Shadow Fade", "Lunge"] },
-        3: { main: "Plague Doctor", mS: ["Noxious Blast", "Blinding Gas", "Battlefield Medicine", "Disorienting Blast"], sub: "Occultist", sS: ["Wyrd Reconstruction", "Weakening Curse", "Hands from Below", "Pull of the Abyss"] },
-        2: { main: "Flagellant", mS: ["Punish", "Rain of Sorrows", "Redeem", "Reclaim"], sub: "Bounty Hunter", sS: ["Collect Bounty", "Mark for Death", "Flashbang", "Finish Him"] },
-        1: { main: "Houndmaster", mS: ["Hound’s Rush", "Target Whistle", "Cry Havoc", "Lick Wounds"], sub: "Hellion", sS: ["Wicked Hack", "Iron Swan", "If It Bleeds", "YAWP!"] }
+        label: "Main Warrens Team",
+        description: "Beast-focused team for Warrens.",
+        heroes: [
+          { name: "Houndmaster", skills: ["Hound's Rush","Mark","Cry Havoc","Target Whistle"] },
+          { name: "Crusader", skills: ["Smite","Zealous Accusation","Bulwark of Faith","Inspiring Cry"] },
+          { name: "Occultist", skills: ["Wyrd Reconstruction","Weakening Curse","Sacrificial Stab","Abyssal Arts"] },
+          { name: "Highwayman", skills: ["Open Vein","Point Blank Shot","Duelist's Advance","Pistol Shot"] }
+        ]
       },
       {
-        label: "Team B - Balanced Survivability",
-        4: { main: "Vestal", mS: ["Judgment", "Dazzling Light", "Divine Grace", "Divine Comfort"], sub: "Occultist", sS: ["Wyrd Reconstruction", "Weakening Curse", "Hands from Below", "Pull of the Abyss"] },
-        3: { main: "Occultist", mS: ["Wyrd Reconstruction", "Weakening Curse", "Hands from Below", "Pull of the Abyss"], sub: "Plague Doctor", sS: ["Noxious Blast", "Blinding Gas", "Battlefield Medicine", "Disorienting Blast"] },
-        2: { main: "Bounty Hunter", mS: ["Collect Bounty", "Mark for Death", "Flashbang", "Finish Him"], sub: "Houndmaster", sS: ["Hound’s Rush", "Target Whistle", "Cry Havoc", "Lick Wounds"] },
-        1: { main: "Man-at-Arms", mS: ["Crush", "Rampart", "Defender", "Bolster"], sub: "Flagellant", sS: ["Punish", "Rain of Sorrows", "Redeem", "Reclaim"] }
+        label: "Substitute Warrens Team",
+        description: "Flexible substitute team.",
+        heroes: [
+          { name: "Vestal", skills: ["Divine Grace","Judgment","Dazzling Light","Dazzling Light"] },
+          { name: "Leper", skills: ["Chop","Hack","Withstand","Solemnity"] },
+          { name: "Hellion", skills: ["Iron Swan","Barbaric Yell","If It Bleeds","Bleed Out"] },
+          { name: "Jester", skills: ["Inspiring Tune","Battle Ballad","Dirge","Solo"] }
+        ]
       },
       {
-        label: "Team C - Antiquarian Loot",
-        4: { main: "Jester", mS: ["Battle Ballad", "Inspiring Tune", "Slice Off", "Harvest"], sub: "Occultist", sS: ["Wyrd Reconstruction", "Weakening Curse", "Hands from Below", "Pull of the Abyss"] },
-        3: { main: "Hellion", mS: ["Wicked Hack", "Iron Swan", "If It Bleeds", "YAWP!"], sub: "Highwayman", sS: ["Duelist’s Advance", "Point Blank Shot", "Pistol Shot", "Tracking Shot"] },
-        2: { main: "Man-at-Arms", mS: ["Crush", "Rampart", "Defender", "Bolster"], sub: "Flagellant", sS: ["Punish", "Rain of Sorrows", "Redeem", "Reclaim"] },
-        1: { main: "Antiquarian", mS: ["Flashpowder", "Protect Me!", "Nervous Stab", "Invigorating Vapours"], sub: "Houndmaster", sS: ["Hound’s Rush", "Target Whistle", "Cry Havoc", "Lick Wounds"] }
+        label: "Loot Warrens Team",
+        description: "Treasure-focused with Antiquarian.",
+        heroes: [
+          { name: "Antiquarian", skills: ["Protect Me","Collectibles","Gold Rush","Archaic Knowledge"] },
+          { name: "Houndmaster", skills: ["Hound's Rush","Mark","Cry Havoc","Target Whistle"] },
+          { name: "Hellion", skills: ["Iron Swan","Barbaric Yell","If It Bleeds","Bleed Out"] },
+          { name: "Occultist", skills: ["Wyrd Reconstruction","Weakening Curse","Sacrificial Stab","Abyssal Arts"] }
+        ]
       }
     ]
   },
   cove: {
     teams: [
       {
-        label: "Team A - Blight and Control",
-        4: { main: "Arbalest", mS: ["Sniper Shot", "Rallying Flare", "Blindfire", "Bola"], sub: "Occultist", sS: ["Wyrd Reconstruction", "Weakening Curse", "Hands from Below", "Pull of the Abyss"] },
-        3: { main: "Plague Doctor", mS: ["Noxious Blast", "Blinding Gas", "Battlefield Medicine", "Disorienting Blast"], sub: "Occultist", sS: ["Wyrd Reconstruction", "Weakening Curse", "Hands from Below", "Sacrificial Stab"] },
-        2: { main: "Shieldbreaker", mS: ["Pierce", "Puncture", "Snake Skin", "Expose Weakness"], sub: "Highwayman", sS: ["Duelist’s Advance", "Point Blank Shot", "Tracking Shot", "Open Vein"] },
-        1: { main: "Occultist", mS: ["Wyrd Reconstruction", "Weakening Curse", "Hands from Below", "Pull of the Abyss"], sub: "Man-at-Arms", sS: ["Crush", "Rampart", "Defender", "Retribution"] }
+        label: "Main Cove Team",
+        description: "Balanced Cove team.",
+        heroes: [
+          { name: "Crusader", skills: ["Smite","Zealous Accusation","Bulwark of Faith","Inspiring Cry"] },
+          { name: "Plague Doctor", skills: ["Noxious Blast","Plague Grenade","Battlefield Medicine","Disorienting Blast"] },
+          { name: "Grave Robber", skills: ["Pick to the Face","Lunge","Shadow Fade","Thrown Dagger"] },
+          { name: "Arbalest", skills: ["Sniper Shot","Rallying Flare","Blindfire","Bola"] }
+        ]
       },
       {
-        label: "Team B - Stress and Damage",
-        4: { main: "Vestal", mS: ["Judgment", "Dazzling Light", "Divine Grace", "Divine Comfort"], sub: "Occultist", sS: ["Wyrd Reconstruction", "Weakening Curse", "Hands from Below", "Pull of the Abyss"] },
-        3: { main: "Jester", mS: ["Battle Ballad", "Inspiring Tune", "Slice Off", "Harvest"], sub: "Plague Doctor", sS: ["Noxious Blast", "Blinding Gas", "Battlefield Medicine", "Disorienting Blast"] },
-        2: { main: "Hellion", mS: ["Wicked Hack", "Iron Swan", "If It Bleeds", "YAWP!"], sub: "Shieldbreaker", sS: ["Pierce", "Puncture", "Snake Skin", "Expose Weakness"] },
-        1: { main: "Flagellant", mS: ["Punish", "Rain of Sorrows", "Redeem", "Reclaim"], sub: "Houndmaster", sS: ["Hound’s Rush", "Target Whistle", "Cry Havoc", "Lick Wounds"] }
+        label: "Substitute Cove Team",
+        description: "Alternative Cove team.",
+        heroes: [
+          { name: "Highwayman", skills: ["Open Vein","Point Blank Shot","Duelist's Advance","Pistol Shot"] },
+          { name: "Jester", skills: ["Inspiring Tune","Battle Ballad","Dirge","Solo"] },
+          { name: "Occultist", skills: ["Wyrd Reconstruction","Weakening Curse","Sacrificial Stab","Abyssal Arts"] },
+          { name: "Vestal", skills: ["Divine Grace","Judgment","Dazzling Light","Dazzling Light"] }
+        ]
       },
       {
-        label: "Team C - Antiquarian Loot",
-        4: { main: "Man-at-Arms", mS: ["Crush", "Rampart", "Defender", "Bolster"], sub: "Jester", sS: ["Battle Ballad", "Inspiring Tune", "Slice Off", "Harvest"] },
-        3: { main: "Occultist", mS: ["Wyrd Reconstruction", "Weakening Curse", "Hands from Below", "Pull of the Abyss"], sub: "Plague Doctor", sS: ["Noxious Blast", "Blinding Gas", "Battlefield Medicine", "Disorienting Blast"] },
-        2: { main: "Highwayman", mS: ["Duelist’s Advance", "Point Blank Shot", "Pistol Shot", "Tracking Shot"], sub: "Grave Robber", sS: ["Thrown Dagger", "Pick to the Face", "Shadow Fade", "Lunge"] },
-        1: { main: "Antiquarian", mS: ["Flashpowder", "Protect Me!", "Nervous Stab", "Invigorating Vapours"], sub: "Man-at-Arms", sS: ["Crush", "Rampart", "Defender", "Bolster"] }
+        label: "Loot Cove Team",
+        description: "Treasure-focused Cove run.",
+        heroes: [
+          { name: "Antiquarian", skills: ["Protect Me","Collectibles","Gold Rush","Archaic Knowledge"] },
+          { name: "Arbalest", skills: ["Sniper Shot","Rallying Flare","Blindfire","Bola"] },
+          { name: "Grave Robber", skills: ["Pick to the Face","Lunge","Shadow Fade","Thrown Dagger"] },
+          { name: "Plague Doctor", skills: ["Noxious Blast","Plague Grenade","Battlefield Medicine","Disorienting Blast"] }
+        ]
       }
     ]
   }
 };
 
-// BOSSES
+// -------------------- BOSSES (Base + DLC) --------------------
 const BOSSES = {
   ruins: [
-    { name: "Swine Prince", level: 3, type: "melee" },
-    { name: "Shambler", level: 5, type: "abomination" },
-    { name: "Bone Commander", level: 4, type: "undead" }
+    {
+      name: "Shambler",
+      difficulty: "Champion",
+      recommendedTeam: ["Arbalest","Vestal","Highwayman","Plague Doctor"]
+    },
+    {
+      name: "Bone Court",
+      difficulty: "Veteran",
+      recommendedTeam: ["Leper","Occultist","Hellion","Vestal"]
+    },
+    // DLC Bosses
+    {
+      name: "The Swine Prince",
+      difficulty: "Champion",
+      recommendedTeam: ["Houndmaster","Crusader","Occultist","Highwayman"]
+    }
   ],
   weald: [
-    { name: "The Hag", level: 4, type: "magic" },
-    { name: "Shambler", level: 5, type: "abomination" },
-    { name: "Spider Boss", level: 3, type: "beast" }
+    {
+      name: "Brigand Cannon",
+      difficulty: "Champion",
+      recommendedTeam: ["Leper","Occultist","Hellion","Jester"]
+    },
+    {
+      name: "The Prophet",
+      difficulty: "Veteran",
+      recommendedTeam: ["Vestal","Highwayman","Bounty Hunter","Grave Robber"]
+    }
   ],
   warrens: [
-    { name: "Collector", level: 5, type: "treasure" },
-    { name: "Rabid Wolf", level: 3, type: "beast" },
-    { name: "Flesh Eater", level: 4, type: "ghoul" }
+    {
+      name: "Flesh",
+      difficulty: "Champion",
+      recommendedTeam: ["Houndmaster","Crusader","Occultist","Highwayman"]
+    },
+    {
+      name: "Swine King",
+      difficulty: "Champion",
+      recommendedTeam: ["Houndmaster","Leper","Vestal","Hellion"]
+    }
   ],
   cove: [
-    { name: "Crestfallen Captain", level: 4, type: "pirate" },
-    { name: "Shambler", level: 5, type: "abomination" },
-    { name: "Eel Boss", level: 3, type: "aquatic" }
+    {
+      name: "Shark",
+      difficulty: "Champion",
+      recommendedTeam: ["Crusader","Plague Doctor","Grave Robber","Arbalest"]
+    },
+    {
+      name: "Sea Captain",
+      difficulty: "Veteran",
+      recommendedTeam: ["Highwayman","Jester","Occultist","Vestal"]
+    }
   ]
 };
 
-// DD_RUNS
-const DD_RUNS = [
-  { name: "Short Ruins", region: "ruins", length: "short" },
-  { name: "Medium Weald", region: "weald", length: "medium" },
-  { name: "Long Warrens", region: "warrens", length: "long" },
-  { name: "Short Cove", region: "cove", length: "short" }
-];
-
-// PROVISIONS
-const PROVISIONS = [
-  { name: "Food", cost: 2 },
-  { name: "Shovel", cost: 3 },
-  { name: "Torch", cost: 1 },
-  { name: "Bandage", cost: 4 },
-  { name: "Antivenom", cost: 6 }
-];
-
-// CLASSES
-const CLASSES = [
-  "Crusader",
-  "Leper",
-  "Hellion",
-  "Plague Doctor",
-  "Vestal",
-  "Occultist",
-  "Highwayman",
-  "Grave Robber",
-  "Jester",
-  "Bounty Hunter",
-  "Houndmaster",
-  "Man-at-Arms",
-  "Flagellant",
-  "Shieldbreaker",
-  "Antiquarian"
-];
-
-// POS_QUIRKS
-const POS_QUIRKS = [
-  "Dextrous",
-  "Strong",
-  "Stout",
-  "Robust",
-  "Steady",
-  "Quick Healer",
-  "Iron Will",
-  "Fast Reflexes",
-  "Hardy",
-  "Sharp-eyed"
-];
-
-// NEG_QUIRKS
-const NEG_QUIRKS = [
-  "Fragile",
-  "Cowardly",
-  "Clumsy",
-  "Vengeful",
-  "Irrational",
-  "Nervous",
-  "Pessimist",
-  "Greedy",
-  "Obsessive",
-  "Mark of Death"
-];
-
-// BUILDINGS
-const BUILDINGS = {
-  barracks: { level: 1, maxLevel: 3, benefit: "Stress Recovery" },
-  blacksmith: { level: 1, maxLevel: 3, benefit: "Weapon Upgrade" },
-  guild: { level: 1, maxLevel: 3, benefit: "Class Training" },
-  sanitarium: { level: 1, maxLevel: 3, benefit: "Remove Negative Quirks" },
-  stagecoach: { level: 1, maxLevel: 3, benefit: "Hire Heroes" },
-  tavern: { level: 1, maxLevel: 3, benefit: "Stress Relief" },
-  merchant: { level: 1, maxLevel: 3, benefit: "Sell Items" },
-  abbey: { level: 1, maxLevel: 3, benefit: "Remove Negative Quirks" },
-  altar: { level: 1, maxLevel: 3, benefit: "Bless Heroes" }
-};
-
-// EXPORT MODULE
-export {
-  REGIONS,
-  BOSSES,
-  DD_RUNS,
-  PROVISIONS,
-  CLASSES,
-  POS_QUIRKS,
-  NEG_QUIRKS,
-  BUILDINGS
+// -------------------- QUIRKS --------------------
+const QUIRKS = {
+  positive: [
+    { name: "Quick Reflexes", tags: ["dodge","combat","all"] },
+    { name: "Strong", tags: ["damage","all"] },
+    { name: "Resilient", tags: ["stress","all"] },
+    { name: "Unerring", tags: ["accuracy","ranged","all"] }
+  ],
+  negative: [
+    { name: "Nervous", tags: ["stress","all"] },
+    { name: "Zoophobia", tags: ["beast","stress","ruins"] },
+    { name: "Hemophobic", tags: ["bleed","stress","weald"] },
+    { name: "Claustrophobic", tags: ["dungeon length","all"] }
+  ]
 };
