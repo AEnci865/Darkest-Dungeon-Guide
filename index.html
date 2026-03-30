@@ -981,14 +981,16 @@ color: var(–text-dim);
 
   <div class="tab-pane" id="tab-quirks">
     <div class="section-title">Quirk Reference</div>
-    <div class="section-sub">Essential quirks — what to lock, what to purge. Sorted by priority.</div>
-    <div class="quirk-section">
-      <div class="section-title" style="font-size:0.8rem;color:#80c060;border-color:rgba(64,96,48,0.3);">✦ Positive Quirks — Lock These</div>
-      <div class="quirk-grid" id="pos-quirks"></div>
-    </div>
-    <div class="quirk-section">
-      <div class="section-title" style="font-size:0.8rem;color:#c06060;border-color:rgba(96,48,48,0.3);">✦ Negative Quirks — Purge Priority</div>
-      <div class="quirk-grid" id="neg-quirks"></div>
+    <div class="section-sub">Full quirk list with correct stats, categories, and region/monster synergy tags. Colour-coded region indicators show where each quirk helps or hurts.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;" id="quirk-columns">
+      <div>
+        <div class="section-title" style="font-size:0.8rem;color:#80c060;border-color:rgba(64,96,48,0.3);margin-bottom:14px;">✦ Positive Quirks</div>
+        <div id="pos-quirks"></div>
+      </div>
+      <div>
+        <div class="section-title" style="font-size:0.8rem;color:#c06060;border-color:rgba(96,48,48,0.3);margin-bottom:14px;">✦ Negative Quirks</div>
+        <div id="neg-quirks"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -1284,38 +1286,301 @@ const PROVISIONS = {
 
 const CLASSES = ["Antiquarian","Arbalest","Abomination","Bounty Hunter","Crusader","Flagellant","Grave Robber","Hellion","Highwayman","Houndmaster","Jester","Leper","Man-at-Arms","Occultist","Plague Doctor","Shieldbreaker","Vestal"];
 
+// ── QUIRK DATA ───────────────────────────────────────────
+// Each quirk has:
+//   name, effect (display), keep (Lock/Situational/Purge)
+//   category: 'general'|'conditional'|'light'|'region'|'monster'|'curio'|'town'|'resist'
+//   synergy: { bonus regions[], bonus monsters[], penalty regions[], penalty monsters[] }
+//   score: numeric weight for synergy engine (+/-)
+
 const POS_QUIRKS = [
-  { name:"Unerring", effect:"+10% accuracy — a must-lock on any damage hero", keep:"Lock" },
-  { name:"Resilient", effect:"+25% stun resist — invaluable vs stun-heavy regions", keep:"Lock" },
-  { name:"Hard Skinned", effect:"+10% protection — strong on frontliners", keep:"Lock" },
-  { name:"Thick Blooded", effect:"+25% bleed resist — lock on Weald/Warrens runs", keep:"Lock" },
-  { name:"Robust", effect:"+25% disease resist — lock on Warrens specialists", keep:"Lock" },
-  { name:"Righteous", effect:"+15 ACC, +5 SPD in Ruins — situationally excellent", keep:"Situational" },
-  { name:"Luminous", effect:"+15 ACC, +5 SPD in any dungeon", keep:"Lock" },
-  { name:"Steady", effect:"-10% stress — reduces sustained stress accumulation", keep:"Situational" },
-  { name:"Optimistic", effect:"+25% debuff resist — keeps heroes performing", keep:"Lock" },
-  { name:"Motivated", effect:"+25% move resist — positional control protection", keep:"Lock" },
-  { name:"On Guard", effect:"+5 SPD on first round — initiative advantage", keep:"Situational" },
-  { name:"Natural Swing", effect:"+5% crit — meaningful on high-damage heroes", keep:"Lock" },
-  { name:"Bloodthirsty", effect:"+10% dmg vs bleeding — Weald/Warrens specialist", keep:"Situational" },
-  { name:"Quick Reflexes", effect:"+2 SPD — action order advantage", keep:"Lock" }
+  // ── GENERAL STAT ──────────────────────────────────────
+  { name:"Tough",            effect:"+10% Max HP — straight survivability", keep:"Lock", category:"general",
+    synergy:{}, score:7 },
+  { name:"Hard Skinned",     effect:"+5 PROT — reduces all incoming damage", keep:"Lock", category:"general",
+    synergy:{}, score:7 },
+  { name:"Quick Reflexes",   effect:"+2 SPD — better action order every round", keep:"Lock", category:"general",
+    synergy:{}, score:8 },
+  { name:"Natural Swing",    effect:"+5 ACC — hits land more consistently", keep:"Lock", category:"general",
+    synergy:{}, score:7 },
+  { name:"Evasive",          effect:"+5 DODGE — harder to hit", keep:"Lock", category:"general",
+    synergy:{}, score:6 },
+  { name:"Accurate",         effect:"+1% CRIT — small but permanent crit boost", keep:"Situational", category:"general",
+    synergy:{}, score:5 },
+  { name:"Luminous",         effect:"+2 SPD, +5 DODGE — global, always active", keep:"Lock", category:"general",
+    synergy:{}, score:9 },
+
+  // ── CONDITIONAL ──────────────────────────────────────
+  { name:"On Guard",         effect:"(Round 1) +4 SPD, +5 DODGE — excellent initiative", keep:"Lock", category:"conditional",
+    synergy:{}, score:7 },
+  { name:"Quick Draw",       effect:"(Round 1) +4 SPD — good initiative", keep:"Situational", category:"conditional",
+    synergy:{}, score:5 },
+  { name:"Precision Striker",effect:"(Melee) +3% CRIT — lock on melee damage dealers", keep:"Lock", category:"conditional",
+    synergy:{}, score:7 },
+  { name:"Slugger",          effect:"(Melee) +10% DMG — strong on frontline bruisers", keep:"Lock", category:"conditional",
+    synergy:{}, score:8 },
+  { name:"Unerring",         effect:"(Ranged) +10% DMG — must-lock on ranged heroes", keep:"Lock", category:"conditional",
+    synergy:{}, score:9 },
+  { name:"Natural Eye",      effect:"(Ranged) +5 ACC — pairs with Unerring nicely", keep:"Lock", category:"conditional",
+    synergy:{}, score:6 },
+  { name:"Eagle Eye",        effect:"(Ranged) +3% CRIT — good on Arbalest/HWM", keep:"Lock", category:"conditional",
+    synergy:{}, score:7 },
+  { name:"Second Wind",      effect:"(HP <50%) +10% DMG — activates near death", keep:"Situational", category:"conditional",
+    synergy:{}, score:5 },
+  { name:"Last Gasp",        effect:"(HP <50%) +1 SPD — speed boost when low", keep:"Situational", category:"conditional",
+    synergy:{}, score:4 },
+  { name:"Clutch Hitter",    effect:"(HP <50%) +3% CRIT — synergizes with Flagellant", keep:"Situational", category:"conditional",
+    synergy:{}, score:5 },
+  { name:"Fast Healer",      effect:"(Camping) +20% Heal received — strong for tanky heroes", keep:"Lock", category:"conditional",
+    synergy:{}, score:7 },
+  { name:"Stout",            effect:"(Camping) +20% Heal received — same as Fast Healer", keep:"Lock", category:"conditional",
+    synergy:{}, score:7 },
+  { name:"Back Tracker",     effect:"(Walking backwards) -100% Stress DMG", keep:"Situational", category:"conditional",
+    synergy:{}, score:4 },
+
+  // ── LIGHT-RELATED ────────────────────────────────────
+  { name:"Early Riser",      effect:"(Light >75) +2 SPD — reward for high torch play", keep:"Situational", category:"light",
+    synergy:{bonusRegions:['ruins','weald','warrens','cove']}, score:6 },
+  { name:"Night Owl",        effect:"(Light <25) +2 SPD — dark torch specialist", keep:"Situational", category:"light",
+    synergy:{}, score:5 },
+  { name:"Warrior of Light", effect:"(Light >75) +10% DMG — strong high-torch bonus", keep:"Lock", category:"light",
+    synergy:{bonusRegions:['ruins','weald','warrens','cove']}, score:8 },
+  { name:"Lurker",           effect:"(Light <25) +10% DMG — dark dungeon specialist", keep:"Situational", category:"light",
+    synergy:{}, score:6 },
+  { name:"Photomania",       effect:"(Light >75) -10% Stress DMG received", keep:"Situational", category:"light",
+    synergy:{bonusRegions:['ruins','weald','warrens','cove']}, score:5 },
+
+  // ── REGION-SPECIFIC ───────────────────────────────────
+  { name:"Ruins Tactician",  effect:"(Ruins) +15% DMG — pure damage in the Ruins", keep:"Lock", category:"region",
+    synergy:{bonusRegions:['ruins']}, score:10 },
+  { name:"Weald Tactician",  effect:"(Weald) +15% DMG — pure damage in the Weald", keep:"Lock", category:"region",
+    synergy:{bonusRegions:['weald']}, score:10 },
+  { name:"Warrens Tactician",effect:"(Warrens) +15% DMG — pure damage in the Warrens", keep:"Lock", category:"region",
+    synergy:{bonusRegions:['warrens']}, score:10 },
+  { name:"Cove Tactician",   effect:"(Cove) +15% DMG — pure damage in the Cove", keep:"Lock", category:"region",
+    synergy:{bonusRegions:['cove']}, score:10 },
+  { name:"Ruins Adventurer", effect:"(Ruins) +15% Stress Resist — stress defense in Ruins", keep:"Lock", category:"region",
+    synergy:{bonusRegions:['ruins']}, score:9 },
+  { name:"Weald Adventurer", effect:"(Weald) +15% Stress Resist — stress defense in Weald", keep:"Lock", category:"region",
+    synergy:{bonusRegions:['weald']}, score:9 },
+  { name:"Warrens Adventurer",effect:"(Warrens) +15% Stress Resist — stress defense in Warrens", keep:"Lock", category:"region",
+    synergy:{bonusRegions:['warrens']}, score:9 },
+  { name:"Cove Adventurer",  effect:"(Cove) -20% Stress received — exceptional Cove stress defense", keep:"Lock", category:"region",
+    synergy:{bonusRegions:['cove']}, score:10 },
+  { name:"Ruins Explorer",   effect:"(Ruins) +20% Scouting Chance — reveal rooms early", keep:"Situational", category:"region",
+    synergy:{bonusRegions:['ruins']}, score:5 },
+  { name:"Weald Explorer",   effect:"(Weald) +20% Scouting Chance", keep:"Situational", category:"region",
+    synergy:{bonusRegions:['weald']}, score:5 },
+  { name:"Warrens Explorer", effect:"(Warrens) +20% Scouting Chance", keep:"Situational", category:"region",
+    synergy:{bonusRegions:['warrens']}, score:5 },
+  { name:"Cove Explorer",    effect:"(Cove) +10% Scouting Chance — avoids ambushes", keep:"Situational", category:"region",
+    synergy:{bonusRegions:['cove']}, score:4 },
+  { name:"Cove Scrounger",   effect:"(Cove) +5% Scouting Chance — weaker version of Explorer", keep:"Situational", category:"region",
+    synergy:{bonusRegions:['cove']}, score:3 },
+
+  // ── MONSTER-SPECIFIC ──────────────────────────────────
+  { name:"Slayer of Beast",    effect:"(vs Beast) +10 ACC, +3% CRIT — Weald/Warrens specialist", keep:"Lock", category:"monster",
+    synergy:{bonusRegions:['weald','warrens']}, score:9 },
+  { name:"Slayer of Eldritch", effect:"(vs Eldritch) +10 ACC, +3% CRIT — Cove/Ruins specialist", keep:"Lock", category:"monster",
+    synergy:{bonusRegions:['cove','ruins']}, score:9 },
+  { name:"Slayer of Mankind",  effect:"(vs Mankind) +10 ACC, +3% CRIT — Weald/Warrens vs Brigands", keep:"Lock", category:"monster",
+    synergy:{bonusRegions:['weald','warrens']}, score:8 },
+  { name:"Slayer of Unholy",   effect:"(vs Unholy) +10 ACC, +3% CRIT — Ruins specialist", keep:"Lock", category:"monster",
+    synergy:{bonusRegions:['ruins']}, score:9 },
+  { name:"Hatred of Beast",    effect:"(vs Beast) +15% DMG, +15% Stress Resist — best Beast quirk", keep:"Lock", category:"monster",
+    synergy:{bonusRegions:['weald','warrens']}, score:10 },
+  { name:"Hatred of Eldritch", effect:"(vs Eldritch) +15% DMG, +15% Stress Resist — best Eldritch quirk", keep:"Lock", category:"monster",
+    synergy:{bonusRegions:['cove','ruins']}, score:10 },
+  { name:"Hatred of Mankind",  effect:"(vs Mankind) +15% DMG, +15% Stress Resist — Brigand/Weald killer", keep:"Lock", category:"monster",
+    synergy:{bonusRegions:['weald','warrens']}, score:9 },
+  { name:"Hatred of Unholy",   effect:"(vs Unholy) +15% DMG, +15% Stress Resist — Ruins killer", keep:"Lock", category:"monster",
+    synergy:{bonusRegions:['ruins']}, score:10 },
+
+  // ── RESIST ────────────────────────────────────────────
+  { name:"Steady",           effect:"-10% Stress DMG received — always valuable", keep:"Lock", category:"resist",
+    synergy:{}, score:8 },
+  { name:"Resilient",        effect:"+10% Stress Heal — speeds up recovery", keep:"Lock", category:"resist",
+    synergy:{}, score:7 },
+  { name:"Thick Blooded",    effect:"+10% Blight Resist — useful vs Weald/Warrens", keep:"Situational", category:"resist",
+    synergy:{bonusRegions:['weald','warrens']}, score:6 },
+  { name:"Clotter",          effect:"+15% Bleed Resist — lock for Weald runners", keep:"Lock", category:"resist",
+    synergy:{bonusRegions:['weald','warrens']}, score:7 },
+  { name:"Robust",           effect:"+15% Disease Resist — lock for Warrens specialists", keep:"Lock", category:"resist",
+    synergy:{bonusRegions:['warrens']}, score:8 },
+  { name:"Hard Noggin",      effect:"+15% Stun Resist — prevents stun-lock", keep:"Lock", category:"resist",
+    synergy:{}, score:8 },
+  { name:"Irrepressible",    effect:"+5% Affliction Resist — reduces virtue/affliction RNG", keep:"Situational", category:"resist",
+    synergy:{}, score:5 },
+  { name:"Unyielding",       effect:"+10% Deathblow Resist — direct death prevention", keep:"Lock", category:"resist",
+    synergy:{}, score:9 },
+  { name:"Optimistic",       effect:"+25% Debuff Resist — keeps hero stats intact", keep:"Lock", category:"resist",
+    synergy:{}, score:8 },
+
+  // ── TOWN ─────────────────────────────────────────────
+  { name:"Meditator",        effect:"+20% Stress Heal when Meditating (Abbey) or camping", keep:"Lock", category:"town",
+    synergy:{}, score:7 },
+  { name:"Nymphomania",      effect:"+20% Stress Heal at Brothel — pairs with Tavern", keep:"Situational", category:"town",
+    synergy:{}, score:4 },
 ];
 
 const NEG_QUIRKS = [
-  { name:"Abusive", effect:"Causes stress to party — actively harmful", keep:"Purge" },
-  { name:"Faithless", effect:"-15 ACC in Ruins — crippling in the Ruins", keep:"Purge" },
-  { name:"Nervous", effect:"+10% stress received — compounds badly", keep:"Purge" },
-  { name:"Disordered", effect:"+25% debuff chance received — hero gets locked down", keep:"Purge" },
-  { name:"Lazy Eye", effect:"-10% accuracy — reduces already-tight hit chances", keep:"Purge" },
-  { name:"Clumsy", effect:"-3 SPD — action order loss is very punishing", keep:"Purge" },
-  { name:"Masochistic", effect:"Draws attacks when at low HP — can trigger death spiral", keep:"Purge" },
-  { name:"Paranoid", effect:"Chance to refuse camping skills — cripples camp healing", keep:"Purge" },
-  { name:"Kleptomaniac", effect:"Steals from curios — minor but annoying", keep:"Situational" },
-  { name:"Guilty Conscience", effect:"-5% damage in light — Ruins/Cove penalty", keep:"Situational" },
-  { name:"Stress Eater", effect:"Eats food to reduce stress — food drain", keep:"Situational" },
-  { name:"Thanatophobia", effect:"+15 stress when hero dies — chain-reaction risk", keep:"Purge" },
-  { name:"Lygophobia", effect:"+20% stress in darkness — situational but dangerous", keep:"Situational" },
-  { name:"Zoophobia", effect:"+15 stress vs beast — Weald/Warrens crippler", keep:"Purge" }
+  // ── GENERAL STAT ──────────────────────────────────────
+  { name:"Fragile",          effect:"-10% Max HP — dangerous on frontliners", keep:"Purge", category:"general",
+    synergy:{}, score:-7 },
+  { name:"Soft",             effect:"-5% Max HP — minor but cumulative", keep:"Purge", category:"general",
+    synergy:{}, score:-5 },
+  { name:"Slow Reflexes",    effect:"-1 SPD — acts later every round", keep:"Purge", category:"general",
+    synergy:{}, score:-5 },
+  { name:"The Yips",         effect:"-5 ACC — misses compound over a dungeon", keep:"Purge", category:"general",
+    synergy:{}, score:-6 },
+  { name:"Clumsy",           effect:"-5 DODGE — easier to hit", keep:"Purge", category:"general",
+    synergy:{}, score:-5 },
+  { name:"Inaccurate",       effect:"-1% CRIT — minor penalty", keep:"Situational", category:"general",
+    synergy:{}, score:-3 },
+  { name:"The Runs",         effect:"-10 DEF, -10% Max HP — double penalty", keep:"Purge", category:"general",
+    synergy:{}, score:-8 },
+  { name:"Tetanus",          effect:"-5 ACC, -10% DMG — significant combat penalty", keep:"Purge", category:"general",
+    synergy:{}, score:-8 },
+  { name:"Syphilis",         effect:"-5 ACC, -10 DMG, -10% Max HP — severe triple penalty", keep:"Purge", category:"general",
+    synergy:{}, score:-10 },
+  { name:"Rabies",           effect:"-10 ACC, +20% DMG — risky trade-off", keep:"Situational", category:"general",
+    synergy:{}, score:-3 },
+
+  // ── CONDITIONAL ──────────────────────────────────────
+  { name:"Slow Draw",        effect:"(Round 1) -4 SPD — acts last on opening round", keep:"Purge", category:"conditional",
+    synergy:{}, score:-5 },
+  { name:"Off Guard",        effect:"(Round 1) -4 SPD, -5 DODGE — vulnerable opener", keep:"Purge", category:"conditional",
+    synergy:{}, score:-6 },
+  { name:"Weak Grip",        effect:"(Melee) -3% CRIT — hurts melee damage dealers", keep:"Purge", category:"conditional",
+    synergy:{}, score:-5 },
+  { name:"Torn Rotator Cuff",effect:"(Melee) -5% DMG — persistent melee penalty", keep:"Purge", category:"conditional",
+    synergy:{}, score:-5 },
+  { name:"Scattering",       effect:"(Ranged) -5% DMG — hurts ranged heroes", keep:"Purge", category:"conditional",
+    synergy:{}, score:-5 },
+  { name:"Lazy Eye",         effect:"(Ranged) -5 ACC — ranged heroes miss more", keep:"Purge", category:"conditional",
+    synergy:{}, score:-6 },
+  { name:"Flawed Release",   effect:"(Ranged) -3% CRIT — minor ranged penalty", keep:"Purge", category:"conditional",
+    synergy:{}, score:-4 },
+  { name:"Tuckered Out",     effect:"(HP <50%) -10% DMG — gets weaker when wounded", keep:"Purge", category:"conditional",
+    synergy:{}, score:-6 },
+  { name:"Winded",           effect:"(HP <50%) -1 SPD — slows when hurt", keep:"Purge", category:"conditional",
+    synergy:{}, score:-4 },
+  { name:"Dud Hitter",       effect:"(HP <50%) -3% CRIT — loses punch when damaged", keep:"Purge", category:"conditional",
+    synergy:{}, score:-4 },
+  { name:"Stomach Cramp",    effect:"(Camping) -20% Heal received — undermines camping", keep:"Purge", category:"conditional",
+    synergy:{}, score:-7 },
+  { name:"Bulimic",          effect:"(Camping) -20% Heal received — same as Stomach Cramp", keep:"Purge", category:"conditional",
+    synergy:{}, score:-7 },
+  { name:"Stress Eater",     effect:"(Stress >50) +100% Food consumed — severe food drain", keep:"Purge", category:"conditional",
+    synergy:{}, score:-6 },
+
+  // ── LIGHT-RELATED ────────────────────────────────────
+  { name:"Sensitive to Light",effect:"(Light >75) -10% DMG — punishes high torch play", keep:"Purge", category:"light",
+    synergy:{penaltyRegions:['ruins','weald','warrens','cove']}, score:-6 },
+  { name:"Night Blindness",  effect:"(Light <25) -10% DMG — punishes dark runs", keep:"Situational", category:"light",
+    synergy:{}, score:-4 },
+  { name:"Diurnal",          effect:"(Light <25) -2 SPD — slow in darkness", keep:"Situational", category:"light",
+    synergy:{}, score:-4 },
+  { name:"Nocturnal",        effect:"(Light >75) -2 SPD — slow at high torch", keep:"Situational", category:"light",
+    synergy:{}, score:-4 },
+  { name:"Phengophobia",     effect:"(Light >75) -20% Stress Resist — stressed by bright light", keep:"Purge", category:"light",
+    synergy:{penaltyRegions:['ruins','weald','warrens','cove']}, score:-7 },
+  { name:"Lygomania",        effect:"(Light >75) +10% Stress DMG — stressed by bright light", keep:"Purge", category:"light",
+    synergy:{penaltyRegions:['ruins','weald','warrens','cove']}, score:-7 },
+
+  // ── REGION-SPECIFIC ───────────────────────────────────
+  { name:"Ruins Phobe",      effect:"(Ruins) -20% Stress Resist — badly stressed in Ruins", keep:"Purge", category:"region",
+    synergy:{penaltyRegions:['ruins']}, score:-10 },
+  { name:"Weald Phobe",      effect:"(Weald) -20% Stress Resist — badly stressed in Weald", keep:"Purge", category:"region",
+    synergy:{penaltyRegions:['weald']}, score:-10 },
+  { name:"Warrens Phobe",    effect:"(Warrens) -20% Stress Resist — badly stressed in Warrens", keep:"Purge", category:"region",
+    synergy:{penaltyRegions:['warrens']}, score:-10 },
+  { name:"Cove Phobe",       effect:"(Cove) +20% Stress received — brutal in the Cove", keep:"Purge", category:"region",
+    synergy:{penaltyRegions:['cove']}, score:-10 },
+
+  // ── MONSTER-SPECIFIC ──────────────────────────────────
+  { name:"Zoophobia",        effect:"(vs Beast) -20% Stress Resist — Weald/Warrens crippler", keep:"Purge", category:"monster",
+    synergy:{penaltyRegions:['weald','warrens']}, score:-9 },
+  { name:"Automatonophobia", effect:"(vs Mankind) -20% Stress Resist — Weald/Brigand problem", keep:"Purge", category:"monster",
+    synergy:{penaltyRegions:['weald','warrens']}, score:-8 },
+  { name:"Fear of Beast",    effect:"(vs Beast) -15% Stress Resist, -10 ACC — double penalty", keep:"Purge", category:"monster",
+    synergy:{penaltyRegions:['weald','warrens']}, score:-9 },
+  { name:"Fear of Eldritch", effect:"(vs Eldritch) -15% Stress Resist, -10 ACC — Cove/Ruins problem", keep:"Purge", category:"monster",
+    synergy:{penaltyRegions:['cove','ruins']}, score:-9 },
+  { name:"Fear of Mankind",  effect:"(vs Mankind) -15% Stress Resist, -10 ACC", keep:"Purge", category:"monster",
+    synergy:{penaltyRegions:['weald','warrens']}, score:-8 },
+  { name:"Fear of Unholy",   effect:"(vs Unholy) -15% Stress Resist, -10 ACC — Ruins problem", keep:"Purge", category:"monster",
+    synergy:{penaltyRegions:['ruins']}, score:-9 },
+  { name:"Claustrophobia",   effect:"(In corridor) -20% Stress Resist — hurts all regions", keep:"Purge", category:"monster",
+    synergy:{penaltyRegions:['ruins','weald','warrens','cove']}, score:-8 },
+
+  // ── RESIST ────────────────────────────────────────────
+  { name:"Nervous",          effect:"+10% Stress DMG received — stacks badly", keep:"Purge", category:"resist",
+    synergy:{}, score:-7 },
+  { name:"Ruminator",        effect:"-10% Stress Heal — slows recovery in town", keep:"Purge", category:"resist",
+    synergy:{}, score:-6 },
+  { name:"Thin Blooded",     effect:"-10% Blight Resist — worse in Weald/Warrens", keep:"Purge", category:"resist",
+    synergy:{penaltyRegions:['weald','warrens']}, score:-5 },
+  { name:"Anemic",           effect:"-10% Bleed Resist — worse in Weald", keep:"Purge", category:"resist",
+    synergy:{penaltyRegions:['weald']}, score:-5 },
+  { name:"Hemophilia",       effect:"-20% Bleed Resist — dangerous in Weald/Warrens", keep:"Purge", category:"resist",
+    synergy:{penaltyRegions:['weald','warrens']}, score:-8 },
+  { name:"Sickly",           effect:"-10% Disease Resist — risky in Warrens", keep:"Purge", category:"resist",
+    synergy:{penaltyRegions:['warrens']}, score:-5 },
+  { name:"Wasting Sickness", effect:"-50% Disease Resist — never run in Warrens", keep:"Purge", category:"resist",
+    synergy:{penaltyRegions:['warrens']}, score:-10 },
+  { name:"Shocker",          effect:"-10% Stun Resist — gets stunned more often", keep:"Purge", category:"resist",
+    synergy:{}, score:-5 },
+  { name:"Mercurial",        effect:"-5% Affliction Resist — more likely to afflict", keep:"Purge", category:"resist",
+    synergy:{}, score:-5 },
+  { name:"Suicidal",         effect:"-10% Deathblow Resist — more likely to die at Death's Door", keep:"Purge", category:"resist",
+    synergy:{}, score:-9 },
+
+  // ── CURIO TRIGGERS ───────────────────────────────────
+  { name:"Bloodthirsty",     effect:"35% chance to auto-trigger Torture curios — wastes turns", keep:"Purge", category:"curio",
+    synergy:{}, score:-6 },
+  { name:"Kleptomaniac",     effect:"35% chance to auto-trigger Treasure curios — keeps loot but risky", keep:"Situational", category:"curio",
+    synergy:{}, score:-2 },
+  { name:"Compulsive",       effect:"20% chance to auto-trigger ANY curio — highly unpredictable", keep:"Purge", category:"curio",
+    synergy:{penaltyRegions:['ruins','weald','warrens','cove']}, score:-8 },
+  { name:"Guilty Conscience",effect:"35% chance to auto-trigger Worship curios", keep:"Situational", category:"curio",
+    synergy:{penaltyRegions:['ruins']}, score:-4 },
+  { name:"Dark Temptation",  effect:"40% chance to auto-trigger Unholy curios", keep:"Purge", category:"curio",
+    synergy:{penaltyRegions:['ruins']}, score:-5 },
+  { name:"Demonomania",      effect:"40% chance to auto-trigger Unholy curios", keep:"Purge", category:"curio",
+    synergy:{penaltyRegions:['ruins']}, score:-5 },
+  { name:"Egomania",         effect:"40% chance to auto-trigger Reflective curios — keeps loot", keep:"Situational", category:"curio",
+    synergy:{}, score:-2 },
+  { name:"Necromania",       effect:"40% chance to auto-trigger Body curios", keep:"Purge", category:"curio",
+    synergy:{penaltyRegions:['ruins','warrens']}, score:-5 },
+
+  // ── TOWN ─────────────────────────────────────────────
+  { name:"Faithless",        effect:"Will not Pray or Flagellate — blocks Abbey", keep:"Purge", category:"town",
+    synergy:{}, score:-7 },
+  { name:"Deviant Tastes",   effect:"Cannot visit Brothel — limits Tavern options", keep:"Purge", category:"town",
+    synergy:{}, score:-5 },
+  { name:"Known Cheat",      effect:"Cannot Gamble — blocks Tavern option", keep:"Purge", category:"town",
+    synergy:{}, score:-4 },
+  { name:"Unquiet Mind",     effect:"Cannot Meditate — blocks Abbey Cloister", keep:"Purge", category:"town",
+    synergy:{}, score:-6 },
+  { name:"Witness",          effect:"Will not Pray — partial Abbey block", keep:"Purge", category:"town",
+    synergy:{}, score:-5 },
+  { name:"Tippler",          effect:"Will only Drink — forces Tavern Bar exclusively", keep:"Situational", category:"town",
+    synergy:{}, score:-3 },
+  { name:"Resolution",       effect:"Will never Drink — blocks Tavern Bar", keep:"Situational", category:"town",
+    synergy:{}, score:-3 },
+  { name:"Thanatophobia",    effect:"+15 Stress when an ally dies — chain-reaction risk", keep:"Purge", category:"town",
+    synergy:{}, score:-7 },
+
+  // ── AFFLICTIONS (reference only) ─────────────────────
+  { name:"Abusive",          effect:"All resists -15%, -5 ACC, -15 DEF; stresses party", keep:"Purge", category:"general",
+    synergy:{}, score:-9 },
+  { name:"Masochistic",      effect:"All resists -15%, -15 DEF; may self-attack or death-mark self", keep:"Purge", category:"general",
+    synergy:{}, score:-9 },
+  { name:"Paranoid",         effect:"All resists -15%; may ignore commands or act randomly", keep:"Purge", category:"general",
+    synergy:{}, score:-8 },
+  { name:"Hopeless",         effect:"All resists -15%, -3 SPD; may ignore commands", keep:"Purge", category:"general",
+    synergy:{}, score:-8 },
 ];
 
 // ═══════════════════════════════════════════════════════
@@ -1564,18 +1829,55 @@ function initRoster() {
 // QUIRKS
 // ═══════════════════════════════════════════════════════
 function renderQuirks() {
-  document.getElementById('pos-quirks').innerHTML = POS_QUIRKS.map(q => `
-    <div class="quirk-entry pos">
-      <div class="quirk-keep-label ${q.keep==='Lock'?'keep-yes':q.keep==='Purge'?'keep-no':'keep-situational'}">${q.keep}</div>
-      <div class="quirk-entry-name">${q.name}</div>
-      <div class="quirk-entry-effect">${q.effect}</div>
-    </div>`).join('');
-  document.getElementById('neg-quirks').innerHTML = NEG_QUIRKS.map(q => `
-    <div class="quirk-entry neg">
-      <div class="quirk-keep-label ${q.keep==='Purge'?'keep-no':'keep-situational'}">${q.keep}</div>
-      <div class="quirk-entry-name">${q.name}</div>
-      <div class="quirk-entry-effect">${q.effect}</div>
-    </div>`).join('');
+  const CATEGORIES = {
+    general:     { label:'General Stats',         color:'var(--text)' },
+    conditional: { label:'Conditional',           color:'#a0c080' },
+    light:       { label:'Light-Related',         color:'#c0a840' },
+    region:      { label:'Region-Specific',       color:'var(--gold)' },
+    monster:     { label:'Monster-Specific',      color:'#c07040' },
+    resist:      { label:'Resistances',           color:'#7090c0' },
+    curio:       { label:'Curio Triggers',        color:'#a060a0' },
+    town:        { label:'Town Behaviour',        color:'var(--text-dim)' },
+  };
+
+  function regionTag(r) {
+    const colors = { ruins:'#c0a020', weald:'#507a20', warrens:'#a02040', cove:'#5090c0' };
+    return `<span style="font-size:0.6rem;padding:1px 5px;border:1px solid ${colors[r]||'#666'};color:${colors[r]||'#aaa'};margin-right:3px;">${r}</span>`;
+  }
+
+  function renderGroup(quirks, isPos) {
+    const byCat = {};
+    quirks.forEach(q => { (byCat[q.category] = byCat[q.category]||[]).push(q); });
+    return Object.entries(CATEGORIES).map(([key, meta]) => {
+      const group = byCat[key];
+      if (!group) return '';
+      return `
+        <div style="margin-bottom:18px;">
+          <div style="font-size:0.68rem;color:${meta.color};letter-spacing:2px;text-transform:uppercase;
+            border-bottom:1px solid var(--border2);padding-bottom:5px;margin-bottom:8px;">${meta.label}</div>
+          <div class="quirk-grid">
+            ${group.map(q => {
+              const bonusR = (q.synergy&&q.synergy.bonusRegions)||[];
+              const penR   = (q.synergy&&q.synergy.penaltyRegions)||[];
+              const keepClass = q.keep==='Lock'?'keep-yes':q.keep==='Purge'?'keep-no':'keep-situational';
+              return `
+                <div class="quirk-entry ${isPos?'pos':'neg'}">
+                  <div class="quirk-keep-label ${keepClass}">${q.keep}</div>
+                  <div class="quirk-entry-name">${q.name}</div>
+                  <div class="quirk-entry-effect">${q.effect}</div>
+                  ${bonusR.length||penR.length ? `<div style="margin-top:5px;">
+                    ${bonusR.map(r=>regionTag(r)).join('')}
+                    ${penR.map(r=>`<span style="font-size:0.6rem;padding:1px 5px;border:1px solid var(--red-dim);color:var(--red-dim);margin-right:3px;">✕${r}</span>`).join('')}
+                  </div>` : ''}
+                </div>`;
+            }).join('')}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  document.getElementById('pos-quirks').innerHTML = renderGroup(POS_QUIRKS, true);
+  document.getElementById('neg-quirks').innerHTML = renderGroup(NEG_QUIRKS, false);
 }
 
 // ═══════════════════════════════════════════════════════
