@@ -6,7 +6,7 @@
 var roster      = JSON.parse(localStorage.getItem('dd-roster')  || '[]');
 var estateState = JSON.parse(localStorage.getItem('dd-estate')  || '{}');
 var subsState   = {};
-var activeProvLevel = 'short'; // Matches data.js: PROVISIONS.short
+var activeProvLevel = 'short'; 
 var initialized = {};
 
 // -- PERSISTENCE HELPERS --
@@ -22,7 +22,7 @@ function renderRegion(rk) {
 
     if (!subsState[rk]) subsState[rk] = {1:false,2:false,3:false,4:false};
 
-    // Update Text Elements
+    // 1. Update Subtitle and Intelligence Tips
     var subEl = document.getElementById(rk + '-subtitle');
     if (subEl) subEl.textContent = intel.subtitle;
 
@@ -33,9 +33,17 @@ function renderRegion(rk) {
         + '</ul>';
     }
 
+    // 2. FIND THE GRID (Fixes the "Blank Screen" issue)
+    // Checks for specific ID first, then falls back to searching within the tab pane
     var grid = document.getElementById(rk + '-team');
-    if (!grid) return;
+    if (!grid) {
+        var pane = document.getElementById('tab-' + rk);
+        if (pane) grid = pane.querySelector('.team-grid');
+    }
 
+    if (!grid) return; // Exit if no container is found
+
+    // 3. Build the Hero Cards
     var positions  = [4,3,2,1];
     var html = '';
     
@@ -141,6 +149,7 @@ function switchTab(id) {
     document.querySelectorAll('.nav-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'tab-' + id));
 
+    // Ensure all regions (Base + DLC) are included here
     const regions = ['ruins', 'weald', 'warrens', 'cove', 'courtyard', 'farmstead'];
     
     if (regions.includes(id)) { 
@@ -174,6 +183,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Start App
+    // Start App on Ruins tab
     switchTab('ruins');
 });
