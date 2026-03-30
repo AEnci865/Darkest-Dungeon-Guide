@@ -394,3 +394,4 @@ initialized = {};
 renderEstate();
 if (document.getElementById(‘rosterGrid’)) renderRoster();
 }
+}
