@@ -9,5 +9,3 @@
 ## How to Run
 Open index.html in browser
 
-## Deploy
-Upload to GitHub → enable Pages → done
