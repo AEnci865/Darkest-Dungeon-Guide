@@ -2,125 +2,132 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Darkest Dungeon Master Reference</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darkest Dungeon: Estate Reference</title>
     <style>
         :root {
-            --bg: #050505; --panel: #121212; --gold: #c5a059; --border: #4a3b21;
-            --text: #bbb; --heal: #2d4d2d; --dmg: #7a1f1f; --util: #4b2d5c;
+            --bg: #0b0b0b; --panel: #1a1a1a; --gold: #c5a059; --border: #5c4b2b;
+            --text: #d1d1d1; --red: #7a1f1f;
         }
-        body { background: var(--bg); color: var(--text); font-family: 'Georgia', serif; margin: 0; padding: 10px; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 1000px; background: var(--panel); border: 2px solid var(--border); padding: 15px; box-shadow: 0 0 50px #000; }
-        h1, h2 { text-align: center; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Georgia', serif; margin: 0; padding: 15px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 900px; border: 2px solid var(--border); background: var(--panel); padding: 20px; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+        h1, h2 { text-align: center; text-transform: uppercase; letter-spacing: 3px; color: var(--gold); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
         
-        /* Navigation Grid matching your image */
-        .nav-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 20px; }
-        @media(min-width: 600px) { .nav-grid { grid-template-columns: repeat(4, 1fr); } }
+        /* The Navigation Grid - Matching your Layout Image */
+        .nav-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 30px; }
+        .nav-btn { background: #252525; border: 1px solid var(--border); color: var(--text); padding: 12px 20px; cursor: pointer; transition: 0.3s; font-size: 0.8rem; text-transform: uppercase; min-width: 140px; }
+        .nav-btn:hover { background: var(--gold); color: black; }
+        .nav-btn.active { background: var(--gold); color: black; font-weight: bold; }
 
-        button { background: #1a1a1a; border: 1px solid var(--border); color: var(--text); padding: 12px; cursor: pointer; text-transform: uppercase; font-size: 0.75rem; transition: 0.2s; }
-        button:hover { background: var(--gold); color: #000; }
-        button.active { background: var(--gold); color: #000; font-weight: bold; }
+        /* Content Area */
+        .content-view { border: 1px solid #333; padding: 20px; background: #0a0a0a; min-height: 400px; }
 
-        .content-box { border: 1px solid #333; padding: 15px; background: #0a0a0a; min-height: 400px; }
-        
-        /* Estate Tracker Layout */
-        .estate-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 10px; }
-        @media(min-width: 700px) { .estate-grid { grid-template-columns: 1fr 1fr; } }
-        .building-card { border: 1px solid var(--border); padding: 10px; background: #151515; }
-        .building-card h3 { color: var(--gold); margin: 0 0 10px 0; font-size: 0.9rem; border-bottom: 1px solid #333; }
-        .level-row { display: flex; align-items: center; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #222; font-size: 0.85rem; }
-        input[type="checkbox"] { transform: scale(1.2); accent-color: var(--gold); cursor: pointer; }
+        /* Team Builder Grid */
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        .hero-card { background: #151515; border: 1px solid #444; padding: 15px; text-align: center; }
+        .hero-name { color: var(--gold); font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #333; }
+        .skills-list { font-size: 0.8rem; color: #999; text-align: left; line-height: 1.5; min-height: 80px; }
+        .swap-btn { width: 100%; margin-top: 15px; padding: 8px; background: #333; color: white; border: 1px solid #555; cursor: pointer; font-size: 0.7rem; }
 
-        /* Hero Slots */
-        .team-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-        @media(min-width: 600px) { .team-grid { grid-template-columns: repeat(4, 1fr); } }
-        .hero-slot { background: #1a1a1a; border: 1px solid #333; padding: 10px; }
-        .hero-name { color: var(--gold); font-weight: bold; border-bottom: 1px solid #333; margin-bottom: 5px; text-align: center; }
-        .skills-text { font-size: 0.75rem; color: #999; line-height: 1.4; }
-        .swap-btn { width: 100%; margin-top: 10px; background: #333; border: 1px solid #444; color: white; padding: 4px; font-size: 0.65rem; cursor: pointer; }
+        /* Estate Tracker Styling */
+        .estate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .building-card { background: #111; border: 1px solid var(--border); padding: 15px; }
+        .building-card h3 { color: var(--gold); margin-top: 0; font-size: 1rem; border-bottom: 1px solid #444; }
+        .lvl-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #222; }
+        input[type="checkbox"] { transform: scale(1.3); accent-color: var(--gold); cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Estate Master System</h1>
+    <h1>Estate Management System</h1>
     
     <div class="nav-grid">
-        <button onclick="ui('ruins')" class="t-btn active">💀 Ruins</button>
-        <button onclick="ui('weald')" class="t-btn">🌿 Weald</button>
-        <button onclick="ui('warrens')" class="t-btn">🐀 Warrens</button>
-        <button onclick="ui('cove')" class="t-btn">🐙 Cove</button>
-        <button onclick="ui('estate')" class="t-btn">🏰 Estate Tracker</button>
-        <button onclick="ui('bosses')" class="t-btn">⚔️ Bosses</button>
-        <button onclick="ui('farmstead')" class="t-btn">🌾 Farmstead</button>
-        <button onclick="ui('provisions')" class="t-btn">🎒 Provisions</button>
+        <button class="nav-btn active" onclick="show('ruins')">💀 Ruins</button>
+        <button class="nav-btn" onclick="show('weald')">🌿 Weald</button>
+        <button class="nav-btn" onclick="show('warrens')">🐀 Warrens</button>
+        <button class="nav-btn" onclick="show('cove')">🐙 Cove</button>
+        <button class="nav-btn" onclick="show('estate')">🏰 Estate Tracker</button>
+        <button class="nav-btn" onclick="show('bosses')">⚔️ Bosses</button>
+        <button class="nav-btn" onclick="show('darkest')" style="color:red">🔥 Darkest Dungeon</button>
+        <button class="nav-btn" onclick="show('provisions')">🎒 Provisions</button>
     </div>
 
-    <div id="main-view" class="content-box">
+    <div id="view" class="content-view">
         </div>
 </div>
 
 <script>
-    const heroes = {
+    // Data for Hero Positions & Subs
+    const teamData = {
         ruins: [
-            { m: "Vestal", ms: "Judgment, Dazzling, Grace, Comfort", s: "Occultist", ss: "Wyrd, Curse, Artillery, Hex" },
-            { m: "Plague Doctor", ms: "Noxious, Grenade, Gas, Meds", s: "Jester", ss: "Ballad, Tune, Slice, Dirk" },
-            { m: "Highwayman", ms: "Duelist, PBS, Pistol, Open Vein", s: "Houndmaster", ss: "Rush, Whistle, Blackjack, Lick" },
-            { m: "Crusader", ms: "Smite, Stun, Lance, Cry", s: "Leper", ss: "Chop, Hew, Purge, Withstand" }
+            { pos: 4, m: "Vestal", ms: "Judgment, Dazzling, Grace, Comfort", s: "Occultist", ss: "Wyrd, Curse, Artillery, Hex" },
+            { pos: 3, m: "Plague Doctor", ms: "Noxious, Grenade, Gas, Meds", s: "Jester", ss: "Ballad, Tune, Slice, Dirk" },
+            { pos: 2, m: "Highwayman", ms: "Duelist, PBS, Pistol, Open Vein", s: "Houndmaster", ss: "Rush, Whistle, Blackjack, Lick" },
+            { pos: 1, m: "Crusader", ms: "Smite, Stun, Lance, Cry", s: "Leper", ss: "Chop, Hew, Purge, Withstand" }
+        ],
+        weald: [
+            { pos: 4, m: "Arbalest", ms: "Sniper, Flare, Bandage, Bola", s: "Vestal", ss: "Grace, Comfort, Dazzling, Judgment" },
+            { pos: 3, m: "Houndmaster", ms: "Rush, Whistle, Guard, Lick", s: "Occultist", ss: "Wyrd, Curse, Pull, Hex" },
+            { pos: 2, m: "Bounty Hunter", ms: "Collect, Mark, Flashbang, Finish", s: "Abomination", ss: "Manacles, Beast, Bile, Absolve" },
+            { pos: 1, m: "Hellion", ms: "Wicked, Iron Swan, Bleed, YAWP", s: "Flagellant", ss: "Punish, Rain, Redeem, Reclaim" }
         ]
-        // Add more regions here
     };
 
-    let subActive = [false, false, false, false];
+    let subStates = [false, false, false, false];
 
-    function ui(tab) {
-        // Handle Active Button State
-        document.querySelectorAll('.t-btn').forEach(b => b.classList.toggle('active', b.innerText.toLowerCase().includes(tab)));
-        const view = document.getElementById('main-view');
+    function show(tab) {
+        // Update button colors
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.innerText.toLowerCase().includes(tab));
+        });
+
+        const view = document.getElementById('view');
 
         if (tab === 'estate') {
             renderEstate(view);
-        } else if (tab === 'ruins') {
-            renderTeam(view, 'ruins');
+        } else if (teamData[tab]) {
+            renderTeam(view, tab);
         } else {
-            view.innerHTML = `<h2>${tab.toUpperCase()}</h2><p style="text-align:center">Section under construction. Pass to Claude for GUI polishing.</p>`;
+            view.innerHTML = `<h2>${tab}</h2><p style="text-align:center">Data processing in progress...</p>`;
         }
     }
 
     function renderTeam(container, region) {
         let html = `<div class="team-grid">`;
-        heroes[region].forEach((h, i) => {
-            const isSub = subActive[i];
+        teamData[region].forEach((hero, i) => {
+            const activeSub = subStates[i];
             html += `
-                <div class="hero-slot">
-                    <div class="hero-name">${isSub ? h.s : h.m}</div>
-                    <div class="skills-text"><strong>Skills:</strong><br>${isSub ? h.ss : h.ms}</div>
-                    <button class="swap-btn" onclick="swap(${i}, '${region}')">Swap Sub</button>
+                <div class="hero-card">
+                    <div class="hero-name">${activeSub ? hero.s : hero.m}</div>
+                    <div class="skills-list"><strong>Skills:</strong><br>${activeSub ? hero.ss : hero.ms}</div>
+                    <button class="swap-btn" onclick="swap(${i}, '${region}')">SWAP SUB</button>
                 </div>`;
         });
         container.innerHTML = html + `</div>`;
     }
 
     function swap(idx, region) {
-        subActive[idx] = !subActive[idx];
-        ui(region);
+        subStates[idx] = !subStates[idx];
+        show(region);
     }
 
     function renderEstate(container) {
-        const builds = [
-            { id: 'bs_w', n: 'Blacksmith: Weapons' },
-            { id: 'bs_a', n: 'Blacksmith: Armor' },
-            { id: 'guild', n: 'Guild: Skills' },
-            { id: 'san', n: 'Sanitarium: Slots' }
+        const buildings = [
+            { id: 'bw', name: 'Blacksmith: Weapons' },
+            { id: 'ba', name: 'Blacksmith: Armor' },
+            { id: 'gd', name: 'Guild: Skills' },
+            { id: 'sn', name: 'Sanitarium: Slots' }
         ];
-        
-        let html = `<h2>Estate Upgrades</h2><div class="estate-grid">`;
-        builds.forEach(b => {
-            html += `<div class="building-card"><h3>${b.n}</h3>`;
-            for(let i=1; i<=5; i++) {
+
+        let html = `<h2>Hamlet Upgrade Tracker</h2><div class="estate-grid">`;
+        buildings.forEach(b => {
+            html += `<div class="building-card"><h3>${b.name}</h3>`;
+            for (let i = 1; i <= 5; i++) {
                 const key = `${b.id}_${i}`;
                 const checked = localStorage.getItem(key) === 'true' ? 'checked' : '';
                 html += `
-                    <div class="level-row">
+                    <div class="lvl-row">
                         Level ${i}
                         <input type="checkbox" id="${key}" ${checked} onchange="save('${key}')">
                     </div>`;
@@ -131,11 +138,12 @@
     }
 
     function save(id) {
-        localStorage.setItem(id, document.getElementById(id).checked);
+        const val = document.getElementById(id).checked;
+        localStorage.setItem(id, val);
     }
 
-    // Default view
-    ui('ruins');
+    // Default to Ruins on load
+    show('ruins');
 </script>
 
 </body>
