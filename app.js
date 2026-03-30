@@ -126,12 +126,11 @@ var fs = document.getElementById(‘filterStatus’).value;
 var grid = document.getElementById(‘rosterGrid’);
 var heroes = roster.filter(function(h) { return (!fc || h.cls === fc) && (!fs || h.status === fs); });
 if (!heroes.length) { grid.innerHTML = ‘<div style="color:var(--text-dim);font-style:italic;grid-column:1/-1;padding:20px 0;">No heroes recorded. Add your first hero above.</div>’; return; }
-grid.innerHTML = heroes.map(function(h) {
+grid.innerHTML = heroes.map(function(h, idx) {
 var sc = stressColor(h.stress);
 var sp = Math.min(100, h.stress / 2);
 var posQHtml = (h.posQ||[]).map(function(q) { return ‘<span class="quirk-tag quirk-pos">’ + q + ‘</span>’; }).join(’’);
 var negQHtml = (h.negQ||[]).map(function(q) { return ‘<span class="quirk-tag quirk-neg">’ + q + ‘</span>’; }).join(’’);
-var idx = roster.indexOf(h);
 return ‘<div class="roster-card' + (h.status==='dead'?' dead':'') + (h.status==='retired'?' retired':'') + '">’
 + ‘<div class="rcard-level">Lv’ + h.level + ‘</div>’
 + ‘<div class="rcard-name">’ + h.name + ‘</div>’
@@ -156,7 +155,7 @@ document.getElementById(‘clearRoster’).addEventListener(‘click’, functio
 document.getElementById(‘saveHero’).addEventListener(‘click’, function() {
 var posQ = document.getElementById(‘newPosQ’).value.split(’,’).map(function(s){return s.trim();}).filter(Boolean);
 var negQ = document.getElementById(‘newNegQ’).value.split(’,’).map(function(s){return s.trim();}).filter(Boolean);
-roster.push({ name: document.getElementById(‘newName’).value.trim()||‘Unnamed’, cls: document.getElementById(‘newClass’).value, level: document.getElementById(‘newLevel’).value, stress: parseInt(document.getElementById(‘newStress’).value)||0, status: document.getElementById(‘newStatus’).value, posQ: posQ, negQ: negQ });
+roster.push({ name: document.getElementById(‘newName’).value.trim()||‘Unnamed’, cls: document.getElementById(‘newClass’).value, level: document.getElementById(‘newLevel’).value, stress: parseInt(document.getElementById(‘newStress’).value, 10)||0, status: document.getElementById(‘newStatus’).value, posQ: posQ, negQ: negQ });
 saveRoster(); renderRoster();
 document.getElementById(‘addHeroForm’).classList.remove(‘open’);
 document.getElementById(‘newName’).value=’’; document.getElementById(‘newStress’).value=‘0’; document.getElementById(‘newPosQ’).value=’’; document.getElementById(‘newNegQ’).value=’’;
@@ -218,7 +217,7 @@ var nameEl = document.getElementById(‘estateName’);
 if (nameEl && !nameEl.value) nameEl.value = localStorage.getItem(‘dd-estate-name’) || ‘’;
 var total = 0, maxT = 0;
 BUILDINGS.forEach(function(b) { b.upgrades.forEach(function(u,ui) { total += getUpgradeLevel(b.id,ui); maxT += u.maxLevel; }); });
-var pct = Math.round((total/maxT)*100);
+var pct = maxT ? Math.round((total/maxT)*100) : 0;
 document.getElementById(‘estate-summary’).innerHTML =
 ‘<div class="estate-stat"><div class="estate-stat-val">’+total+’</div><div class="estate-stat-label">Upgrades Done</div></div>’
 +’<div class="estate-stat"><div class="estate-stat-val">’+maxT+’</div><div class="estate-stat-label">Total</div></div>’
@@ -274,9 +273,9 @@ else { if(tag===‘darkest’)return 2.0; }
 return 1.0;
 }
 function computeRoute() {
-var week = parseInt(document.getElementById(‘routeWeek’).value)||1;
+var week = parseInt(document.getElementById(‘routeWeek’).value, 10)||1;
 var strategy = document.getElementById(‘routeStrategy’).value;
-var count = parseInt(document.getElementById(‘routeCount’).value)||10;
+var count = parseInt(document.getElementById(‘routeCount’).value, 10)||10;
 var weights = STRATEGY_WEIGHTS[strategy]||STRATEGY_WEIGHTS.balanced;
 var candidates = [];
 BUILDINGS.forEach(function(b) {
@@ -333,16 +332,21 @@ initialized[id] = true;
 renderRegion(id);
 }
 }
-document.getElementById(‘mainNav’).addEventListener(‘click’, function(e) {
+var mainNav = document.getElementById(‘mainNav’);
+if (mainNav) {
+mainNav.addEventListener(‘click’, function(e) {
 var btn = e.target.closest(’[data-tab]’);
 if (btn) switchTab(btn.dataset.tab);
 });
+}
 document.addEventListener(‘click’, function(e) {
 var pt = e.target.closest(’.prov-tab[data-prov]’);
 if (pt) { document.querySelectorAll(’.prov-tab[data-prov]’).forEach(function(b){b.classList.remove(‘active’);}); pt.classList.add(‘active’); activeProv=pt.dataset.prov; renderProvisions(); }
 });
+setTimeout(function() {
 renderRegion(‘ruins’);
 initialized[‘ruins’] = true;
+}, 0);
 
 // –– DATA EXPORT / IMPORT ––
 function exportData() {
@@ -377,10 +381,10 @@ if (data.roster) { roster = data.roster; saveRoster(); }
 if (data.estate) { estateState = data.estate; saveEstate(); }
 if (data.name) { localStorage.setItem(‘dd-estate-name’, data.name); }
 alert(‘Import successful! Reload the tabs to see your data.’);
-initialized = {};
 document.getElementById(‘importArea’).value = ‘’;
+initialized = {};
 renderEstate();
-if (initialized[‘roster’]) renderRoster();
+if (document.getElementById(‘rosterGrid’)) renderRoster();
 } catch(e) { alert(‘Invalid JSON. Please check and try again.’); }
 }
 function nukeAll() {
