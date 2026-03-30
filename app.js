@@ -1,198 +1,252 @@
-// Darkest Dungeon Estate Guide - Full Plug & Play Version
+// ==========================
+// DARKHEST DUNGEON APP.JS
+// ==========================
 
-// –– STATE ––
-var roster = JSON.parse(localStorage.getItem('dd-roster') || '[]');
-var subsState = {};
-var estateState = JSON.parse(localStorage.getItem('dd-estate') || '{}');
-var activeProv = 'short';
-var activeProvRegion = 'ruins';
-var activeTeam = {ruins:0, weald:0, warrens:0, cove:0};
-var initialized = {};
+// ---- DATA IMPORTED FROM data.js ----
+// Assumes REGIONS, BOSSES, DD_RUNS, PROVISIONS, CLASSES, POS_QUIRKS, NEG_QUIRKS, BUILDINGS exist
 
-// –– HELPERS ––
-function stressColor(s) {
-    return s < 50 ? '#80c060' : s < 100 ? '#c5a059' : s < 150 ? '#c08020' : '#cc2222';
-}
+// ==========================
+// TAB SWITCHING
+// ==========================
+document.addEventListener('DOMContentLoaded', () => {
 
-function saveRoster() { 
-    localStorage.setItem('dd-roster', JSON.stringify(roster)); 
-}
+    const tabs = document.querySelectorAll('.nav-tab');
+    const panes = document.querySelectorAll('.tab-pane');
 
-function saveEstate() { 
-    localStorage.setItem('dd-estate', JSON.stringify(estateState)); 
-}
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const target = tab.dataset.tab;
 
-function saveEstateName() { 
-    localStorage.setItem('dd-estate-name', document.getElementById('estateName').value); 
-}
+            // Remove active class from all tabs and panes
+            tabs.forEach(t => t.classList.remove('active'));
+            panes.forEach(p => p.classList.remove('active'));
 
-function getUpgradeLevel(bId, uIdx) { 
-    return estateState[bId + '*' + uIdx] || 0; 
-}
+            // Activate the clicked tab and its pane
+            tab.classList.add('active');
+            document.getElementById(`tab-${target}`).classList.add('active');
+        });
+    });
 
-function setUpgradeLevel(bId, uIdx, level) {
-    estateState[bId + '*' + uIdx] = level;
-    saveEstate();
-    renderEstate();
-    if (initialized['buildroute']) computeRoute();
-}
+    // ---- Provisions Sub-Tabs ----
+    const provTabs = document.querySelectorAll('.prov-tab');
+    const provContent = document.getElementById('prov-content');
 
-function pipClick(bId, uIdx, clicked, maxLevel) {
-    var cur = getUpgradeLevel(bId, uIdx);
-    var nv = cur === clicked ? clicked - 1 : clicked;
-    setUpgradeLevel(bId, uIdx, Math.max(0, Math.min(maxLevel, nv)));
-}
+    provTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const target = tab.dataset.prov;
 
-function resetEstate() {
-    if (confirm('Reset all building levels to 0?')) {
-        estateState = {};
-        saveEstate();
-        renderEstate();
-        if (initialized['buildroute']) computeRoute();
+            // Remove active
+            provTabs.forEach(t => t.classList.remove('active'));
+
+            // Add active
+            tab.classList.add('active');
+
+            // Render provisions for this selection
+            provContent.innerHTML = '';
+            PROVISIONS[target].forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                provContent.appendChild(li);
+            });
+        });
+    });
+
+    // Render default provisions tab
+    document.querySelector('.prov-tab.active')?.click();
+
+    // ==========================
+    // REGION TEAMS
+    // ==========================
+    Object.keys(REGIONS).forEach(region => {
+        const container = document.getElementById(`${region}-team`);
+        if (!container) return;
+
+        const team = REGIONS[region].teams[0]; // Default team 0
+        Object.keys(team).forEach(idx => {
+            if (idx === 'label') return;
+            const hero = team[idx];
+            const div = document.createElement('div');
+            div.textContent = `${hero.main} [${hero.mS.join(', ')}]`;
+            container.appendChild(div);
+        });
+    });
+
+    // ==========================
+    // BOSSES
+    // ==========================
+    const bossList = document.getElementById('boss-list');
+    BOSSES.forEach(boss => {
+        const div = document.createElement('div');
+        div.className = 'boss-item';
+        div.innerHTML = `<strong>${boss.name}</strong> (${boss.region}) - ${boss.tier.join(', ')}`;
+        bossList.appendChild(div);
+    });
+
+    // ==========================
+    // DARKEST DUNGEON RUNS
+    // ==========================
+    const ddList = document.getElementById('dd-list');
+    DD_RUNS.forEach(run => {
+        const div = document.createElement('div');
+        div.className = 'dd-item';
+        div.textContent = `${run.name} - ${run.effect}`;
+        ddList.appendChild(div);
+    });
+
+    // ==========================
+    // HERO ROSTER
+    // ==========================
+    const rosterGrid = document.getElementById('rosterGrid');
+    const addHeroBtn = document.getElementById('addHeroBtn');
+    const addHeroForm = document.getElementById('addHeroForm');
+    const saveHeroBtn = document.getElementById('saveHero');
+    const cancelHeroBtn = document.getElementById('cancelHero');
+
+    // Populate class dropdown
+    const newClassSelect = document.getElementById('newClass');
+    CLASSES.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        newClassSelect.appendChild(opt);
+    });
+
+    // Load roster from localStorage
+    let roster = JSON.parse(localStorage.getItem('roster') || '[]');
+    renderRoster();
+
+    addHeroBtn.addEventListener('click', () => addHeroForm.style.display = 'block');
+    cancelHeroBtn.addEventListener('click', () => addHeroForm.style.display = 'none');
+
+    saveHeroBtn.addEventListener('click', () => {
+        const hero = {
+            name: document.getElementById('newName').value,
+            class: document.getElementById('newClass').value,
+            level: parseInt(document.getElementById('newLevel').value),
+            stress: parseInt(document.getElementById('newStress').value),
+            status: document.getElementById('newStatus').value,
+            posQ: document.getElementById('newPosQ').value.split(',').map(s => s.trim()).filter(Boolean),
+            negQ: document.getElementById('newNegQ').value.split(',').map(s => s.trim()).filter(Boolean)
+        };
+        roster.push(hero);
+        saveRoster();
+        renderRoster();
+        addHeroForm.style.display = 'none';
+    });
+
+    function renderRoster() {
+        rosterGrid.innerHTML = '';
+        roster.forEach((h, idx) => {
+            const div = document.createElement('div');
+            div.className = 'roster-card';
+            div.innerHTML = `<strong>${h.name}</strong> (${h.class}) Lv.${h.level} Stress:${h.stress}<br>Status: ${h.status}<br>+${h.posQ.join(', ')}<br>-${h.negQ.join(', ')}`;
+            rosterGrid.appendChild(div);
+        });
     }
-}
 
-// –– REGION TEAMS ––
-function renderRegion(rk) {
-    var region = REGIONS[rk];
-    if (!region) return;
-    var teamIdx = activeTeam[rk] || 0;
-    var team = region.teams[teamIdx];
-    if (!team) return;
-    if (!subsState[rk]) subsState[rk] = {1:false,2:false,3:false,4:false};
-    var grid = document.getElementById(rk + '-team');
-    if (!grid) return;
+    function saveRoster() {
+        localStorage.setItem('roster', JSON.stringify(roster));
+    }
 
-    var positions = [4,3,2,1];
-    var posLabels = {4:'Position 4 (Back)',3:'Position 3',2:'Position 2',1:'Position 1 (Front)'};
+    // ==========================
+    // QUIRKS
+    // ==========================
+    const posQuirkDiv = document.getElementById('pos-quirks');
+    const negQuirkDiv = document.getElementById('neg-quirks');
 
-    var teamBtns = region.teams.map(function(t, i) {
-        var isActive = i === teamIdx;
-        return '<button onclick="switchTeam(\'' + rk + '\',' + i + ')" style="' +
-            'padding:5px 12px;font-size:.65rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;' +
-            'font-family:\'Cinzel Decorative\',serif;transition:all .2s;' +
-            (isActive ? 'background:linear-gradient(135deg,#1a1308,#0d0b0b);border:1px solid var(--gold);color:var(--gold);' :
-                        'background:var(--panel);border:1px solid var(--border);color:var(--text-dim);') +
-            '">' + t.label + '</button>';
-    }).join('');
-
-    var html = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">' + teamBtns + '</div>';
-    html += '<div class="team-grid">';
-    positions.forEach(function(pos) {
-        var hero = team[pos];
-        var isSub = subsState[rk][pos];
-        var name = isSub ? hero.sub : hero.main;
-        var skills = isSub ? hero.sS : hero.mS;
-        var skillsHtml = skills.map(function(s) {
-            return '<div style="font-size:.82rem;color:var(--text-dim);line-height:1.8;font-style:italic;">' + s + '</div>';
-        }).join('');
-        html += '<div>' +
-                '<div class="pos-label">' + posLabels[pos] + '</div>' +
-                '<div class="hero-card' + (isSub ? ' subbed' : '') + '">' +
-                    '<div class="hero-name' + (isSub ? ' sub-active' : '') + '">' + name + '</div>' +
-                    '<div class="skills-list">' + skillsHtml + '</div>' +
-                    '<button class="swap-btn' + (isSub ? ' subbed' : '') + '" onclick="toggleSub(\'' + rk + '\',' + pos + ')">' +
-                        (isSub ? 'Back to Main' : 'Sub: ' + hero.sub) +
-                    '</button>' +
-                '</div></div>';
+    POS_QUIRKS.forEach(q => {
+        const div = document.createElement('div');
+        div.textContent = q;
+        posQuirkDiv.appendChild(div);
     });
-    html += '</div>';
-    grid.innerHTML = html;
-}
-
-function switchTeam(rk, idx) {
-    activeTeam[rk] = idx;
-    subsState[rk] = {1:false,2:false,3:false,4:false};
-    renderRegion(rk);
-}
-
-function toggleSub(rk, pos) {
-    if (!subsState[rk]) subsState[rk] = {};
-    subsState[rk][pos] = !subsState[rk][pos];
-    renderRegion(rk);
-}
-
-// –– BOSSES ––
-function renderBosses() {
-    var el = document.getElementById('boss-list');
-    var html = '';
-    BOSSES.forEach(function(b, i) {
-        var mechHtml = b.mechanics.map(function(m){ return '<li>' + m + '</li>'; }).join('');
-        var teamsHtml = b.teams.map(function(t){ 
-            return '<div class="team-rec"><div class="team-rec-label">' + t.label + ' Team</div><div class="team-rec-heroes">' + t.heroes + '</div></div>'; 
-        }).join('');
-        var avoidHtml = b.avoid.map(function(a){
-            return '<li class="' + (a.indexOf('CRITICAL') >= 0 || a.indexOf('NEVER') >= 0 ? 'warn' : '') + '">' + a + '</li>';
-        }).join('');
-        html += '<div class="boss-card">' +
-                    '<div class="boss-header" onclick="toggleBoss(' + i + ')">' +
-                        '<div><div class="boss-name">' + b.name + '</div><div class="boss-region">' + b.region + ' — ' + b.tiers + '</div></div>' +
-                        '<div class="chevron" id="chev-' + i + '">▶</div>' +
-                    '</div>' +
-                    '<div class="boss-body" id="boss-body-' + i + '">' +
-                        '<div class="boss-section"><h4>Mechanics & Priority</h4><ul>' + mechHtml + '</ul>' + teamsHtml + '</div>' +
-                        '<div class="boss-section"><h4>Avoid / Watch For</h4><ul>' + avoidHtml + '</ul></div>' +
-                    '</div>' +
-                '</div>';
+    NEG_QUIRKS.forEach(q => {
+        const div = document.createElement('div');
+        div.textContent = q;
+        negQuirkDiv.appendChild(div);
     });
-    el.innerHTML = html;
-}
 
-function toggleBoss(i) {
-    var body = document.getElementById('boss-body-' + i);
-    var chev = document.getElementById('chev-' + i);
-    var isOpen = body.classList.contains('open');
-    document.querySelectorAll('.boss-body').forEach(function(b){ b.classList.remove('open'); });
-    document.querySelectorAll('.chevron').forEach(function(c){ c.classList.remove('open'); });
-    if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
-}
+    // ==========================
+    // ESTATE
+    // ==========================
+    const estateGrid = document.getElementById('estate-grid');
+    const estateSummary = document.getElementById('estate-summary');
+    const estateNameInput = document.getElementById('estateName');
 
-// –– ESTATE BUILDINGS ––
-function renderEstate() {
-    var container = document.getElementById('estate-container');
-    var html = '';
-    Object.keys(BUILDINGS).forEach(function(bId) {
-        var b = BUILDINGS[bId];
-        var upgradesHtml = b.upgrades.map(function(up, idx) {
-            var level = getUpgradeLevel(bId, idx);
-            var pips = '';
-            for (var i = 1; i <= up.maxLevel; i++) {
-                pips += '<span class="pip' + (i <= level ? ' active' : '') + '" onclick="pipClick(\'' + bId + '\',' + idx + ',' + i + ',' + up.maxLevel + ')"></span>';
-            }
-            return '<div class="upgrade">' +
-                    '<div class="upgrade-name">' + up.name + '</div>' +
-                    '<div class="pips">' + pips + '</div>' +
-                   '</div>';
-        }).join('');
-        html += '<div class="building">' +
-                    '<div class="building-name">' + b.name + '</div>' +
-                    '<div class="upgrades">' + upgradesHtml + '</div>' +
-                '</div>';
-    });
-    container.innerHTML = html;
-}
+    let estate = JSON.parse(localStorage.getItem('estate') || '{}');
+    if (estate.name) estateNameInput.value = estate.name;
 
-// –– PROVISIONS ––
-function renderProvisions() {
-    var container = document.getElementById('prov-list');
-    if (!container) return;
-    var provs = PROVISIONS[activeProvRegion][activeProv];
-    var html = provs.map(function(p){
-        return '<div class="prov-item">' +
-                '<div class="prov-name">' + p.name + '</div>' +
-                '<div class="prov-cost">' + p.cost + '</div>' +
-               '</div>';
-    }).join('');
-    container.innerHTML = html;
-}
+    estateNameInput.addEventListener('input', saveEstateName);
 
-// –– INIT ––
-function init() {
-    ['ruins','weald','warrens','cove'].forEach(renderRegion);
-    renderBosses();
+    function saveEstateName() {
+        estate.name = estateNameInput.value;
+        localStorage.setItem('estate', JSON.stringify(estate));
+        renderEstate();
+    }
+
+    function renderEstate() {
+        estateGrid.innerHTML = '';
+        estateSummary.textContent = estate.name || 'Unnamed Estate';
+        BUILDINGS.forEach(building => {
+            const div = document.createElement('div');
+            div.className = 'estate-card';
+            div.innerHTML = `<strong>${building.name}</strong> Level: ${estate[building.id] || 0}`;
+            div.addEventListener('click', () => {
+                estate[building.id] = ((estate[building.id] || 0) + 1) % (building.max + 1);
+                saveEstateName();
+            });
+            estateGrid.appendChild(div);
+        });
+    }
+
     renderEstate();
-    renderProvisions();
-    initialized['buildroute'] = true;
-}
 
-window.onload = init;
+    window.resetEstate = function() {
+        BUILDINGS.forEach(b => delete estate[b.id]);
+        saveEstateName();
+    };
+
+    // ==========================
+    // DATA EXPORT / IMPORT
+    // ==========================
+    window.exportData = function() {
+        const save = JSON.stringify({ roster, estate }, null, 2);
+        navigator.clipboard.writeText(save);
+        alert('Data copied to clipboard!');
+    };
+
+    window.downloadData = function() {
+        const save = JSON.stringify({ roster, estate }, null, 2);
+        const blob = new Blob([save], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'dd_estate_save.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+
+    window.importData = function() {
+        const area = document.getElementById('importArea');
+        try {
+            const imported = JSON.parse(area.value);
+            roster = imported.roster || [];
+            estate = imported.estate || {};
+            saveRoster();
+            renderRoster();
+            renderEstate();
+            alert('Import successful!');
+        } catch (e) {
+            alert('Invalid JSON');
+        }
+    };
+
+    window.nukeAll = function() {
+        if (!confirm('Are you sure? This will erase everything.')) return;
+        localStorage.clear();
+        roster = [];
+        estate = {};
+        renderRoster();
+        renderEstate();
+    };
+
+}); // DOMContentLoaded
