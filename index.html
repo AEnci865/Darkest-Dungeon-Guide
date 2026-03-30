@@ -19,6 +19,8 @@
     <button class="nav-tab"         data-tab="weald">  <span class="icon">&#127807;</span>Weald</button>
     <button class="nav-tab"         data-tab="warrens"><span class="icon">&#128000;</span>Warrens</button>
     <button class="nav-tab"         data-tab="cove">   <span class="icon">&#128025;</span>Cove</button>
+    <button class="nav-tab"         data-tab="courtyard"><span class="icon">&#129656;</span>Courtyard</button>
+    <button class="nav-tab"         data-tab="farmstead"><span class="icon">&#127776;</span>Farmstead</button>
     <button class="nav-tab"         data-tab="bosses"> <span class="icon">&#9876;&#65039;</span>Bosses</button>
     <button class="nav-tab"         data-tab="darkest"><span class="icon">&#128293;</span>Darkest</button>
     <button class="nav-tab"         data-tab="provisions"><span class="icon">&#127920;</span>Provisions</button>
@@ -82,9 +84,31 @@
     <div class="tips-box" id="cove-tips"></div>
   </div>
 
+  <div id="tab-courtyard" class="tab-pane">
+    <div class="region-header">
+      <div class="section-title" style="margin:0;border:none;">The Courtyard</div>
+      <div class="focus-badges"><span class="badge badge-bleed">Bleed</span></div>
+    </div>
+    <div class="section-sub" id="courtyard-subtitle"></div>
+    <div class="team-grid" id="courtyard-team"></div>
+    <div class="tips-box" id="courtyard-tips"></div>
+  </div>
+
+  <div id="tab-farmstead" class="tab-pane">
+    <div class="region-header">
+      <div class="section-title" style="margin:0;border:none;">The Farmstead</div>
+      <div class="focus-badges"><span class="badge badge-pierce">Pierce</span></div>
+    </div>
+    <div class="section-sub" id="farmstead-subtitle"></div>
+    <div class="team-grid" id="farmstead-team"></div>
+    <div class="tips-box" id="farmstead-tips"></div>
+  </div>
+
   <div id="tab-bosses" class="tab-pane">
     <div class="section-title">Boss Compendium</div>
     <div id="boss-list"></div>
+    <div class="section-title" style="margin-top:20px;">Special & Wandering Bosses</div>
+    <div id="special-boss-list"></div>
   </div>
 
   <div id="tab-darkest" class="tab-pane">
@@ -116,6 +140,7 @@
         <option value="dead">Dead</option>
       </select>
     </div>
+    
     <div class="add-hero-form" id="addHeroForm">
       <div class="form-row">
         <input type="text" id="newName" placeholder="Name">
