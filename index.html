@@ -2,64 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Darkest Dungeon Estate Guide</title>
+  <title>Darkest Dungeon Campaign Optimizer</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Darkest Dungeon Estate Guide</h1>
+<h1>Darkest Dungeon Campaign Optimizer</h1>
 
 <div id="mainNav">
-  <button data-tab="ruins" class="nav-tab active">Ruins</button>
-  <button data-tab="weald" class="nav-tab">Weald</button>
-  <button data-tab="warrens" class="nav-tab">Warrens</button>
-  <button data-tab="cove" class="nav-tab">Cove</button>
-  <button data-tab="bosses" class="nav-tab">Bosses</button>
-  <button data-tab="roster" class="nav-tab">Roster</button>
-  <button data-tab="estate" class="nav-tab">Estate</button>
-  <button data-tab="buildroute" class="nav-tab">Build Route</button>
+  <button data-tab="roster" class="nav-tab active">Roster</button>
+  <button data-tab="team" class="nav-tab">Team Builder</button>
+  <button data-tab="campaign" class="nav-tab">Campaign</button>
 </div>
 
-<div id="tab-ruins" class="tab-pane active">
-  <div id="ruins-team"></div>
-</div>
-<div id="tab-weald" class="tab-pane">
-  <div id="weald-team"></div>
-</div>
-<div id="tab-warrens" class="tab-pane">
-  <div id="warrens-team"></div>
-</div>
-<div id="tab-cove" class="tab-pane">
-  <div id="cove-team"></div>
-</div>
-
-<div id="tab-bosses" class="tab-pane">
-  <div id="boss-list"></div>
-</div>
-
-<div id="tab-roster" class="tab-pane">
+<!-- ROSTER -->
+<div id="tab-roster" class="tab-pane active">
+  <button onclick="loadSampleRoster()">Load Sample Roster</button>
+  <button onclick="predictRunRisk()">Predict Risk</button>
+  <button onclick="detectStressSpiral()">Stress Check</button>
   <div id="rosterGrid"></div>
 </div>
 
-<div id="tab-estate" class="tab-pane">
-  <div id="estate-summary"></div>
-  <div id="estate-grid"></div>
+<!-- TEAM -->
+<div id="tab-team" class="tab-pane">
+  <button onclick="buildAutoTeam()">Build Best Team</button>
+  <div id="team-output"></div>
 </div>
 
-<div id="tab-buildroute" class="tab-pane">
-  <input id="routeWeek" placeholder="Week" value="1">
-  <select id="routeStrategy">
-    <option value="balanced">Balanced</option>
-    <option value="survival">Survival</option>
-    <option value="speed">Speed</option>
-    <option value="economy">Economy</option>
-    <option value="darkest">Darkest</option>
-  </select>
-  <input id="routeCount" value="10">
-  <button onclick="computeRoute()">Compute</button>
-
-  <div id="route-summary"></div>
-  <div id="route-queue"></div>
+<!-- CAMPAIGN -->
+<div id="tab-campaign" class="tab-pane">
+  Week: <input id="weekInput" value="1">
+  <button onclick="optimizeCampaign()">Optimize Next Move</button>
+  <div id="campaign-output"></div>
 </div>
 
 <script src="data.js"></script>
