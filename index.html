@@ -1,146 +1,2025 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Darkest Dungeon: Estate Master Guide</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+<meta charset="UTF-8">
+<title>Darkest Dungeon: Estate Master Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
 
-    :root {
-      --bg: #060404;
-      --panel: #0d0b0b;
-      --gold: #c5a059;
-      --gold-dim: #8a6d38;
-      --border: #3a2c18;
-      --text: #c0b090;
-      --text-dim: #7a6a50;
-      --red: #cc2222;
-    }
+:root {
+–bg: #060404;
+–panel: #0d0b0b;
+–panel2: #111010;
+–gold: #c5a059;
+–gold-dim: #8a6d38;
+–gold-bright: #e8c070;
+–border: #3a2c18;
+–border2: #2a2020;
+–text: #c0b090;
+–text-dim: #7a6a50;
+–red: #cc2222;
+–red-dim: #7a1515;
+–bleed: #a02040;
+–blight: #507a20;
+–holy: #c0a020;
+–eldritch: #6040a0;
+–stress: #8050a0;
+–positive: #406030;
+–negative: #603030;
+–scrollbar: #3a2c18;
+}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+- { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Crimson Pro', Georgia, serif; /* Fixed Quotes */
-      line-height: 1.6;
-      padding: 20px;
-    }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(–bg); }
+::-webkit-scrollbar-thumb { background: var(–scrollbar); border-radius: 3px; }
 
-    .app { max-width: 1200px; margin: 0 auto; }
+body {
+background: var(–bg);
+color: var(–text);
+font-family: ‘Crimson Pro’, Georgia, serif;
+font-size: 15px;
+min-height: 100vh;
+background-image:
+radial-gradient(ellipse at 20% 0%, rgba(100,50,10,0.12) 0%, transparent 60%),
+radial-gradient(ellipse at 80% 100%, rgba(60,10,10,0.15) 0%, transparent 60%);
+}
 
-    header { 
-      text-align: center; 
-      padding: 40px 0; 
-      border-bottom: 1px solid var(--border);
-      position: relative;
-    }
+.app { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
-    /* Fixed Quotes in Pseudo-elements */
-    header::before { content: '✦'; color: var(--gold-dim); position: absolute; left: 10px; top: 45px; }
-    header::after { content: '✦'; color: var(--gold-dim); position: absolute; right: 10px; top: 45px; }
+header {
+text-align: center;
+padding: 30px 20px 20px;
+border-bottom: 1px solid var(–border);
+margin-bottom: 24px;
+position: relative;
+}
+header::before, header::after {
+content: ‘✦’;
+color: var(–gold-dim);
+font-size: 1.2rem;
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+}
+header::before { left: 0; }
+header::after { right: 0; }
 
-    h1 { 
-      font-family: 'Cinzel Decorative', serif; 
-      color: var(--gold); 
-      text-transform: uppercase; 
-      letter-spacing: 4px;
-    }
+h1 {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: clamp(1.2rem, 3vw, 2rem);
+color: var(–gold);
+text-shadow: 0 0 40px rgba(197,160,89,0.4);
+letter-spacing: 6px;
+text-transform: uppercase;
+}
+.subtitle {
+font-style: italic;
+color: var(–text-dim);
+font-size: 0.9rem;
+margin-top: 6px;
+letter-spacing: 2px;
+}
 
-    .container { margin-top: 30px; display: grid; gap: 20px; }
-    .card { background: var(--panel); border: 1px solid var(--border); padding: 20px; border-radius: 4px; }
-    .item-list { list-style: none; margin-top: 10px; }
-    .priority-high { color: var(--gold-bright); border-left: 3px solid var(--gold); padding-left: 10px; }
-  </style>
+/* NAV */
+.nav-tabs {
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+gap: 6px;
+margin-bottom: 20px;
+}
+.nav-tab {
+background: var(–panel);
+border: 1px solid var(–border);
+color: var(–text-dim);
+padding: 10px 6px;
+cursor: pointer;
+font-family: ‘Cinzel Decorative’, serif;
+font-size: 0.62rem;
+letter-spacing: 1px;
+text-transform: uppercase;
+transition: all 0.2s;
+text-align: center;
+line-height: 1.4;
+}
+.nav-tab:hover { border-color: var(–gold-dim); color: var(–text); }
+.nav-tab.active {
+background: linear-gradient(135deg, #1a1308, #0d0b0b);
+border-color: var(–gold);
+color: var(–gold);
+box-shadow: 0 0 12px rgba(197,160,89,0.2), inset 0 0 8px rgba(197,160,89,0.05);
+}
+.nav-tab .icon { font-size: 1.1rem; display: block; margin-bottom: 4px; }
+
+/* TAB CONTENT */
+.tab-pane { display: none; animation: fadeIn 0.35s ease; }
+.tab-pane.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+.section-title {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: 1rem;
+color: var(–gold);
+text-transform: uppercase;
+letter-spacing: 3px;
+border-bottom: 1px solid var(–border);
+padding-bottom: 10px;
+margin-bottom: 16px;
+}
+.section-sub {
+font-size: 0.8rem;
+color: var(–text-dim);
+font-style: italic;
+margin-bottom: 16px;
+}
+
+/* REGION TEAMS */
+.region-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 16px;
+flex-wrap: wrap;
+gap: 10px;
+}
+.focus-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.badge {
+font-size: 0.7rem;
+padding: 2px 10px;
+border-radius: 2px;
+border: 1px solid;
+font-weight: 600;
+letter-spacing: 1px;
+text-transform: uppercase;
+}
+.badge-bleed { color: var(–bleed); border-color: var(–bleed); background: rgba(160,32,64,0.1); }
+.badge-blight { color: var(–blight); border-color: var(–blight); background: rgba(80,122,32,0.1); }
+.badge-holy { color: var(–holy); border-color: var(–holy); background: rgba(192,160,32,0.1); }
+.badge-eldritch { color: var(–eldritch); border-color: var(–eldritch); background: rgba(96,64,160,0.1); }
+.badge-pierce { color: #5090c0; border-color: #5090c0; background: rgba(80,144,192,0.1); }
+.badge-prot { color: #809060; border-color: #809060; background: rgba(128,144,96,0.1); }
+.badge-mark { color: #c05020; border-color: #c05020; background: rgba(192,80,32,0.1); }
+
+.team-grid {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 12px;
+}
+.pos-label {
+font-size: 0.65rem;
+color: var(–text-dim);
+letter-spacing: 2px;
+text-transform: uppercase;
+margin-bottom: 6px;
+}
+.hero-card {
+background: var(–panel);
+border: 1px solid var(–border2);
+padding: 14px;
+position: relative;
+transition: border-color 0.2s;
+}
+.hero-card:hover { border-color: var(–border); }
+.hero-card.subbed { border-color: var(–eldritch); }
+.hero-name {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: 0.7rem;
+color: var(–gold);
+margin-bottom: 10px;
+min-height: 32px;
+line-height: 1.4;
+}
+.hero-name.sub-active { color: #9070c0; }
+.skills-list {
+font-size: 0.82rem;
+color: var(–text-dim);
+line-height: 1.8;
+min-height: 90px;
+font-style: italic;
+}
+.skill-item::before { content: ’› ’; color: var(–gold-dim); }
+.swap-btn {
+width: 100%;
+margin-top: 12px;
+padding: 5px;
+background: transparent;
+border: 1px solid var(–border2);
+color: var(–text-dim);
+cursor: pointer;
+font-size: 0.68rem;
+letter-spacing: 1px;
+transition: all 0.2s;
+font-family: ‘Crimson Pro’, serif;
+}
+.swap-btn:hover { border-color: var(–gold-dim); color: var(–gold); }
+.swap-btn.subbed { border-color: var(–eldritch); color: #9070c0; }
+
+/* TIPS */
+.tips-box {
+margin-top: 16px;
+background: rgba(197,160,89,0.04);
+border: 1px solid var(–border);
+border-left: 3px solid var(–gold-dim);
+padding: 12px 16px;
+}
+.tips-box h4 { color: var(–gold-dim); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+.tips-box ul { list-style: none; }
+.tips-box li { font-size: 0.85rem; padding: 3px 0; }
+.tips-box li::before { content: ’☽ ’; color: var(–gold-dim); }
+
+/* BOSSES */
+.boss-card {
+background: var(–panel);
+border: 1px solid var(–border2);
+border-left: 3px solid var(–red-dim);
+margin-bottom: 16px;
+overflow: hidden;
+}
+.boss-header {
+background: linear-gradient(90deg, rgba(122,21,21,0.2), transparent);
+padding: 12px 16px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+cursor: pointer;
+}
+.boss-name {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: 0.85rem;
+color: #dd4444;
+letter-spacing: 2px;
+}
+.boss-region { font-size: 0.75rem; color: var(–text-dim); font-style: italic; }
+.boss-body { padding: 16px; display: none; }
+.boss-body.open { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.boss-section h4 { font-size: 0.75rem; color: var(–gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; border-bottom: 1px solid var(–border2); padding-bottom: 4px; }
+.boss-section ul { list-style: none; }
+.boss-section li { font-size: 0.85rem; padding: 3px 0; }
+.boss-section li::before { content: ’• ’; color: var(–red-dim); }
+.warn { color: var(–red); font-weight: 600; }
+.team-rec {
+margin-top: 12px;
+background: rgba(0,0,0,0.3);
+padding: 10px;
+font-size: 0.82rem;
+}
+.team-rec-label { font-size: 0.7rem; color: var(–text-dim); letter-spacing: 1px; margin-bottom: 4px; }
+.team-rec-heroes { color: var(–gold-dim); }
+.chevron { color: var(–text-dim); font-size: 0.8rem; transition: transform 0.2s; }
+.chevron.open { transform: rotate(90deg); }
+
+/* PROVISIONS */
+.prov-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.prov-card {
+background: var(–panel);
+border: 1px solid var(–border2);
+padding: 16px;
+}
+.prov-card-title {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: 0.75rem;
+color: var(–gold);
+margin-bottom: 12px;
+padding-bottom: 8px;
+border-bottom: 1px solid var(–border2);
+letter-spacing: 1px;
+}
+.prov-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.prov-table th { color: var(–text-dim); font-size: 0.7rem; letter-spacing: 1px; text-align: left; padding: 4px 6px; border-bottom: 1px solid var(–border2); font-style: italic; }
+.prov-table td { padding: 5px 6px; border-bottom: 1px solid rgba(58,44,24,0.3); }
+.prov-table tr:last-child td { border: none; }
+.item-name { color: var(–text); }
+.item-qty { color: var(–gold); text-align: right; font-weight: 600; }
+.item-note { color: var(–text-dim); font-size: 0.75rem; font-style: italic; }
+.prov-rule {
+margin-top: 14px;
+padding: 10px;
+background: rgba(197,160,89,0.04);
+border: 1px solid var(–border);
+font-size: 0.82rem;
+font-style: italic;
+color: var(–text-dim);
+}
+.prov-rule strong { color: var(–gold-dim); }
+.prov-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+.prov-tab {
+padding: 5px 14px;
+background: var(–panel);
+border: 1px solid var(–border2);
+color: var(–text-dim);
+cursor: pointer;
+font-size: 0.75rem;
+letter-spacing: 1px;
+transition: all 0.2s;
+}
+.prov-tab.active { border-color: var(–gold); color: var(–gold); }
+
+/* ROSTER */
+.roster-controls {
+display: flex;
+gap: 10px;
+margin-bottom: 16px;
+flex-wrap: wrap;
+align-items: center;
+}
+.ctrl-btn {
+padding: 7px 16px;
+background: var(–panel);
+border: 1px solid var(–border);
+color: var(–text-dim);
+cursor: pointer;
+font-size: 0.78rem;
+letter-spacing: 1px;
+transition: all 0.2s;
+font-family: ‘Crimson Pro’, serif;
+}
+.ctrl-btn:hover { border-color: var(–gold-dim); color: var(–gold); }
+.ctrl-btn.danger { border-color: var(–red-dim); }
+.ctrl-btn.danger:hover { color: var(–red); border-color: var(–red); }
+select, input[type=text], input[type=number] {
+background: var(–panel);
+border: 1px solid var(–border2);
+color: var(–text);
+padding: 6px 10px;
+font-family: ‘Crimson Pro’, serif;
+font-size: 0.85rem;
+}
+select:focus, input:focus { outline: none; border-color: var(–gold-dim); }
+
+.roster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.roster-card {
+background: var(–panel);
+border: 1px solid var(–border2);
+padding: 12px;
+position: relative;
+cursor: pointer;
+transition: border-color 0.2s;
+}
+.roster-card:hover { border-color: var(–border); }
+.roster-card.selected { border-color: var(–gold); }
+.roster-card.dead { opacity: 0.4; filter: grayscale(1); }
+.roster-card.retired { border-style: dashed; border-color: var(–text-dim); }
+.rcard-name { font-family: ‘Cinzel Decorative’, serif; font-size: 0.65rem; color: var(–gold); margin-bottom: 4px; }
+.rcard-class { font-size: 0.8rem; color: var(–text-dim); font-style: italic; }
+.rcard-level {
+position: absolute;
+top: 8px; right: 8px;
+font-size: 0.7rem;
+color: var(–gold-dim);
+border: 1px solid var(–border2);
+padding: 1px 5px;
+}
+.rcard-stress {
+margin-top: 8px;
+font-size: 0.72rem;
+}
+.stress-bar {
+height: 3px;
+background: var(–border2);
+border-radius: 2px;
+margin-top: 3px;
+overflow: hidden;
+}
+.stress-fill {
+height: 100%;
+border-radius: 2px;
+transition: width 0.3s;
+}
+.rcard-quirks { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 3px; }
+.quirk-tag {
+font-size: 0.65rem;
+padding: 1px 6px;
+border-radius: 1px;
+}
+.quirk-pos { background: rgba(64,96,48,0.3); color: #80c060; border: 1px solid rgba(64,96,48,0.5); }
+.quirk-neg { background: rgba(96,48,48,0.3); color: #c06060; border: 1px solid rgba(96,48,48,0.5); }
+.rcard-del {
+position: absolute;
+bottom: 8px; right: 8px;
+background: transparent;
+border: none;
+color: var(–red-dim);
+cursor: pointer;
+font-size: 0.75rem;
+padding: 2px 5px;
+opacity: 0;
+transition: opacity 0.2s;
+}
+.roster-card:hover .rcard-del { opacity: 1; }
+
+.add-hero-form {
+background: var(–panel);
+border: 1px solid var(–border);
+padding: 16px;
+margin-bottom: 16px;
+display: none;
+}
+.add-hero-form.open { display: block; }
+.form-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 10px; }
+.form-group { display: flex; flex-direction: column; gap: 4px; }
+.form-label { font-size: 0.72rem; color: var(–text-dim); letter-spacing: 1px; }
+
+/* QUIRKS */
+.quirk-section { margin-bottom: 24px; }
+.quirk-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+gap: 8px;
+margin-top: 10px;
+}
+.quirk-entry {
+background: var(–panel);
+border: 1px solid var(–border2);
+padding: 10px 14px;
+position: relative;
+}
+.quirk-entry-name { font-size: 0.88rem; margin-bottom: 4px; }
+.quirk-entry.pos .quirk-entry-name { color: #80c060; }
+.quirk-entry.neg .quirk-entry-name { color: #c06060; }
+.quirk-entry-effect { font-size: 0.78rem; color: var(–text-dim); font-style: italic; }
+.quirk-keep-label {
+position: absolute;
+top: 8px; right: 8px;
+font-size: 0.62rem;
+padding: 1px 5px;
+}
+.keep-yes { color: #80c060; border: 1px solid rgba(64,96,48,0.5); }
+.keep-no { color: #c06060; border: 1px solid rgba(96,48,48,0.5); }
+.keep-situational { color: var(–gold-dim); border: 1px solid var(–border); }
+
+.dd-card {
+background: var(–panel);
+border: 1px solid var(–border2);
+border-left: 3px solid var(–red);
+margin-bottom: 14px;
+padding: 16px;
+}
+.dd-card-title {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: 0.8rem;
+color: var(–red);
+margin-bottom: 8px;
+letter-spacing: 2px;
+}
+.dd-team { margin: 10px 0; padding: 10px; background: rgba(0,0,0,0.3); font-size: 0.85rem; }
+.dd-team-label { font-size: 0.7rem; color: var(–text-dim); margin-bottom: 4px; letter-spacing: 1px; }
+.dd-team-val { color: var(–gold-dim); }
+.dd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 0.85rem; margin-top: 10px; }
+.dd-col h4 { font-size: 0.72rem; color: var(–text-dim); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+.dd-col ul { list-style: none; }
+.dd-col li { padding: 2px 0; }
+.dd-col li::before { content: ’⚠ ’; color: var(–red-dim); font-size: 0.7rem; }
+
+@media (max-width: 700px) {
+.nav-tabs { grid-template-columns: repeat(4, 1fr); }
+.team-grid { grid-template-columns: repeat(2, 1fr); }
+.boss-body.open, .dd-grid, .prov-grid { grid-template-columns: 1fr; }
+}
+
+/* ── ESTATE TRACKER ───────────────────────────────── */
+.estate-summary {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+gap: 8px;
+margin-bottom: 20px;
+}
+.estate-stat {
+background: var(–panel);
+border: 1px solid var(–border2);
+padding: 10px 14px;
+text-align: center;
+}
+.estate-stat-val {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: 1.2rem;
+color: var(–gold);
+}
+.estate-stat-label {
+font-size: 0.68rem;
+color: var(–text-dim);
+letter-spacing: 1px;
+text-transform: uppercase;
+margin-top: 3px;
+}
+
+.estate-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+gap: 14px;
+}
+.building-card {
+background: var(–panel);
+border: 1px solid var(–border2);
+padding: 14px;
+transition: border-color 0.2s;
+}
+.building-card:hover { border-color: var(–border); }
+.building-card.maxed { border-color: var(–gold-dim); }
+
+.building-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 10px;
+}
+.building-icon { font-size: 1.3rem; margin-right: 8px; }
+.building-name {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: 0.65rem;
+color: var(–gold);
+letter-spacing: 1px;
+flex: 1;
+}
+.building-maxed-badge {
+font-size: 0.6rem;
+color: var(–gold);
+border: 1px solid var(–gold-dim);
+padding: 1px 6px;
+letter-spacing: 1px;
+}
+
+.upgrade-rows { display: flex; flex-direction: column; gap: 6px; }
+.upgrade-row {
+display: flex;
+align-items: center;
+gap: 8px;
+font-size: 0.78rem;
+}
+.upgrade-label {
+color: var(–text-dim);
+width: 140px;
+flex-shrink: 0;
+font-style: italic;
+}
+.upgrade-pips { display: flex; gap: 4px; }
+.pip {
+width: 18px;
+height: 18px;
+border: 1px solid var(–border2);
+background: transparent;
+cursor: pointer;
+position: relative;
+transition: all 0.15s;
+flex-shrink: 0;
+}
+.pip:hover { border-color: var(–gold-dim); }
+.pip.filled { background: var(–gold-dim); border-color: var(–gold); }
+.pip.maxpip { background: var(–gold); border-color: var(–gold-bright); box-shadow: 0 0 6px rgba(197,160,89,0.4); }
+
+.building-effect {
+margin-top: 10px;
+font-size: 0.75rem;
+color: var(–text-dim);
+font-style: italic;
+border-top: 1px solid var(–border2);
+padding-top: 8px;
+line-height: 1.5;
+}
+.building-cost {
+font-size: 0.72rem;
+color: var(–gold-dim);
+margin-top: 4px;
+}
+
+/* ── BUILD ROUTE ─────────────────────────────────── */
+.route-controls {
+display: flex;
+gap: 16px;
+flex-wrap: wrap;
+align-items: flex-end;
+margin-bottom: 20px;
+padding: 16px;
+background: var(–panel);
+border: 1px solid var(–border2);
+}
+
+.route-summary {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+gap: 8px;
+margin-bottom: 20px;
+}
+.route-stat {
+background: var(–panel);
+border: 1px solid var(–border2);
+padding: 12px;
+text-align: center;
+}
+.route-stat-val {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: 1.1rem;
+color: var(–gold);
+}
+.route-stat-label {
+font-size: 0.65rem;
+color: var(–text-dim);
+letter-spacing: 1px;
+text-transform: uppercase;
+margin-top: 3px;
+}
+
+.queue-item {
+display: grid;
+grid-template-columns: 40px 1fr auto auto;
+align-items: center;
+gap: 14px;
+padding: 12px 16px;
+background: var(–panel);
+border: 1px solid var(–border2);
+margin-bottom: 6px;
+transition: border-color 0.2s;
+position: relative;
+overflow: hidden;
+}
+.queue-item:hover { border-color: var(–border); }
+.queue-item::before {
+content: ‘’;
+position: absolute;
+left: 0; top: 0; bottom: 0;
+width: 3px;
+}
+.queue-item.priority-critical::before { background: var(–red); }
+.queue-item.priority-high::before { background: var(–gold); }
+.queue-item.priority-medium::before { background: #608040; }
+.queue-item.priority-low::before { background: var(–text-dim); }
+
+.queue-rank {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: 0.9rem;
+color: var(–text-dim);
+text-align: center;
+}
+.queue-building {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: 0.68rem;
+color: var(–gold);
+letter-spacing: 1px;
+margin-bottom: 3px;
+}
+.queue-upgrade { font-size: 0.82rem; color: var(–text); font-style: italic; }
+.queue-reason { font-size: 0.72rem; color: var(–text-dim); margin-top: 3px; }
+.queue-cost {
+font-size: 0.82rem;
+color: var(–gold-dim);
+white-space: nowrap;
+text-align: right;
+}
+.queue-cost.affordable { color: #80c060; }
+.queue-cost.costly { color: #c08020; }
+.queue-cost.expensive { color: var(–red); }
+.queue-score {
+font-size: 0.7rem;
+color: var(–text-dim);
+text-align: right;
+white-space: nowrap;
+}
+.priority-pill {
+font-size: 0.6rem;
+padding: 2px 7px;
+letter-spacing: 1px;
+text-transform: uppercase;
+border: 1px solid;
+white-space: nowrap;
+}
+.pill-critical { color: var(–red); border-color: var(–red-dim); }
+.pill-high { color: var(–gold); border-color: var(–gold-dim); }
+.pill-medium { color: #80a050; border-color: #507030; }
+.pill-low { color: var(–text-dim); border-color: var(–border2); }
+
+.route-tip {
+margin-top: 16px;
+padding: 12px 16px;
+background: rgba(197,160,89,0.04);
+border: 1px solid var(–border);
+border-left: 3px solid var(–gold-dim);
+font-size: 0.82rem;
+font-style: italic;
+color: var(–text-dim);
+}
+
+</style>
 </head>
 <body>
-
 <div class="app">
   <header>
     <h1>Estate Master Guide</h1>
-    <p class="subtitle">"Ruin has come to our family..."</p>
+    <div class="subtitle">Darkest Dungeon — Expedition Intelligence System</div>
   </header>
 
-  <div id="main-content" class="container">
+  <nav class="nav-tabs" id="mainNav">
+    <button class="nav-tab active" data-tab="ruins"><span class="icon">💀</span>Ruins</button>
+    <button class="nav-tab" data-tab="weald"><span class="icon">🌿</span>Weald</button>
+    <button class="nav-tab" data-tab="warrens"><span class="icon">🐀</span>Warrens</button>
+    <button class="nav-tab" data-tab="cove"><span class="icon">🐙</span>Cove</button>
+    <button class="nav-tab" data-tab="bosses"><span class="icon">⚔️</span>Bosses</button>
+    <button class="nav-tab" data-tab="darkest"><span class="icon">🔥</span>Darkest</button>
+    <button class="nav-tab" data-tab="provisions"><span class="icon">🎒</span>Provisions</button>
+    <button class="nav-tab" data-tab="roster"><span class="icon">📜</span>Roster</button>
+    <button class="nav-tab" data-tab="quirks"><span class="icon">🔮</span>Quirks</button>
+    <button class="nav-tab" data-tab="estate"><span class="icon">🏛️</span>Estate</button>
+    <button class="nav-tab" data-tab="buildroute"><span class="icon">⚙️</span>Build Route</button>
+  </nav>
+
+  <!-- RUINS -->
+
+  <div class="tab-pane active" id="tab-ruins">
+    <div class="region-header">
+      <div class="section-title" style="margin:0;border:none;">The Ruins</div>
+      <div class="focus-badges">
+        <span class="badge badge-holy">Holy</span>
+        <span class="badge badge-blight">Blight</span>
+      </div>
     </div>
+    <div class="section-sub">Undead enemies resist Bleed. Prioritize Holy damage and Blight for Skeletons. Stress generation is moderate but constant.</div>
+    <div class="team-grid" id="ruins-team"></div>
+    <div class="tips-box">
+      <h4>Region Intelligence</h4>
+      <ul>
+        <li>Undead have 0% bleed resist — wait, they're IMMUNE. Use Blight & Holy exclusively.</li>
+        <li>Courtyard rooms often have Pestilent Courtyard events — bring extra antivenom.</li>
+        <li>Skeletons can self-resurrect once. Overkill with blight DoT to prevent this.</li>
+        <li>Bone Rabble should be cleared fast — they swarm and can stun-lock backliners.</li>
+        <li>Ancestor Shade patrols can spawn high-difficulty encounters in early game.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEALD -->
+
+  <div class="tab-pane" id="tab-weald">
+    <div class="region-header">
+      <div class="section-title" style="margin:0;border:none;">The Weald</div>
+      <div class="focus-badges">
+        <span class="badge badge-bleed">Bleed</span>
+        <span class="badge badge-mark">Mark</span>
+        <span class="badge badge-prot">Prot Strip</span>
+      </div>
+    </div>
+    <div class="section-sub">Enemies often have high protection. Brigands hit hard from any position. Fungal enemies cause disease — bring more food.</div>
+    <div class="team-grid" id="weald-team"></div>
+    <div class="tips-box">
+      <h4>Region Intelligence</h4>
+      <ul>
+        <li>Brigand Matchman — kill before he summons reinforcements. Highest priority target.</li>
+        <li>Fungal Scratcher causes Infected — food consumption +33%. Bring 8–10 food on medium.</li>
+        <li>Stress healer (Jester/Vestal) critical — Weald has many surprise stress-dealing combats.</li>
+        <li>Webber enemies can shuffle party positions — have positional flexibility.</li>
+        <li>Bleed + Mark synergy: BH marks, then Hellion shreds with If It Bleeds for massive output.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WARRENS -->
+
+  <div class="tab-pane" id="tab-warrens">
+    <div class="region-header">
+      <div class="section-title" style="margin:0;border:none;">The Warrens</div>
+      <div class="focus-badges">
+        <span class="badge badge-bleed">Bleed</span>
+        <span class="badge badge-blight">Blight</span>
+      </div>
+    </div>
+    <div class="section-sub">Beast-type enemies bleed well. Disease vectors are everywhere. High stress generation from pig-men affronts.</div>
+    <div class="team-grid" id="warrens-team"></div>
+    <div class="tips-box">
+      <h4>Region Intelligence</h4>
+      <ul>
+        <li>Swine enemies are all Beast-type — Houndmaster's Mark and Cry trigger bonus damage.</li>
+        <li>Disease is rampant — PD's Battlefield Medicine is a must or bring stacks of antivenom.</li>
+        <li>Carrion Eaters spawn from corpses — use abilities that prevent corpse creation.</li>
+        <li>Swinetaur Commanders can generate reinforcements — kill them first.</li>
+        <li>Pack in shorter dungeons to minimize disease accumulation. Short = 3 rooms ideal.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- COVE -->
+
+  <div class="tab-pane" id="tab-cove">
+    <div class="region-header">
+      <div class="section-title" style="margin:0;border:none;">The Cove</div>
+      <div class="focus-badges">
+        <span class="badge badge-pierce">Pierce</span>
+        <span class="badge badge-eldritch">Eldritch</span>
+      </div>
+    </div>
+    <div class="section-sub">Eldritch enemies are resistant to Bleed and Blight. High bleed-resist monsters. Shuffle abilities common — maintain position flexibility.</div>
+    <div class="team-grid" id="cove-team"></div>
+    <div class="tips-box">
+      <h4>Region Intelligence</h4>
+      <ul>
+        <li>Cove enemies have 40–60% bleed resist — do NOT rely on bleed DoT here.</li>
+        <li>Squiffy Ghast applies massive stress — your Vestal must be on stress-heal watch.</li>
+        <li>Deep Dweller shamblers can summon The Shambler — never ignore curios here without torch.</li>
+        <li>Shuffle is constant — bring at least 2 heroes with positional flexibility (HWM, Hellion).</li>
+        <li>Shieldbreaker's Pierce bypasses the Cove's common high-protection enemy variants.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BOSSES -->
+
+  <div class="tab-pane" id="tab-bosses">
+    <div class="section-title">Boss Compendium</div>
+    <div class="section-sub">Click any boss to expand full strategy. Each boss appears at Apprentice, Veteran, and Champion tiers.</div>
+    <div id="boss-list"></div>
+  </div>
+
+  <!-- DARKEST DUNGEON -->
+
+  <div class="tab-pane" id="tab-darkest">
+    <div class="section-title" style="color: var(--red);">The Darkest Dungeon</div>
+    <div class="section-sub">Four forays into madness. Each is unique. Heroes who complete a run are <strong>Resolute</strong> but cannot re-enter another DD run. Plan sacrifices carefully.</div>
+    <div id="dd-list"></div>
+  </div>
+
+  <!-- PROVISIONS -->
+
+  <div class="tab-pane" id="tab-provisions">
+    <div class="section-title">Provisions Guide</div>
+    <div class="prov-tabs">
+      <button class="prov-tab active" data-prov="short">Short</button>
+      <button class="prov-tab" data-prov="medium">Medium</button>
+      <button class="prov-tab" data-prov="long">Long</button>
+    </div>
+    <div id="prov-content"></div>
+  </div>
+
+  <!-- ESTATE TRACKER -->
+
+  <div class="tab-pane" id="tab-estate">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:6px;">
+      <div class="section-title" style="margin:0;border:none;">Estate Tracker</div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="form-label">Estate Name</div>
+        <input type="text" id="estateName" placeholder="The ??? Estate" style="width:200px;" oninput="saveEstateName()">
+      </div>
+    </div>
+    <div class="section-sub">Click any pip to set upgrade level — click the active pip again to step back. Tracks match exact in-game buildings and pip counts.</div>
+
+```
+<div class="estate-summary" id="estate-summary"></div>
+
+<div class="estate-grid" id="estate-grid"></div>
+
+<div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
+  <button class="ctrl-btn danger" onclick="resetEstate()">Reset All Buildings</button>
+  <button class="ctrl-btn" onclick="exportEstate()">Export State</button>
+</div>
+```
+
+  </div>
+
+  <!-- BUILD ROUTE -->
+
+  <div class="tab-pane" id="tab-buildroute">
+    <div class="section-title">Build Route Optimizer</div>
+    <div class="section-sub">Input your current week and gold, set your goal, and get a prioritized upgrade queue based on your estate state.</div>
+
+```
+<div class="route-controls">
+  <div class="form-group">
+    <div class="form-label">Current Week</div>
+    <input type="number" id="routeWeek" min="1" max="100" value="1" style="width:80px;" oninput="computeRoute()">
+  </div>
+  <div class="form-group">
+    <div class="form-label">Gold on Hand</div>
+    <input type="number" id="routeGold" min="0" value="5000" style="width:100px;" oninput="computeRoute()">
+  </div>
+  <div class="form-group">
+    <div class="form-label">Strategy Focus</div>
+    <select id="routeStrategy" onchange="computeRoute()" style="width:180px;">
+      <option value="balanced">Balanced (Default)</option>
+      <option value="survival">Survival First</option>
+      <option value="speed">Dungeon Speed</option>
+      <option value="economy">Economy / Gold</option>
+      <option value="darkest">Darkest Dungeon Prep</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <div class="form-label">Show Top</div>
+    <select id="routeCount" onchange="computeRoute()" style="width:100px;">
+      <option value="5">5 picks</option>
+      <option value="10" selected>10 picks</option>
+      <option value="20">20 picks</option>
+      <option value="999">All</option>
+    </select>
+  </div>
+</div>
+
+<div class="route-summary" id="route-summary"></div>
+<div id="route-queue"></div>
+```
+
+  </div>
+  <div class="tab-pane" id="tab-roster">
+    <div class="section-title">Hero Roster</div>
+    <div class="section-sub">Track your heroes, stress, quirks, and status. Data saved to localStorage.</div>
+    <div class="roster-controls">
+      <button class="ctrl-btn" id="addHeroBtn">+ Add Hero</button>
+      <button class="ctrl-btn danger" id="clearRoster">Clear All</button>
+      <select id="filterClass" style="width:150px;">
+        <option value="">All Classes</option>
+      </select>
+      <select id="filterStatus">
+        <option value="">All Status</option>
+        <option value="active">Active</option>
+        <option value="retired">Retired</option>
+        <option value="dead">Dead</option>
+      </select>
+    </div>
+    <div class="add-hero-form" id="addHeroForm">
+      <div class="form-row">
+        <div class="form-group">
+          <div class="form-label">Hero Name</div>
+          <input type="text" id="newName" placeholder="Name..." style="width:160px;">
+        </div>
+        <div class="form-group">
+          <div class="form-label">Class</div>
+          <select id="newClass" style="width:160px;"></select>
+        </div>
+        <div class="form-group">
+          <div class="form-label">Level</div>
+          <select id="newLevel" style="width:80px;">
+            <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="form-label">Stress (0–200)</div>
+          <input type="number" id="newStress" min="0" max="200" value="0" style="width:80px;">
+        </div>
+        <div class="form-group">
+          <div class="form-label">Status</div>
+          <select id="newStatus" style="width:120px;">
+            <option value="active">Active</option>
+            <option value="retired">Retired</option>
+            <option value="dead">Dead</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <div class="form-label">Positive Quirks (comma-sep)</div>
+          <input type="text" id="newPosQ" placeholder="e.g. Unerring, Resilient..." style="width:280px;">
+        </div>
+        <div class="form-group">
+          <div class="form-label">Negative Quirks (comma-sep)</div>
+          <input type="text" id="newNegQ" placeholder="e.g. Abusive, Faithless..." style="width:280px;">
+        </div>
+      </div>
+      <div class="form-row">
+        <button class="ctrl-btn" id="saveHero">Save Hero</button>
+        <button class="ctrl-btn" id="cancelHero">Cancel</button>
+      </div>
+    </div>
+    <div class="roster-grid" id="rosterGrid"></div>
+  </div>
+
+  <!-- QUIRKS -->
+
+  <div class="tab-pane" id="tab-quirks">
+    <div class="section-title">Quirk Reference</div>
+    <div class="section-sub">Essential quirks — what to lock, what to purge. Sorted by priority.</div>
+    <div class="quirk-section">
+      <div class="section-title" style="font-size:0.8rem;color:#80c060;border-color:rgba(64,96,48,0.3);">✦ Positive Quirks — Lock These</div>
+      <div class="quirk-grid" id="pos-quirks"></div>
+    </div>
+    <div class="quirk-section">
+      <div class="section-title" style="font-size:0.8rem;color:#c06060;border-color:rgba(96,48,48,0.3);">✦ Negative Quirks — Purge Priority</div>
+      <div class="quirk-grid" id="neg-quirks"></div>
+    </div>
+  </div>
 </div>
 
 <script>
 // ═══════════════════════════════════════════════════════
-// DATA STRUCUTRE
+// DATA
 // ═══════════════════════════════════════════════════════
-
-const PROVISIONS = {
-  short: {
-    ruins: [
-      { item: "Food", qty: 8 },
-      { item: "Shovel", qty: 1 },
-      { item: "Torch", qty: 8 },
-      { item: "Holy Water", qty: 2 }
-    ],
-    weald: [
-      { item: "Food", qty: 12 },
-      { item: "Shovel", qty: 2 },
-      { item: "Antivenom", qty: 2 },
-      { item: "Bandage", qty: 2 }
-    ]
+const REGIONS = {
+  ruins: {
+    4: { main:"Vestal", mS:["Judgment","Dazzling Light","Divine Grace","Divine Comfort"], sub:"Occultist", sS:["Wyrd Reconstruction","Weakening Curse","Hands from Below","Sacrificial Stab"] },
+    3: { main:"Plague Doctor", mS:["Noxious Blast","Blinding Gas","Battlefield Medicine","Disorienting Blast"], sub:"Jester", sS:["Inspiring Tune","Harvest","Solo","Slice Off"] },
+    2: { main:"Highwayman", mS:["Duelist's Advance","Point Blank Shot","Pistol Shot","Open Vein"], sub:"Houndmaster", sS:["Hound's Rush","Whistle","Blackjack","Lick Wounds"] },
+    1: { main:"Crusader", mS:["Smite","Holy Lance","Stunning Blow","Inspiring Cry"], sub:"Leper", sS:["Chop","Hew","Purge","Withstand"] }
+  },
+  weald: {
+    4: { main:"Arbalest", mS:["Sniper Shot","Flare","Rallying Flare","Bola"], sub:"Vestal", sS:["Divine Grace","Dazzling Light","Judgment","Divine Comfort"] },
+    3: { main:"Houndmaster", mS:["Hound's Rush","Cry Havoc","Guard Dog","Lick Wounds"], sub:"Occultist", sS:["Wyrd Reconstruction","Weakening Curse","Pull of the Abyss","Sacrificial Stab"] },
+    2: { main:"Bounty Hunter", mS:["Collect Bounty","Mark for Death","Flashbang","Finish Him"], sub:"Abomination", sS:["Manacles","Beast's Bile","Transform","Absolution"] },
+    1: { main:"Hellion", mS:["Wicked Hack","Iron Swan","If It Bleeds","YAWP!"], sub:"Flagellant", sS:["Punish","Redeem","Rain of Sorrows","Reclaim"] }
+  },
+  warrens: {
+    4: { main:"Occultist", mS:["Wyrd Reconstruction","Weakening Curse","Hands from Below","Pull of the Abyss"], sub:"Arbalest", sS:["Sniper Shot","Rallying Flare","Bandage","Bola"] },
+    3: { main:"Jester", mS:["Battle Ballad","Inspiring Tune","Slice Off","Harvest"], sub:"Houndmaster", sS:["Hound's Rush","Cry Havoc","Whistle","Lick Wounds"] },
+    2: { main:"Houndmaster", mS:["Hound's Rush","Blackjack","Cry Havoc","Guard Dog"], sub:"Abomination", sS:["Manacles","Beast's Bile","Absolution","Transformation"] },
+    1: { main:"Flagellant", mS:["Punish","Rain of Sorrows","Redeem","Reclaim"], sub:"Hellion", sS:["Wicked Hack","If It Bleeds","YAWP!","Adrenaline Rush"] }
+  },
+  cove: {
+    4: { main:"Vestal", mS:["Judgment","Divine Grace","Divine Comfort","Dazzling Light"], sub:"Occultist", sS:["Wyrd Reconstruction","Hands from Below","Weakening Curse","Pull of the Abyss"] },
+    3: { main:"Plague Doctor", mS:["Noxious Blast","Incision","Battlefield Medicine","Disorienting Blast"], sub:"Occultist", sS:["Wyrd Reconstruction","Hands from Below","Weakening Curse","Sacrificial Stab"] },
+    2: { main:"Shieldbreaker", mS:["Pierce","Puncture","Snake Skin","Expose Weakness"], sub:"Highwayman", sS:["Duelist's Advance","Point Blank Shot","Tracking Shot","Open Vein"] },
+    1: { main:"Man-at-Arms", mS:["Crush","Rampart","Defender","Retribution"], sub:"Hellion", sS:["Wicked Hack","If It Bleeds","Iron Swan","YAWP!"] }
   }
 };
 
-const BUILDINGS = [
-  { 
-    id: 'stagecoach', 
-    name: 'Stage Coach', 
-    priority: "CRITICAL",
-    upgrades: ["Network", "Barracks", "Recruits"] 
+const BOSSES = [
+  {
+    name:"The Necromancer",
+    region:"Ruins",
+    tiers:"Apprentice / Veteran / Champion",
+    teams:[
+      { label:"Primary", heroes:"Vestal · Plague Doctor · Highwayman · Crusader" },
+      { label:"Alternate", heroes:"Arbalest · Occultist · Bounty Hunter · Hellion" }
+    ],
+    mechanics:[
+      "Summons Bone Courtiers and Bone Soldiers — clear them or get overwhelmed",
+      "Deal damage to push him to Phase 2 faster — he heals on summon turns",
+      "Backline reach required: Ruins enemies sit in rows 3-4",
+      "Crusader's Smite deals 33% bonus to Unholy — slot him",
+      "Necromancer Lord variant (Veteran+): has self-heal — sustained pressure needed"
+    ],
+    avoid:[
+      "Never leave summoned Courtiers alive — they can out-sustain your damage",
+      "Avoid all-bleed team — undead are immune to bleed",
+      "Don't camp-heal mid-fight if summons are active"
+    ]
   },
-  { 
-    id: 'blacksmith', 
-    name: 'Blacksmith', 
-    priority: "HIGH",
-    upgrades: ["Weapons", "Armor", "Furnace"] 
+  {
+    name:"The Swine Prince",
+    region:"Weald",
+    tiers:"Apprentice / Veteran / Champion",
+    teams:[
+      { label:"Primary", heroes:"Arbalest · Occultist · Houndmaster · Man-at-Arms" },
+      { label:"Alternate", heroes:"Vestal · Jester · Highwayman · Hellion" }
+    ],
+    mechanics:[
+      "NEVER hit Wilbur — Swine King enters rage mode and wipes the party",
+      "Kill Wilbur LAST or let him live — he does minimal damage alone",
+      "Focus all damage on Swine King until he's dead",
+      "Arbalest's Bola is crucial to prevent Wilbur buffing",
+      "HM's Hound Rush + Blackjack can stun Wilbur to skip his buff turns"
+    ],
+    avoid:[
+      "⚠ CRITICAL: ANY hit on Wilbur causes Swine King frenzy — AoEs excluded ONLY if Wilbur is dead",
+      "Don't bring multi-target abilities if Wilbur is alive",
+      "Never rely on random targeting heroes (Leper, Abomination transformation)"
+    ]
+  },
+  {
+    name:"The Hag",
+    region:"Weald",
+    tiers:"Apprentice / Veteran / Champion",
+    teams:[
+      { label:"Primary", heroes:"Occultist · Plague Doctor · Highwayman · Jester" },
+      { label:"Alternate", heroes:"Arbalest · Bounty Hunter · Man-at-Arms · Vestal" }
+    ],
+    mechanics:[
+      "She traps a hero in the cauldron — that hero can't act and takes damage each round",
+      "Skills that can hit rank 4 are critical: PBS, Occultist Stab, Arbalest Sniper",
+      "Jester's Finale or Arbalest's Sniper can reach her in the back",
+      "Heal the trapped hero — they still take DoT damage inside",
+      "Stress heal essential — this fight is a war of attrition"
+    ],
+    avoid:[
+      "Don't bring heroes with no rank 4 range — you'll have a dead slot constantly",
+      "Never let the cauldron DoT go unhealed",
+      "Avoid slow teams — she heals herself at certain health thresholds"
+    ]
+  },
+  {
+    name:"The Drowned Crew / Brigand Pounder",
+    region:"Warrens / Weald",
+    tiers:"Apprentice / Veteran / Champion",
+    teams:[
+      { label:"Pounder Primary", heroes:"Plague Doctor · Bounty Hunter · Houndmaster · Vestal" },
+      { label:"Drowned Primary", heroes:"Occultist · Hellion · Flagellant · Vestal" }
+    ],
+    mechanics:[
+      "Brigand Pounder: destroy it in 3 turns before it fires — BH Finish Him after Flare",
+      "Kill Fuseman and Matchman before Pounder is armed or wipe is imminent",
+      "Drowned Crew: kill the Drowned Sailor first — he can summon more crew endlessly",
+      "High bleed synergy against Drowned (human subtype despite appearance)",
+      "Jester's Finale can chain-delete the Brigand Pounder immediately"
+    ],
+    avoid:[
+      "Never let Matchman survive a turn with Pounder armed",
+      "Don't neglect stress — both fights generate massive stress",
+      "Avoid single-target-only comps for Pounder fight"
+    ]
+  },
+  {
+    name:"The Siren",
+    region:"Cove",
+    tiers:"Apprentice / Veteran / Champion",
+    teams:[
+      { label:"Primary", heroes:"Vestal · Plague Doctor · Shieldbreaker · Man-at-Arms" },
+      { label:"Alternate", heroes:"Occultist · Arbalest · Highwayman · Houndmaster" }
+    ],
+    mechanics:[
+      "She will charm a hero — they fight for her side for 1–3 turns",
+      "Charmed heroes take reduced damage — but can be hit to break charm faster",
+      "Shieldbreaker Pierce bypasses her high protection",
+      "Keep stress low going in — charmed heroes use all their abilities",
+      "MAA's Guard can protect party from charmed hero's attacks"
+    ],
+    avoid:[
+      "Never bring heroes with high AoE damage — they'll massacre your own party when charmed",
+      "Don't stack on bleed — Cove enemies resist it strongly",
+      "Avoid bringing Abomination — transformation while charmed is catastrophic"
+    ]
+  },
+  {
+    name:"The Flesh",
+    region:"Warrens",
+    tiers:"Apprentice / Veteran / Champion",
+    teams:[
+      { label:"Primary", heroes:"Plague Doctor · Occultist · Flagellant · Vestal" },
+      { label:"Alternate", heroes:"Arbalest · Bounty Hunter · Man-at-Arms · Houndmaster" }
+    ],
+    mechanics:[
+      "The Flesh has multiple body parts — Twitching Column is highest priority kill",
+      "Immovable — no position shuffling. Static team compositions work",
+      "Blight is extremely effective — stack it on body parts and wait",
+      "Corroded Body variant (Champion): applies disease — PD mandatory",
+      "High HP pool — this is a sustained fight. Full healing comp is viable"
+    ],
+    avoid:[
+      "Never ignore Twitching Column — it buffs the fight dramatically",
+      "Avoid running out of heals — Flesh hits hard and has many parts",
+      "Don't forget food: fight can run 8–12 rounds"
+    ]
+  },
+  {
+    name:"The Collector",
+    region:"All (Roaming)",
+    tiers:"Veteran / Champion",
+    teams:[
+      { label:"Primary", heroes:"Vestal · Plague Doctor · Houndmaster · Highwayman" },
+      { label:"Alternate", heroes:"Arbalest · Occultist · Man-at-Arms · Crusader" }
+    ],
+    mechanics:[
+      "Summons 'Head' versions of your dead heroes — they inherit some stats",
+      "Kill the Heads immediately — they deal significant damage",
+      "Collector himself has moderate HP but stuns and debuffs constantly",
+      "Bring stun resist trinkets — stun resist is key to surviving his turns",
+      "AoE skills excell here — three targets present constantly"
+    ],
+    avoid:[
+      "Never walk into a Collector fight under-provisioned",
+      "Don't neglect the summoned heads — they will pile up fast",
+      "Avoid heroes with virtuous-dependent strategies — RNG heavy fight"
+    ]
   }
 ];
 
-// ═══════════════════════════════════════════════════════
-// LOGIC / RENDERING
-// ═══════════════════════════════════════════════════════
+const DD_RUNS = [
+  {
+    name:"Raid 1 — We Are the Flame",
+    subtitle:"Shuffling Horror",
+    team:"Highwayman · Crusader · Jester · Vestal",
+    desc:"The first foray is manageable but deceptive. Enemy shuffles are constant — heroes get displaced constantly.",
+    key:[
+      "Every enemy shuffles your party — bring heroes that function from multiple positions",
+      "Highwayman works from positions 1–3, making him invaluable here",
+      "Crusader's Inspiring Cry provides emergency stress healing mid-combat",
+      "Vestal must stay in position 4 — protect her above all else",
+      "The final boss applies extreme stress — virtuous heroes are far safer"
+    ],
+    watch:[
+      "Position shuffles can strand your healer in slot 1",
+      "Stress accumulates fast — manage it between rooms with Jester's tune",
+      "Bring extra bandages — bleed sources are present"
+    ]
+  },
+  {
+    name:"Raid 2 — Lighting the Way",
+    subtitle:"Templar Onslaught",
+    team:"Arbalest · Houndmaster · Man-at-Arms · Vestal",
+    desc:"Three Ancestor's Talismans must be found and brought to the Shuffling Horror. Templars hit extremely hard.",
+    key:[
+      "Collect all 3 Talismans before the final room — they're mandatory",
+      "MAA's Defender/Guard is crucial — Templars focus single targets",
+      "Arbalest's Rallying Flare provides reliable stress management for the team",
+      "Houndmaster's Cry Havoc applies debuffs to the large Templar groups",
+      "Bring maximum torches — this dungeon has severe darkness penalties"
+    ],
+    watch:[
+      "Never rush — exploration is mandatory to find all 3 Talismans",
+      "Templar Impaler hits backline — protect your Vestal",
+      "Stress builds rapidly from Templars' special attacks"
+    ]
+  },
+  {
+    name:"Raid 3 — Belly of the Beast",
+    subtitle:"Exhaustion Marathon",
+    team:"Plague Doctor · Highwayman · Occultist · Hellion",
+    desc:"The longest and most punishing foray. Exhaustion and disease are everywhere. Resource management defines success.",
+    key:[
+      "PD's Battlefield Medicine is mandatory — disease stacks rapidly here",
+      "Occultist heal variance is risky but his debuffs and reach are essential",
+      "Hellion from position 1 with YAWP keeps stress under control via stuns",
+      "Camp aggressively — this run will require 2–3 camps minimum",
+      "Bring extra food, herbs, bandages beyond what you think you need"
+    ],
+    watch:[
+      "Exhaustion forces heroes to skip turns — plan for it",
+      "Disease stacks reduce max HP — PD must cleanse constantly",
+      "The run is extremely long — heroes will accumulate multiple quirks"
+    ]
+  },
+  {
+    name:"Raid 4 — Hell is in the Heart",
+    subtitle:"Final Confrontation",
+    team:"Crusader · Highwayman · Jester · Vestal",
+    desc:"The final battle against the Heart of Darkness. Your best heroes meet their destiny. Choose your sacrifices.",
+    key:[
+      "The Heart has three phases — each with different priority targets",
+      "Phase 1: Kill the Coagulated Heart first to stop guaranteed crits",
+      "Phase 2: Manage stress — Jester's Finale as finisher for phase 2 body",
+      "Phase 3: The Heart itself attacks every hero — full healing focus",
+      "Crusader is the single best hero here — Holy damage + stress heal + self-sustain"
+    ],
+    watch:[
+      "Heroes who complete this run are Resolute — they cannot re-enter the DD",
+      "Bring your most virtuous, least quirk-burdened heroes — mortality is real",
+      "Don't bring irreplaceable heroes unless you must — acceptable sacrifice is strategy"
+    ]
+  }
+];
 
-function renderDashboard() {
-  const container = document.getElementById('main-content');
-  
-  // Render Provisions Section
-  let html = `
-    <div class="card">
-      <h2 style="color:var(--gold)">Provisions: Ruins (Short)</h2>
-      <ul class="item-list">
-        ${PROVISIONS.short.ruins.map(p => `<li><strong>${p.qty}x</strong> ${p.item}</li>`).join('')}
-      </ul>
-    </div>
-  `;
+const PROVISIONS = {
+  short: {
+    rooms:"3–5 rooms",
+    note:"Short dungeons are resource-light. Conserve for future runs.",
+    regions:{
+      ruins:  [["Torch","4","Standard"],["Food","4","Prevent hunger dmg"],["Medicinal Herbs","1","Disease clear"],["Antivenom","1","Precaution"],["Holy Water","1","Curio use"],["Bandage","1","Precaution"]],
+      weald:  [["Torch","4",""],["Food","6","Fungal disease"],["Antivenom","2","Disease likely"],["Bandage","2","Bleed"],["Medicinal Herbs","2","Multi-disease risk"],["Holy Water","0","Not useful"]],
+      warrens:[["Torch","4",""],["Food","5",""],["Antivenom","3","Disease heavy"],["Bandage","2",""],["Medicinal Herbs","2",""],["Laudanum","1","Stress"]],
+      cove:   [["Torch","4",""],["Food","4",""],["Antivenom","1",""],["Bandage","3","Bleed focus"],["Holy Water","1",""],["Shovel","1","Obstacles"]]
+    }
+  },
+  medium: {
+    rooms:"6–8 rooms",
+    note:"Standard provisioning tier. One camp typically needed.",
+    regions:{
+      ruins:  [["Torch","8",""],["Food","8",""],["Medicinal Herbs","2",""],["Antivenom","2",""],["Holy Water","2","Curio + undead"],["Bandage","2",""],["Shovel","1",""],["Key","1","Locked curios"]],
+      weald:  [["Torch","8",""],["Food","10","Fungal disease +33%"],["Antivenom","4",""],["Bandage","4","Bleed"],["Medicinal Herbs","3",""],["Shovel","2",""],["Holy Water","1",""],["Laudanum","1",""]],
+      warrens:[["Torch","8",""],["Food","8",""],["Antivenom","5","Disease endemic"],["Bandage","3",""],["Medicinal Herbs","3",""],["Laudanum","2","Stress endemic"],["Shovel","1",""],["Key","1",""]],
+      cove:   [["Torch","8",""],["Food","8",""],["Antivenom","2",""],["Bandage","4",""],["Holy Water","2",""],["Shovel","2","Obstacles common"],["Laudanum","1",""],["Key","1",""]]
+    }
+  },
+  long: {
+    rooms:"9–12 rooms",
+    note:"Full provisioning. Two camps required. Bring maximum curio items.",
+    regions:{
+      ruins:  [["Torch","12",""],["Food","12",""],["Medicinal Herbs","3",""],["Antivenom","3",""],["Holy Water","4",""],["Bandage","3",""],["Shovel","2",""],["Key","2",""],["Laudanum","2",""],["Skeleton Key","1",""]],
+      weald:  [["Torch","12",""],["Food","16","Fungal: pack extra"],["Antivenom","6",""],["Bandage","6",""],["Medicinal Herbs","4",""],["Shovel","3",""],["Holy Water","1",""],["Laudanum","2",""],["Key","2",""],["Skeleton Key","1",""]],
+      warrens:[["Torch","12",""],["Food","12",""],["Antivenom","8","Max antivenom"],["Bandage","4",""],["Medicinal Herbs","4",""],["Laudanum","3",""],["Shovel","2",""],["Key","2",""],["Skeleton Key","1",""],["Holy Water","1",""]],
+      cove:   [["Torch","12",""],["Food","12",""],["Antivenom","3",""],["Bandage","6",""],["Holy Water","3",""],["Shovel","3",""],["Laudanum","2",""],["Key","2",""],["Skeleton Key","1",""],["Medicinal Herbs","2",""]]
+    }
+  }
+};
 
-  // Render Buildings Section
-  html += `
-    <div class="card">
-      <h2 style="color:var(--gold)">Priority Upgrades</h2>
-      <div class="item-list">
-        ${BUILDINGS.map(b => `
-          <div style="margin-bottom:15px">
-            <h3 class="priority-high">${b.name} (${b.priority})</h3>
-            <p style="font-size:0.9rem; color:var(--text-dim)">Focus: ${b.upgrades.join(', ')}</p>
-          </div>
+const CLASSES = ["Antiquarian","Arbalest","Abomination","Bounty Hunter","Crusader","Flagellant","Grave Robber","Hellion","Highwayman","Houndmaster","Jester","Leper","Man-at-Arms","Occultist","Plague Doctor","Shieldbreaker","Vestal"];
+
+const POS_QUIRKS = [
+  { name:"Unerring", effect:"+10% accuracy — a must-lock on any damage hero", keep:"Lock" },
+  { name:"Resilient", effect:"+25% stun resist — invaluable vs stun-heavy regions", keep:"Lock" },
+  { name:"Hard Skinned", effect:"+10% protection — strong on frontliners", keep:"Lock" },
+  { name:"Thick Blooded", effect:"+25% bleed resist — lock on Weald/Warrens runs", keep:"Lock" },
+  { name:"Robust", effect:"+25% disease resist — lock on Warrens specialists", keep:"Lock" },
+  { name:"Righteous", effect:"+15 ACC, +5 SPD in Ruins — situationally excellent", keep:"Situational" },
+  { name:"Luminous", effect:"+15 ACC, +5 SPD in any dungeon", keep:"Lock" },
+  { name:"Steady", effect:"-10% stress — reduces sustained stress accumulation", keep:"Situational" },
+  { name:"Optimistic", effect:"+25% debuff resist — keeps heroes performing", keep:"Lock" },
+  { name:"Motivated", effect:"+25% move resist — positional control protection", keep:"Lock" },
+  { name:"On Guard", effect:"+5 SPD on first round — initiative advantage", keep:"Situational" },
+  { name:"Natural Swing", effect:"+5% crit — meaningful on high-damage heroes", keep:"Lock" },
+  { name:"Bloodthirsty", effect:"+10% dmg vs bleeding — Weald/Warrens specialist", keep:"Situational" },
+  { name:"Quick Reflexes", effect:"+2 SPD — action order advantage", keep:"Lock" }
+];
+
+const NEG_QUIRKS = [
+  { name:"Abusive", effect:"Causes stress to party — actively harmful", keep:"Purge" },
+  { name:"Faithless", effect:"-15 ACC in Ruins — crippling in the Ruins", keep:"Purge" },
+  { name:"Nervous", effect:"+10% stress received — compounds badly", keep:"Purge" },
+  { name:"Disordered", effect:"+25% debuff chance received — hero gets locked down", keep:"Purge" },
+  { name:"Lazy Eye", effect:"-10% accuracy — reduces already-tight hit chances", keep:"Purge" },
+  { name:"Clumsy", effect:"-3 SPD — action order loss is very punishing", keep:"Purge" },
+  { name:"Masochistic", effect:"Draws attacks when at low HP — can trigger death spiral", keep:"Purge" },
+  { name:"Paranoid", effect:"Chance to refuse camping skills — cripples camp healing", keep:"Purge" },
+  { name:"Kleptomaniac", effect:"Steals from curios — minor but annoying", keep:"Situational" },
+  { name:"Guilty Conscience", effect:"-5% damage in light — Ruins/Cove penalty", keep:"Situational" },
+  { name:"Stress Eater", effect:"Eats food to reduce stress — food drain", keep:"Situational" },
+  { name:"Thanatophobia", effect:"+15 stress when hero dies — chain-reaction risk", keep:"Purge" },
+  { name:"Lygophobia", effect:"+20% stress in darkness — situational but dangerous", keep:"Situational" },
+  { name:"Zoophobia", effect:"+15 stress vs beast — Weald/Warrens crippler", keep:"Purge" }
+];
+
+// ═══════════════════════════════════════════════════════
+// ROSTER STATE
+// ═══════════════════════════════════════════════════════
+let roster = JSON.parse(localStorage.getItem('dd-roster') || '[]');
+let subsState = {};
+
+function saveRoster() {
+  localStorage.setItem('dd-roster', JSON.stringify(roster));
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER REGIONS
+// ═══════════════════════════════════════════════════════
+function renderRegion(regionKey) {
+  const region = REGIONS[regionKey];
+  if (!region) return;
+  if (!subsState[regionKey]) subsState[regionKey] = { 1:false, 2:false, 3:false, 4:false };
+  const grid = document.getElementById(regionKey + '-team');
+  if (!grid) return;
+  const positions = [4,3,2,1];
+  const posLabels = {4:'Position 4 (Back)', 3:'Position 3', 2:'Position 2', 1:'Position 1 (Front)'};
+  grid.innerHTML = positions.map(pos => {
+    const hero = region[pos];
+    const isSub = subsState[regionKey][pos];
+    const name = isSub ? hero.sub : hero.main;
+    const skills = isSub ? hero.sS : hero.mS;
+    return `
+      <div>
+        <div class="pos-label">${posLabels[pos]}</div>
+        <div class="hero-card ${isSub ? 'subbed' : ''}">
+          <div class="hero-name ${isSub ? 'sub-active' : ''}">${name}</div>
+          <div class="skills-list">${skills.map(s => `<div class="skill-item">${s}</div>`).join('')}</div>
+          <button class="swap-btn ${isSub ? 'subbed' : ''}" onclick="toggleSub('${regionKey}',${pos})">
+            ${isSub ? '↩ Main' : '⇄ Sub: ' + hero.sub}
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleSub(regionKey, pos) {
+  if (!subsState[regionKey]) subsState[regionKey] = {};
+  subsState[regionKey][pos] = !subsState[regionKey][pos];
+  renderRegion(regionKey);
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER BOSSES
+// ═══════════════════════════════════════════════════════
+function renderBosses() {
+  const el = document.getElementById('boss-list');
+  el.innerHTML = BOSSES.map((b, i) => `
+    <div class="boss-card">
+      <div class="boss-header" onclick="toggleBoss(${i})">
+        <div>
+          <div class="boss-name">${b.name}</div>
+          <div class="boss-region">${b.region} — ${b.tiers}</div>
+        </div>
+        <div class="chevron" id="chev-${i}">▶</div>
+      </div>
+      <div class="boss-body" id="boss-body-${i}">
+        <div class="boss-section">
+          <h4>Mechanics & Priority</h4>
+          <ul>${b.mechanics.map(m => `<li>${m}</li>`).join('')}</ul>
+          ${b.teams.map(t => `<div class="team-rec"><div class="team-rec-label">${t.label} Team</div><div class="team-rec-heroes">${t.heroes}</div></div>`).join('')}
+        </div>
+        <div class="boss-section">
+          <h4>Avoid / Watch For</h4>
+          <ul>${b.avoid.map(a => `<li class="${a.startsWith('⚠') ? 'warn' : ''}">${a}</li>`).join('')}</ul>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleBoss(i) {
+  const body = document.getElementById(`boss-body-${i}`);
+  const chev = document.getElementById(`chev-${i}`);
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.boss-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.chevron').forEach(c => c.classList.remove('open'));
+  if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER DARKEST
+// ═══════════════════════════════════════════════════════
+function renderDarkest() {
+  const el = document.getElementById('dd-list');
+  el.innerHTML = DD_RUNS.map(r => `
+    <div class="dd-card">
+      <div class="dd-card-title">${r.name}</div>
+      <div style="color:var(--text-dim);font-style:italic;font-size:0.82rem;margin-bottom:10px;">${r.desc}</div>
+      <div class="dd-team">
+        <div class="dd-team-label">Recommended Team</div>
+        <div class="dd-team-val">${r.team}</div>
+      </div>
+      <div class="dd-grid">
+        <div class="dd-col">
+          <h4>Key Tactics</h4>
+          <ul>${r.key.map(k => `<li>${k}</li>`).join('')}</ul>
+        </div>
+        <div class="dd-col">
+          <h4>Watch For</h4>
+          <ul>${r.watch.map(w => `<li>${w}</li>`).join('')}</ul>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER PROVISIONS
+// ═══════════════════════════════════════════════════════
+let activeProv = 'short';
+let activeProvRegion = 'ruins';
+
+function renderProvisions() {
+  const p = PROVISIONS[activeProv];
+  const items = p.regions[activeProvRegion] || p.regions.ruins;
+  const el = document.getElementById('prov-content');
+  el.innerHTML = `
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+        ${['ruins','weald','warrens','cove'].map(r => `
+          <button class="prov-tab ${activeProvRegion===r?'active':''}" onclick="setProvRegion('${r}')" style="text-transform:capitalize;">${r}</button>
         `).join('')}
       </div>
     </div>
-  `;
-
-  container.innerHTML = html;
+    <div class="prov-card" style="max-width:480px;">
+      <div class="prov-card-title">${activeProvRegion.charAt(0).toUpperCase()+activeProvRegion.slice(1)} — ${p.rooms}</div>
+      <table class="prov-table">
+        <thead><tr><th>Item</th><th style="text-align:right;">Qty</th><th>Notes</th></tr></thead>
+        <tbody>${items.map(item => `
+          <tr>
+            <td class="item-name">${item[0]}</td>
+            <td class="item-qty">${item[1]}</td>
+            <td class="item-note">${item[2]}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+      <div class="prov-rule"><strong>Rule of Thumb:</strong> ${p.note}</div>
+    </div>
+    <div style="margin-top:16px;" class="tips-box">
+      <h4>Universal Provisioning Rules</h4>
+      <ul>
+        <li>Torch: 4 per short, 8 per medium, 12 per long — never go dark intentionally early</li>
+        <li>Food: Always exceed the dungeon minimum. Hungry heroes take HP damage at each door</li>
+        <li>Antivenom is the most underrated supply — buy triple in Warrens at all lengths</li>
+        <li>Shovels prevent obstacle penalties — at least 1 per expedition</li>
+        <li>Holy Water at Ruins curios prevents most negative outcomes — always bring some</li>
+      </ul>
+    </div>`;
 }
 
-// Initial Run
-document.addEventListener('DOMContentLoaded', renderDashboard);
+function setProvRegion(r) { activeProvRegion = r; renderProvisions(); }
 
+// ═══════════════════════════════════════════════════════
+// ROSTER
+// ═══════════════════════════════════════════════════════
+function renderRoster() {
+  const filterClass = document.getElementById('filterClass').value;
+  const filterStatus = document.getElementById('filterStatus').value;
+  const grid = document.getElementById('rosterGrid');
+  let heroes = roster;
+  if (filterClass) heroes = heroes.filter(h => h.cls === filterClass);
+  if (filterStatus) heroes = heroes.filter(h => h.status === filterStatus);
+
+  if (!heroes.length) {
+    grid.innerHTML = `<div style="color:var(--text-dim);font-style:italic;grid-column:1/-1;padding:20px 0;">No heroes recorded. Add your first hero above.</div>`;
+    return;
+  }
+
+  grid.innerHTML = heroes.map((h, i) => {
+    const stressColor = h.stress < 50 ? '#80c060' : h.stress < 100 ? var_('gold') : h.stress < 150 ? '#c08020' : '#cc2222';
+    const stressPct = Math.min(100, h.stress / 2);
+    return `
+      <div class="roster-card ${h.status==='dead'?'dead':''} ${h.status==='retired'?'retired':''}">
+        <div class="rcard-level">Lv${h.level}</div>
+        <div class="rcard-name">${h.name}</div>
+        <div class="rcard-class">${h.cls}</div>
+        <div style="font-size:0.7rem;color:var(--text-dim);margin-top:4px;text-transform:uppercase;letter-spacing:1px;">${h.status}</div>
+        <div class="rcard-stress">
+          <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-dim);">
+            <span>Stress</span><span style="color:${stressColor}">${h.stress}</span>
+          </div>
+          <div class="stress-bar"><div class="stress-fill" style="width:${stressPct}%;background:${stressColor}"></div></div>
+        </div>
+        <div class="rcard-quirks">
+          ${(h.posQ||[]).map(q => `<span class="quirk-tag quirk-pos">${q}</span>`).join('')}
+          ${(h.negQ||[]).map(q => `<span class="quirk-tag quirk-neg">${q}</span>`).join('')}
+        </div>
+        <button class="rcard-del" onclick="deleteHero(${roster.indexOf(h)})">✕</button>
+      </div>`;
+  }).join('');
+}
+
+function var_(n) { return n === 'gold' ? '#c5a059' : '#ccc'; }
+
+function deleteHero(i) {
+  roster.splice(i, 1);
+  saveRoster();
+  renderRoster();
+}
+
+function initRoster() {
+  const classFilter = document.getElementById('filterClass');
+  const classSelect = document.getElementById('newClass');
+  CLASSES.forEach(c => {
+    classFilter.innerHTML += `<option value="${c}">${c}</option>`;
+    classSelect.innerHTML += `<option value="${c}">${c}</option>`;
+  });
+  classFilter.addEventListener('change', renderRoster);
+  document.getElementById('filterStatus').addEventListener('change', renderRoster);
+
+  document.getElementById('addHeroBtn').addEventListener('click', () => {
+    document.getElementById('addHeroForm').classList.toggle('open');
+  });
+  document.getElementById('cancelHero').addEventListener('click', () => {
+    document.getElementById('addHeroForm').classList.remove('open');
+  });
+  document.getElementById('clearRoster').addEventListener('click', () => {
+    if (confirm('Clear all heroes?')) { roster = []; saveRoster(); renderRoster(); }
+  });
+  document.getElementById('saveHero').addEventListener('click', () => {
+    const name = document.getElementById('newName').value.trim() || 'Unnamed';
+    const cls = document.getElementById('newClass').value;
+    const level = document.getElementById('newLevel').value;
+    const stress = parseInt(document.getElementById('newStress').value) || 0;
+    const status = document.getElementById('newStatus').value;
+    const posQ = document.getElementById('newPosQ').value.split(',').map(s=>s.trim()).filter(Boolean);
+    const negQ = document.getElementById('newNegQ').value.split(',').map(s=>s.trim()).filter(Boolean);
+    roster.push({ name, cls, level, stress, status, posQ, negQ });
+    saveRoster();
+    renderRoster();
+    document.getElementById('addHeroForm').classList.remove('open');
+    document.getElementById('newName').value = '';
+    document.getElementById('newStress').value = '0';
+    document.getElementById('newPosQ').value = '';
+    document.getElementById('newNegQ').value = '';
+  });
+  renderRoster();
+}
+
+// ═══════════════════════════════════════════════════════
+// QUIRKS
+// ═══════════════════════════════════════════════════════
+function renderQuirks() {
+  document.getElementById('pos-quirks').innerHTML = POS_QUIRKS.map(q => `
+    <div class="quirk-entry pos">
+      <div class="quirk-keep-label ${q.keep==='Lock'?'keep-yes':q.keep==='Purge'?'keep-no':'keep-situational'}">${q.keep}</div>
+      <div class="quirk-entry-name">${q.name}</div>
+      <div class="quirk-entry-effect">${q.effect}</div>
+    </div>`).join('');
+  document.getElementById('neg-quirks').innerHTML = NEG_QUIRKS.map(q => `
+    <div class="quirk-entry neg">
+      <div class="quirk-keep-label ${q.keep==='Purge'?'keep-no':'keep-situational'}">${q.keep}</div>
+      <div class="quirk-entry-name">${q.name}</div>
+      <div class="quirk-entry-effect">${q.effect}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// ESTATE DATA — Buildings, upgrades, costs, effects
+// ═══════════════════════════════════════════════════════
+const BUILDINGS = [
+  // ── ABBEY (3 tracks × 6 pips each) ──────────────────
+  {
+    id: 'abbey', name: 'Abbey', icon: '⛪',
+    upgrades: [
+      { label: 'Cloister', maxLevel: 6,
+        effects: ['Unlocks Prayer treatment','Improved meditation quality','Further improvement','Veteran-tier recovery','Reduced treatment cost','Max quality — Cloister mastered'],
+        tags: ['stress','survival'], priority: 9 },
+      { label: 'Transept', maxLevel: 6,
+        effects: ['Unlocks Flagellation treatment','Improved flagellation quality','Further improvement','Veteran-tier recovery','Reduced treatment cost','Max quality — Transept mastered'],
+        tags: ['stress','survival'], priority: 8 },
+      { label: 'Penance Hall', maxLevel: 6,
+        effects: ['Unlocks Penance treatment','Improved absolution quality','Further improvement','Veteran-tier recovery','Reduced treatment cost','Max quality — Penance Hall mastered'],
+        tags: ['stress','survival'], priority: 7 }
+    ]
+  },
+  // ── TAVERN (3 tracks × 6 pips each) ─────────────────
+  {
+    id: 'tavern', name: 'Tavern', icon: '🍺',
+    upgrades: [
+      { label: 'Bar', maxLevel: 6,
+        effects: ['Unlocks Bar treatment','Improved drinking quality','Further improvement','Veteran-tier stress relief','Reduced treatment cost','Max quality — Bar mastered'],
+        tags: ['stress','economy'], priority: 9 },
+      { label: 'Gambling Hall', maxLevel: 6,
+        effects: ['Unlocks Gambling treatment','Improved gambling quality','Further improvement','Veteran-tier stress relief','Reduced cost','Max quality — Gambling mastered'],
+        tags: ['stress','economy'], priority: 7 },
+      { label: 'Brothel', maxLevel: 6,
+        effects: ['Unlocks Brothel treatment','Improved quality','Further improvement','Veteran-tier stress relief','Reduced cost','Max quality — Brothel mastered'],
+        tags: ['stress'], priority: 7 }
+    ]
+  },
+  // ── SANITARIUM (5 / 5 / 4 pips) ─────────────────────
+  {
+    id: 'sanitarium', name: 'Sanitarium', icon: '🏥',
+    upgrades: [
+      { label: 'Treatment Library', maxLevel: 5,
+        effects: ['Unlocks quirk treatment (1 slot)','2nd quirk slot available','Improved removal quality','Reduced treatment cost','Max library — guaranteed removal'],
+        tags: ['quirks','survival'], priority: 9 },
+      { label: 'Medical Devices', maxLevel: 5,
+        effects: ['Unlocks disease treatment (1 slot)','2nd disease slot available','Improved cure quality','Reduced disease cost','Max devices — full disease mastery'],
+        tags: ['quirks','survival'], priority: 8 },
+      { label: 'Patient Cells', maxLevel: 4,
+        effects: ['Unlocks 3rd treatment slot','4th treatment slot','Reduced overall cost','Max capacity — 4 simultaneous patients'],
+        tags: ['quirks','survival'], priority: 7 }
+    ]
+  },
+  // ── BLACKSMITH (3 tracks × 4 pips each) ─────────────
+  {
+    id: 'blacksmith', name: 'Blacksmith', icon: '⚒️',
+    upgrades: [
+      { label: 'Weaponsmithing', maxLevel: 4,
+        effects: ['Apprentice weapons available','Veteran weapons available','Champion weapons available','Max — all tiers at reduced cost'],
+        tags: ['speed','darkest'], priority: 10 },
+      { label: 'Armorsmithing', maxLevel: 4,
+        effects: ['Apprentice armor available','Veteran armor available','Champion armor available','Max — all tiers at reduced cost'],
+        tags: ['survival','darkest'], priority: 10 },
+      { label: 'Furnace', maxLevel: 4,
+        effects: ['Apprentice upgrade discount','Veteran upgrade discount','Champion upgrade discount','Max — maximum cost reduction'],
+        tags: ['economy','darkest'], priority: 8 }
+    ]
+  },
+  // ── GUILD (4 pips / 5 pips) ──────────────────────────
+  {
+    id: 'guild', name: 'Guild', icon: '⚔️',
+    upgrades: [
+      { label: 'Instructor Mastery', maxLevel: 4,
+        effects: ['Apprentice skills available','Veteran skills available','Champion skills available','Max — all skill tiers unlocked'],
+        tags: ['speed','darkest'], priority: 10 },
+      { label: 'Training Regimen', maxLevel: 5,
+        effects: ['1 skill upgrade slot','2 skill upgrade slots','3 skill upgrade slots','4 skill upgrade slots','Max — 5 slots, reduced costs'],
+        tags: ['speed','darkest'], priority: 8 }
+    ]
+  },
+  // ── STAGECOACH (5 / 5 / 4 pips) ─────────────────────
+  {
+    id: 'stagecoach', name: 'Stage Coach', icon: '🚌',
+    upgrades: [
+      { label: 'Stagecoach Network', maxLevel: 5,
+        effects: ['Base hero recruitment (2/week)','3 heroes available per week','4 heroes available per week','Improved class variety','Max — 5 heroes/week, rare class boost'],
+        tags: ['survival','speed'], priority: 9 },
+      { label: 'Hero Barracks', maxLevel: 5,
+        effects: ['Roster size +2 (11 total)','Roster size +2 (13 total)','Roster size +2 (15 total)','Roster size +2 (17 total)','Max — full 19-hero roster'],
+        tags: ['survival'], priority: 9 },
+      { label: 'Experienced Recruits', maxLevel: 4,
+        effects: ['Recruits arrive at Lvl 1','Recruits arrive at Lvl 2','Recruits arrive at Lvl 3','Max — recruits arrive seasoned with bonuses'],
+        tags: ['speed','darkest'], priority: 7 }
+    ]
+  },
+  // ── SURVIVALIST (1 track × 5 pips) ───────────────────
+  {
+    id: 'survivalist', name: 'Survivalist', icon: '🏕️',
+    upgrades: [
+      { label: 'Bonfire', maxLevel: 5,
+        effects: ['Unlocks basic camping skills','Additional camping skills available','Further camping skill unlocks','Veteran-tier camping skills','Max — all camping skills + reduced costs'],
+        tags: ['survival','speed'], priority: 9 }
+    ]
+  },
+  // ── NOMAD WAGON (4 / 5 pips) ─────────────────────────
+  {
+    id: 'nomadwagon', name: 'Nomad Wagon', icon: '🛒',
+    upgrades: [
+      { label: 'Wagon Size', maxLevel: 4,
+        effects: ['Trinket stock +1 (wider selection)','Trinket stock +2','Trinket stock +3','Max — full trinket catalogue available'],
+        tags: ['economy','speed'], priority: 7 },
+      { label: 'Merchant Network', maxLevel: 5,
+        effects: ['Trinket cost reduction tier 1','Trinket cost reduction tier 2','Trinket cost reduction tier 3','Rare trinket appearance chance up','Max — max discount + rare trinket guarantee'],
+        tags: ['economy'], priority: 8 }
+    ]
+  }
+];
+
+// Estate state: { buildingId_upgradeIndex: level }
+let estateState = JSON.parse(localStorage.getItem('dd-estate') || '{}');
+
+function saveEstate() {
+  localStorage.setItem('dd-estate', JSON.stringify(estateState));
+}
+
+function getUpgradeLevel(bId, uIdx) {
+  return estateState[`${bId}_${uIdx}`] || 0;
+}
+
+function setUpgradeLevel(bId, uIdx, level) {
+  estateState[`${bId}_${uIdx}`] = level;
+  saveEstate();
+  renderEstate();
+  // re-run route if initialized
+  if (initialized['buildroute']) computeRoute();
+}
+
+function saveEstateName() {
+  localStorage.setItem('dd-estate-name', document.getElementById('estateName').value);
+}
+
+function resetEstate() {
+  if (confirm('Reset all building levels to 0?')) {
+    estateState = {};
+    saveEstate();
+    renderEstate();
+    if (initialized['buildroute']) computeRoute();
+  }
+}
+
+function exportEstate() {
+  const data = JSON.stringify(estateState, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'dd-estate.json'; a.click();
+}
+
+function renderEstate() {
+  // Load estate name
+  const nameEl = document.getElementById('estateName');
+  if (nameEl && !nameEl.value) nameEl.value = localStorage.getItem('dd-estate-name') || '';
+  // Summary stats
+  let totalUpgrades = 0, maxUpgrades = 0;
+  BUILDINGS.forEach(b => {
+    b.upgrades.forEach((u, ui) => {
+      const lvl = getUpgradeLevel(b.id, ui);
+      totalUpgrades += lvl;
+      maxUpgrades += u.maxLevel;
+    });
+  });
+  const pct = Math.round((totalUpgrades / maxUpgrades) * 100);
+  const remaining = maxUpgrades - totalUpgrades;
+
+  document.getElementById('estate-summary').innerHTML = `
+    <div class="estate-stat">
+      <div class="estate-stat-val">${totalUpgrades}</div>
+      <div class="estate-stat-label">Upgrades Done</div>
+    </div>
+    <div class="estate-stat">
+      <div class="estate-stat-val">${maxUpgrades}</div>
+      <div class="estate-stat-label">Total Upgrades</div>
+    </div>
+    <div class="estate-stat">
+      <div class="estate-stat-val">${pct}%</div>
+      <div class="estate-stat-label">Completion</div>
+    </div>
+    <div class="estate-stat">
+      <div class="estate-stat-val">${remaining}</div>
+      <div class="estate-stat-label">Remaining</div>
+    </div>`;
+
+  // Building cards
+  document.getElementById('estate-grid').innerHTML = BUILDINGS.map(b => {
+    const allMaxed = b.upgrades.every((u, ui) => getUpgradeLevel(b.id, ui) >= u.maxLevel);
+    return `
+      <div class="building-card ${allMaxed ? 'maxed' : ''}">
+        <div class="building-header">
+          <span class="building-icon">${b.icon}</span>
+          <span class="building-name">${b.name}</span>
+          ${allMaxed ? '<span class="building-maxed-badge">MAXED</span>' : ''}
+        </div>
+        <div class="upgrade-rows">
+          ${b.upgrades.map((u, ui) => {
+            const lvl = getUpgradeLevel(b.id, ui);
+            const isMax = lvl >= u.maxLevel;
+            const pips = Array.from({length: u.maxLevel}, (_, pi) => {
+              const filled = pi < lvl;
+              const isLast = pi === u.maxLevel - 1;
+              return `<div class="pip ${filled ? (isLast && isMax ? 'maxpip' : 'filled') : ''}"
+                onclick="pipClick('${b.id}',${ui},${pi+1},${u.maxLevel})"
+                title="Lvl ${pi+1}: ${u.effects[pi] || ''}"></div>`;
+            }).join('');
+            return `
+              <div class="upgrade-row">
+                <span class="upgrade-label">${u.label}</span>
+                <div class="upgrade-pips">${pips}</div>
+                <span style="font-size:0.7rem;color:${isMax?'var(--gold)':'var(--text-dim)'};">${lvl}/${u.maxLevel}</span>
+              </div>
+              <div class="building-effect">${u.effects[Math.max(0, lvl-1)]}
+                ${!isMax ? `<div class="building-cost">Next: Lvl ${lvl+1}</div>` : ''}
+              </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function pipClick(bId, uIdx, clickedLevel, maxLevel) {
+  const cur = getUpgradeLevel(bId, uIdx);
+  // clicking current level deselects (go down by 1), else set to clicked level
+  const newLevel = cur === clickedLevel ? clickedLevel - 1 : clickedLevel;
+  setUpgradeLevel(bId, uIdx, Math.max(0, Math.min(maxLevel, newLevel)));
+}
+
+// ═══════════════════════════════════════════════════════
+// BUILD ROUTE OPTIMIZER
+// ═══════════════════════════════════════════════════════
+
+const STRATEGY_WEIGHTS = {
+  balanced:  { survival:1.0, stress:1.0, speed:1.0, economy:0.8, darkest:1.0, quirks:0.9 },
+  survival:  { survival:2.0, stress:1.8, speed:0.7, economy:0.5, darkest:0.9, quirks:1.2 },
+  speed:     { survival:0.8, stress:0.8, speed:2.0, economy:0.7, darkest:1.2, quirks:0.6 },
+  economy:   { survival:0.8, stress:0.9, speed:0.8, economy:2.5, darkest:0.7, quirks:0.8 },
+  darkest:   { survival:1.2, stress:1.0, speed:1.5, economy:0.6, darkest:3.0, quirks:1.0 }
+};
+
+// Early-game urgency: some upgrades matter much more in early weeks
+function weekUrgency(week, tag) {
+  if (week <= 10) {
+    if (tag === 'survival') return 1.6;
+    if (tag === 'stress')   return 1.5;
+    if (tag === 'economy')  return 1.4;
+    if (tag === 'speed')    return 1.2;
+  } else if (week <= 25) {
+    if (tag === 'darkest')  return 1.4;
+    if (tag === 'speed')    return 1.3;
+    if (tag === 'quirks')   return 1.2;
+  } else {
+    if (tag === 'darkest')  return 2.0;
+  }
+  return 1.0;
+}
+
+function computeRoute() {
+  const week = parseInt(document.getElementById('routeWeek').value) || 1;
+  const gold = parseInt(document.getElementById('routeGold').value) || 0;
+  const strategy = document.getElementById('routeStrategy').value;
+  const count = parseInt(document.getElementById('routeCount').value);
+  const weights = STRATEGY_WEIGHTS[strategy] || STRATEGY_WEIGHTS.balanced;
+
+  const candidates = [];
+
+  BUILDINGS.forEach(b => {
+    b.upgrades.forEach((u, ui) => {
+      const lvl = getUpgradeLevel(b.id, ui);
+      if (lvl >= u.maxLevel) return; // already maxed
+
+      const nextCost = u.costs[lvl] || 0;
+      const nextEffect = u.effects[lvl] || '';
+
+      // Compute weighted score
+      let score = u.priority * 10;
+
+      // Tag-based weight accumulation
+      u.tags.forEach(tag => {
+        const w = weights[tag] || 1.0;
+        const urg = weekUrgency(week, tag);
+        score *= (w * urg);
+      });
+
+      // Diminishing returns on higher levels
+      score *= (1 / (lvl + 1));
+
+      // Cost penalty — very expensive upgrades get mild penalty
+      if (nextCost > 5000) score *= 0.85;
+      if (nextCost > 8000) score *= 0.75;
+
+      // Affordability bonus — if you can buy it now, slight boost
+      if (nextCost <= gold) score *= 1.1;
+
+      // Priority tier
+      let tier = 'low';
+      if (score >= 60) tier = 'critical';
+      else if (score >= 35) tier = 'high';
+      else if (score >= 18) tier = 'medium';
+
+      candidates.push({
+        bName: b.name, bIcon: b.icon,
+        uLabel: u.label,
+        currentLevel: lvl,
+        nextLevel: lvl + 1,
+        maxLevel: u.maxLevel,
+        cost: nextCost,
+        effect: nextEffect,
+        score: Math.round(score),
+        tier,
+        tags: u.tags
+      });
+    });
+  });
+
+  // Sort descending by score
+  candidates.sort((a, b) => b.score - a.score);
+  const shown = candidates.slice(0, count === 999 ? candidates.length : count);
+
+  // Summary
+  const affordable = shown.filter(c => c.cost <= gold).length;
+  const totalCost = shown.reduce((s, c) => s + c.cost, 0);
+  const critCount = candidates.filter(c => c.tier === 'critical').length;
+
+  document.getElementById('route-summary').innerHTML = `
+    <div class="route-stat">
+      <div class="route-stat-val">${candidates.length}</div>
+      <div class="route-stat-label">Upgrades Available</div>
+    </div>
+    <div class="route-stat">
+      <div class="route-stat-val">${critCount}</div>
+      <div class="route-stat-label">Critical Priority</div>
+    </div>
+    <div class="route-stat">
+      <div class="route-stat-val">${affordable}</div>
+      <div class="route-stat-label">Affordable Now</div>
+    </div>
+    <div class="route-stat">
+      <div class="route-stat-val">${totalCost.toLocaleString()}g</div>
+      <div class="route-stat-label">Total to Complete</div>
+    </div>`;
+
+  if (!shown.length) {
+    document.getElementById('route-queue').innerHTML = `
+      <div style="color:var(--gold);font-style:italic;padding:20px;text-align:center;font-family:'Cinzel Decorative',serif;font-size:0.8rem;">
+        ALL BUILDINGS MAXED — THE ESTATE IS COMPLETE
+      </div>`;
+    return;
+  }
+
+  const costColor = (cost) => cost <= gold ? 'affordable' : cost <= gold * 2 ? 'costly' : 'expensive';
+
+  document.getElementById('route-queue').innerHTML = shown.map((c, i) => `
+    <div class="queue-item priority-${c.tier}">
+      <div class="queue-rank">${i + 1}</div>
+      <div>
+        <div class="queue-building">${c.bIcon} ${c.bName}</div>
+        <div class="queue-upgrade">${c.uLabel} → Level ${c.nextLevel}/${c.maxLevel}</div>
+        <div class="queue-reason">${c.effect}</div>
+      </div>
+      <div>
+        <div class="priority-pill pill-${c.tier}">${c.tier}</div>
+        <div class="queue-score" style="margin-top:4px;">Score: ${c.score}</div>
+      </div>
+      <div>
+        <div class="queue-cost ${costColor(c.cost)}">${c.cost.toLocaleString()}g</div>
+        <div style="font-size:0.65rem;color:var(--text-dim);text-align:right;margin-top:3px;">
+          ${c.cost <= gold ? '✓ Affordable' : `Need +${(c.cost-gold).toLocaleString()}g`}
+        </div>
+      </div>
+    </div>`).join('') + `
+    <div class="route-tip">
+      <strong>Strategy:</strong> ${strategyTip(strategy, week)}
+    </div>`;
+}
+
+function strategyTip(strategy, week) {
+  const tips = {
+    balanced: 'Balanced mode weights all building categories equally. Good default for most playthroughs.',
+    survival: 'Survival mode prioritizes Abbey/Tavern stress slots, Stagecoach roster size, and Blacksmith armor. Heroes must live.',
+    speed:    'Speed mode prioritizes Guild skill tiers and Blacksmith weapons. Kill things faster, clear more rooms per week.',
+    economy:  'Economy mode prioritizes Nomad Wagon exchange rates and heirloom income. Gold multiplies everything downstream.',
+    darkest:  'Darkest prep maximizes weapon/skill tiers (Champion required), Guild upgrades, and Survivalist camp depth.'
+  };
+  const earlyNote = week <= 8 ? ' <em>Early game: stress slots and roster size are most urgent regardless of strategy.</em>' : '';
+  return (tips[strategy] || '') + earlyNote;
+}
+
+// ═══════════════════════════════════════════════════════
+// UPDATED TABS + NAV — add estate and buildroute
+// ═══════════════════════════════════════════════════════
+const tabs = ['ruins','weald','warrens','cove','bosses','darkest','provisions','roster','quirks'];
+let initialized = {};
+
+function switchTab(id) {
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'tab-'+id));
+  if (!initialized[id]) {
+    if (id === 'bosses') renderBosses();
+    else if (id === 'darkest') renderDarkest();
+    else if (id === 'provisions') renderProvisions();
+    else if (id === 'roster') initRoster();
+    else if (id === 'quirks') renderQuirks();
+    else if (id === 'estate') renderEstate();
+    else if (id === 'buildroute') { renderEstate(); computeRoute(); }
+    else renderRegion(id);
+    initialized[id] = true;
+  }
+}
+
+document.getElementById('mainNav').addEventListener('click', e => {
+  const btn = e.target.closest('[data-tab]');
+  if (btn) switchTab(btn.dataset.tab);
+});
+
+// Provisions length tabs
+document.addEventListener('click', e => {
+  const pt = e.target.closest('.prov-tab[data-prov]');
+  if (pt) {
+    document.querySelectorAll('.prov-tab[data-prov]').forEach(b => b.classList.remove('active'));
+    pt.classList.add('active');
+    activeProv = pt.dataset.prov;
+    renderProvisions();
+  }
+});
+
+document.querySelectorAll('.prov-tab[data-prov]').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.prov-tab[data-prov]').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    activeProv = b.dataset.prov;
+    renderProvisions();
+  });
+});
+
+// Init
+renderRegion('ruins');
+initialized['ruins'] = true;
 </script>
+
 </body>
 </html>
