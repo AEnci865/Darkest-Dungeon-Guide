@@ -6,6 +6,7 @@ var subsState = {};
 var estateState = JSON.parse(localStorage.getItem(‘dd-estate’) || ‘{}’);
 var activeProv = ‘short’;
 var activeProvRegion = ‘ruins’;
+var activeTeam = {ruins:0, weald:0, warrens:0, cove:0};
 var initialized = {};
 
 // –– HELPERS ––
@@ -22,18 +23,31 @@ function resetEstate() { if (confirm(‘Reset all building levels to 0?’)) { e
 function renderRegion(rk) {
 var region = REGIONS[rk];
 if (!region) return;
+var teamIdx = activeTeam[rk] || 0;
+var team = region.teams[teamIdx];
+if (!team) return;
 if (!subsState[rk]) subsState[rk] = {1:false,2:false,3:false,4:false};
 var grid = document.getElementById(rk + ‘-team’);
 if (!grid) return;
 var positions = [4,3,2,1];
 var posLabels = {4:‘Position 4 (Back)’,3:‘Position 3’,2:‘Position 2’,1:‘Position 1 (Front)’};
-var html = ‘’;
+var teamBtns = region.teams.map(function(t, i) {
+var isActive = i === teamIdx;
+return ‘<button onclick="switchTeam(\'' + rk + '\',' + i + ')" style="'
++ 'padding:5px 12px;font-size:.65rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;'
++ 'font-family:\'Cinzel Decorative\',serif;transition:all .2s;'
++ (isActive ? 'background:linear-gradient(135deg,#1a1308,#0d0b0b);border:1px solid var(--gold);color:var(--gold);'
+: 'background:var(--panel);border:1px solid var(--border);color:var(--text-dim);')
++ '">’ + t.label + ‘</button>’;
+}).join(’’);
+var html = ‘<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">’ + teamBtns + ‘</div>’;
+html += ‘<div class="team-grid">’;
 positions.forEach(function(pos) {
-var hero = region[pos];
+var hero = team[pos];
 var isSub = subsState[rk][pos];
 var name = isSub ? hero.sub : hero.main;
 var skills = isSub ? hero.sS : hero.mS;
-var skillsHtml = skills.map(function(s) { return ‘<div class="skill-item" style="font-size:.82rem;color:var(--text-dim);line-height:1.8;font-style:italic;">’ + s + ‘</div>’; }).join(’’);
+var skillsHtml = skills.map(function(s) { return ‘<div style="font-size:.82rem;color:var(--text-dim);line-height:1.8;font-style:italic;">’ + s + ‘</div>’; }).join(’’);
 html += ‘<div>’
 + ‘<div class="pos-label">’ + posLabels[pos] + ‘</div>’
 + ‘<div class="hero-card' + (isSub ? ' subbed' : '') + '">’
@@ -43,8 +57,10 @@ html += ‘<div>’
 + (isSub ? ‘Back to Main’ : ’Sub: ’ + hero.sub)
 + ‘</button></div></div>’;
 });
+html += ‘</div>’;
 grid.innerHTML = html;
 }
+function switchTeam(rk, idx) { activeTeam[rk] = idx; subsState[rk] = {1:false,2:false,3:false,4:false}; renderRegion(rk); }
 function toggleSub(rk, pos) { if (!subsState[rk]) subsState[rk] = {}; subsState[rk][pos] = !subsState[rk][pos]; renderRegion(rk); }
 
 // –– BOSSES ––
