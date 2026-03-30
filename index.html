@@ -1,42 +1,301 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Darkest Dungeon Campaign Optimizer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Darkest Dungeon: Estate Master Guide</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="app">
 
-<h1>Darkest Dungeon Campaign Optimizer</h1>
+  <header>
+    <h1>Estate Master Guide</h1>
+    <div class="subtitle">Darkest Dungeon &mdash; Expedition Intelligence System</div>
+  </header>
 
-<div id="mainNav">
-  <button data-tab="roster" class="nav-tab active">Roster</button>
-  <button data-tab="team" class="nav-tab">Team Builder</button>
-  <button data-tab="campaign" class="nav-tab">Campaign</button>
+  <nav class="nav-tabs" id="mainNav">
+    <button class="nav-tab active" data-tab="ruins">   <span class="icon">&#128128;</span>Ruins</button>
+    <button class="nav-tab"         data-tab="weald">  <span class="icon">&#127807;</span>Weald</button>
+    <button class="nav-tab"         data-tab="warrens"><span class="icon">&#128000;</span>Warrens</button>
+    <button class="nav-tab"         data-tab="cove">   <span class="icon">&#128025;</span>Cove</button>
+    <button class="nav-tab"         data-tab="bosses"> <span class="icon">&#9876;&#65039;</span>Bosses</button>
+    <button class="nav-tab"         data-tab="darkest"><span class="icon">&#128293;</span>Darkest</button>
+    <button class="nav-tab"         data-tab="provisions"><span class="icon">&#127920;</span>Provisions</button>
+    <button class="nav-tab"         data-tab="roster"> <span class="icon">&#128220;</span>Roster</button>
+    <button class="nav-tab"         data-tab="quirks"> <span class="icon">&#128302;</span>Quirks</button>
+    <button class="nav-tab"         data-tab="estate"> <span class="icon">&#127963;&#65039;</span>Estate</button>
+    <button class="nav-tab"         data-tab="buildroute"><span class="icon">&#9881;&#65039;</span>Build Route</button>
+    <button class="nav-tab"         data-tab="campaign"><span class="icon">&#128336;</span>Campaign</button>
+    <button class="nav-tab"         data-tab="data">   <span class="icon">&#128190;</span>Data</button>
+  </nav>
+
+  <!-- ── REGION TABS ─────────────────────────────────────── -->
+
+  <div id="tab-ruins" class="tab-pane active">
+    <div class="region-header">
+      <div class="section-title" style="margin:0;border:none;">The Ruins</div>
+      <div class="focus-badges">
+        <span class="badge badge-holy">Holy</span>
+        <span class="badge badge-blight">Blight</span>
+      </div>
+    </div>
+    <div class="section-sub" id="ruins-subtitle"></div>
+    <div class="team-grid" id="ruins-team"></div>
+    <div class="tips-box" id="ruins-tips"></div>
+  </div>
+
+  <div id="tab-weald" class="tab-pane">
+    <div class="region-header">
+      <div class="section-title" style="margin:0;border:none;">The Weald</div>
+      <div class="focus-badges">
+        <span class="badge badge-bleed">Bleed</span>
+        <span class="badge badge-mark">Mark</span>
+        <span class="badge badge-prot">Prot Strip</span>
+      </div>
+    </div>
+    <div class="section-sub" id="weald-subtitle"></div>
+    <div class="team-grid" id="weald-team"></div>
+    <div class="tips-box" id="weald-tips"></div>
+  </div>
+
+  <div id="tab-warrens" class="tab-pane">
+    <div class="region-header">
+      <div class="section-title" style="margin:0;border:none;">The Warrens</div>
+      <div class="focus-badges">
+        <span class="badge badge-bleed">Bleed</span>
+        <span class="badge badge-blight">Blight</span>
+      </div>
+    </div>
+    <div class="section-sub" id="warrens-subtitle"></div>
+    <div class="team-grid" id="warrens-team"></div>
+    <div class="tips-box" id="warrens-tips"></div>
+  </div>
+
+  <div id="tab-cove" class="tab-pane">
+    <div class="region-header">
+      <div class="section-title" style="margin:0;border:none;">The Cove</div>
+      <div class="focus-badges">
+        <span class="badge badge-pierce">Pierce</span>
+        <span class="badge badge-eldritch">Eldritch</span>
+      </div>
+    </div>
+    <div class="section-sub" id="cove-subtitle"></div>
+    <div class="team-grid" id="cove-team"></div>
+    <div class="tips-box" id="cove-tips"></div>
+  </div>
+
+  <!-- ── BOSSES ──────────────────────────────────────────── -->
+
+  <div id="tab-bosses" class="tab-pane">
+    <div class="section-title">Boss Compendium</div>
+    <div class="section-sub">Click any boss to expand. Each boss appears at Apprentice, Veteran, and Champion tiers.</div>
+    <div id="boss-list"></div>
+  </div>
+
+  <!-- ── DARKEST DUNGEON ────────────────────────────────── -->
+
+  <div id="tab-darkest" class="tab-pane">
+    <div class="section-title" style="color:var(--red);">The Darkest Dungeon</div>
+    <div class="section-sub">Four forays into madness. Heroes who complete a run are Resolute but cannot re-enter another DD run.</div>
+    <div id="dd-list"></div>
+  </div>
+
+  <!-- ── PROVISIONS ─────────────────────────────────────── -->
+
+  <div id="tab-provisions" class="tab-pane">
+    <div class="section-title">Provisions Guide</div>
+    <div class="prov-tabs">
+      <button class="prov-tab active" data-prov="short">Short</button>
+      <button class="prov-tab"        data-prov="medium">Medium</button>
+      <button class="prov-tab"        data-prov="long">Long</button>
+    </div>
+    <div id="prov-content"></div>
+  </div>
+
+  <!-- ── ROSTER ─────────────────────────────────────────── -->
+
+  <div id="tab-roster" class="tab-pane">
+    <div class="section-title">Hero Roster</div>
+    <div class="section-sub">Track your heroes, stress, quirks, and status. Saved to localStorage.</div>
+    <div class="roster-controls">
+      <button class="ctrl-btn" id="addHeroBtn">+ Add Hero</button>
+      <button class="ctrl-btn" id="addSampleBtn">Add Sample Heroes</button>
+      <button class="ctrl-btn danger" id="clearRoster">Clear All</button>
+      <select id="filterClass" style="width:150px;"><option value="">All Classes</option></select>
+      <select id="filterStatus">
+        <option value="">All Status</option>
+        <option value="active">Active</option>
+        <option value="retired">Retired</option>
+        <option value="dead">Dead</option>
+      </select>
+    </div>
+    <div class="add-hero-form" id="addHeroForm">
+      <div class="form-row">
+        <div class="form-group"><div class="form-label">Name</div><input type="text" id="newName" placeholder="Name..." style="width:160px;"></div>
+        <div class="form-group"><div class="form-label">Class</div><select id="newClass" style="width:160px;"></select></div>
+        <div class="form-group"><div class="form-label">Level</div><select id="newLevel" style="width:80px;"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+        <div class="form-group"><div class="form-label">Stress (0-200)</div><input type="number" id="newStress" min="0" max="200" value="0" style="width:80px;"></div>
+        <div class="form-group"><div class="form-label">Status</div><select id="newStatus" style="width:120px;"><option value="active">Active</option><option value="retired">Retired</option><option value="dead">Dead</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><div class="form-label">Positive Quirks (comma-sep)</div><input type="text" id="newPosQ" placeholder="Unerring, Resilient..." style="width:280px;"></div>
+        <div class="form-group"><div class="form-label">Negative Quirks (comma-sep)</div><input type="text" id="newNegQ" placeholder="Nervous, Zoophobia..." style="width:280px;"></div>
+      </div>
+      <div class="form-row">
+        <button class="ctrl-btn" id="saveHero">Save Hero</button>
+        <button class="ctrl-btn" id="cancelHero">Cancel</button>
+      </div>
+    </div>
+    <div class="roster-grid" id="rosterGrid"></div>
+  </div>
+
+  <!-- ── QUIRKS ─────────────────────────────────────────── -->
+
+  <div id="tab-quirks" class="tab-pane">
+    <div class="section-title">Quirk Reference</div>
+    <div class="section-sub">Full quirk list with correct stats, categories, and region/monster synergy tags.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;" id="quirk-columns">
+      <div>
+        <div class="section-title" style="font-size:.8rem;color:#80c060;border-color:rgba(64,96,48,.3);margin-bottom:14px;">Positive Quirks</div>
+        <div id="pos-quirks"></div>
+      </div>
+      <div>
+        <div class="section-title" style="font-size:.8rem;color:#c06060;border-color:rgba(96,48,48,.3);margin-bottom:14px;">Negative Quirks</div>
+        <div id="neg-quirks"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ESTATE ─────────────────────────────────────────── -->
+
+  <div id="tab-estate" class="tab-pane">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:6px;">
+      <div class="section-title" style="margin:0;border:none;">Estate Tracker</div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="form-label">Estate Name</div>
+        <input type="text" id="estateName" placeholder="The ??? Estate" style="width:200px;" oninput="saveEstateName()">
+      </div>
+    </div>
+    <div class="section-sub">Click a pip to set upgrade level. Click active pip again to step back.</div>
+    <div class="estate-summary" id="estate-summary"></div>
+    <div class="estate-grid" id="estate-grid"></div>
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="ctrl-btn danger" onclick="resetEstate()">Reset All Buildings</button>
+    </div>
+  </div>
+
+  <!-- ── BUILD ROUTE ────────────────────────────────────── -->
+
+  <div id="tab-buildroute" class="tab-pane">
+    <div class="section-title">Build Route Optimizer</div>
+    <div class="section-sub">Set your current week and strategy to get a prioritized upgrade queue based on your estate state.</div>
+    <div class="route-controls">
+      <div class="form-group">
+        <div class="form-label">Current Week</div>
+        <input type="number" id="routeWeek" min="1" max="100" value="1" style="width:80px;" oninput="computeRoute()">
+      </div>
+      <div class="form-group">
+        <div class="form-label">Strategy Focus</div>
+        <select id="routeStrategy" onchange="computeRoute()" style="width:180px;">
+          <option value="balanced">Balanced (Default)</option>
+          <option value="survival">Survival First</option>
+          <option value="speed">Dungeon Speed</option>
+          <option value="economy">Economy / Gold</option>
+          <option value="darkest">Darkest Dungeon Prep</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Show Top</div>
+        <select id="routeCount" onchange="computeRoute()" style="width:100px;">
+          <option value="5">5 picks</option>
+          <option value="10" selected>10 picks</option>
+          <option value="20">20 picks</option>
+          <option value="999">All</option>
+        </select>
+      </div>
+    </div>
+    <div class="route-summary" id="route-summary"></div>
+    <div id="route-queue"></div>
+  </div>
+
+  <!-- ── CAMPAIGN ───────────────────────────────────────── -->
+
+  <div id="tab-campaign" class="tab-pane">
+    <div class="section-title">Campaign Optimizer</div>
+    <div class="section-sub">Recommends the best dungeon run for your current roster and estate state. Balances reward value against team risk.</div>
+
+```
+<div class="campaign-controls">
+  <div class="form-group">
+    <div class="form-label">Current Week</div>
+    <input type="number" id="campaignWeek" min="1" max="100" value="1" style="width:80px;">
+  </div>
+  <div class="form-group">
+    <div class="form-label">Priority</div>
+    <select id="campaignPriority" style="width:180px;">
+      <option value="balanced">Balanced</option>
+      <option value="gold">Maximize Gold</option>
+      <option value="heirlooms">Maximize Heirlooms</option>
+      <option value="safety">Minimize Risk</option>
+      <option value="speed">Level Heroes Fast</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <div class="form-label">Show</div>
+    <select id="campaignCount" style="width:120px;">
+      <option value="5" selected>Top 5</option>
+      <option value="10">Top 10</option>
+      <option value="999">All Dungeons</option>
+    </select>
+  </div>
+  <button class="ctrl-btn" onclick="optimizeCampaign()">Optimize</button>
 </div>
 
-<!-- ROSTER -->
-<div id="tab-roster" class="tab-pane active">
-  <button onclick="loadSampleRoster()">Load Sample Roster</button>
-  <button onclick="predictRunRisk()">Predict Risk</button>
-  <button onclick="detectStressSpiral()">Stress Check</button>
-  <div id="rosterGrid"></div>
-</div>
+<div id="campaign-roster-panel"></div>
+<div id="campaign-risk-panel"></div>
+<div class="campaign-output-grid" id="campaign-output"></div>
+```
 
-<!-- TEAM -->
-<div id="tab-team" class="tab-pane">
-  <button onclick="buildAutoTeam()">Build Best Team</button>
-  <div id="team-output"></div>
-</div>
+  </div>
 
-<!-- CAMPAIGN -->
-<div id="tab-campaign" class="tab-pane">
-  Week: <input id="weekInput" value="1">
-  <button onclick="optimizeCampaign()">Optimize Next Move</button>
-  <div id="campaign-output"></div>
-</div>
+  <!-- ── DATA ───────────────────────────────────────────── -->
+
+  <div id="tab-data" class="tab-pane">
+    <div class="section-title">Data &amp; Backup</div>
+    <div class="section-sub">Export your roster and estate state as JSON, or import a previous save.</div>
+    <div class="data-panel">
+      <h3>&#128190; Export Save</h3>
+      <p>Copies your full roster and estate upgrade state to clipboard as JSON.</p>
+      <div class="btn-row">
+        <button class="ctrl-btn" onclick="exportData()">Copy to Clipboard</button>
+        <button class="ctrl-btn" onclick="downloadData()">Download as File</button>
+      </div>
+    </div>
+    <div class="data-panel">
+      <h3>&#128229; Import Save</h3>
+      <p>Paste previously exported JSON below and press Import. This will overwrite your current data.</p>
+      <textarea class="import-area" id="importArea" placeholder="Paste your exported JSON here..."></textarea>
+      <div class="btn-row">
+        <button class="ctrl-btn" onclick="importData()">Import Data</button>
+        <button class="ctrl-btn danger" onclick="document.getElementById('importArea').value=''">Clear</button>
+      </div>
+    </div>
+    <div class="data-panel">
+      <h3>&#9888; Reset</h3>
+      <p>Permanently clears all saved data from this browser.</p>
+      <div class="btn-row">
+        <button class="ctrl-btn danger" onclick="nukeAll()">Wipe All Data</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.app -->
 
 <script src="data.js"></script>
+
 <script src="app.js"></script>
+
 </body>
 </html>
