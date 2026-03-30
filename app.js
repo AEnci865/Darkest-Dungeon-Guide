@@ -1,216 +1,217 @@
-// ======================================================
-// APP.JS - Darkest Dungeon Estate Master Guide
-// Fully integrated with data.js and your HTML
-// ======================================================
+// DATA.JS - COMPLETE DARKSTEST DUNGEON GUIDE
 
-// GLOBAL STATE
-let state = {
-    roster: JSON.parse(localStorage.getItem("ddRoster")) || [],
-    estate: JSON.parse(localStorage.getItem("ddEstate")) || {},
-    estateName: localStorage.getItem("ddEstateName") || "Unnamed Estate",
+// ---------------------- REGIONS ---------------------- //
+const REGIONS = {
+  ruins: {
+    teams: [
+      {
+        label: "Damage Core",
+        main: ["Crusader", "Plague Doctor", "Hellion", "Vestal"],
+        roles: ["Frontline", "Support", "Damage", "Healer"],
+        notes: "Balanced high damage team"
+      },
+      {
+        label: "Loot Team",
+        main: ["Antiquarian", "Highwayman", "Occultist", "Leper"],
+        roles: ["Loot", "Ranged", "Support", "Frontline"],
+        notes: "Antiquarian ensures maximum loot, moderate combat"
+      },
+      {
+        label: "Alternative Core",
+        main: ["Man-at-Arms", "Arbalest", "Bounty Hunter", "Jester"],
+        roles: ["Frontline", "Ranged", "Debuff", "Stress Relief"],
+        notes: "Good substitute team"
+      }
+    ],
+    focus: ["Holy", "Blight"],
+    tips: [
+      "Undead are IMMUNE to bleed. Use Blight and Holy exclusively.",
+      "Skeletons can self-resurrect once. Overkill with blight DoT to prevent this.",
+      "Bone Rabble should be cleared fast - they swarm and stun-lock backliners.",
+      "Holy Water on Ruins curios prevents most negative outcomes.",
+      "Courtyard events can spawn Pestilent variants - bring extra antivenom."
+    ]
+  },
+  weald: {
+    teams: [
+      {
+        label: "Damage Core",
+        main: ["Hellion", "Bounty Hunter", "Vestal", "Highwayman"],
+        roles: ["Frontline", "Debuff", "Healer", "Ranged"],
+        notes: "High damage, moderate stress management"
+      },
+      {
+        label: "Loot Team",
+        main: ["Antiquarian", "Occultist", "Highwayman", "Hellion"],
+        roles: ["Loot", "Support", "Ranged", "Frontline"],
+        notes: "Antiquarian included for loot"
+      },
+      {
+        label: "Alternative Core",
+        main: ["Crusader", "Plague Doctor", "Jester", "Arbalest"],
+        roles: ["Frontline", "Support", "Stress Relief", "Ranged"],
+        notes: "Substitute team with good survivability"
+      }
+    ],
+    focus: ["Bleed", "Mark", "Protection Strip"],
+    tips: [
+      "Brigand Matchman - kill before he summons reinforcements.",
+      "Fungal Scratcher causes Infected - food consumption +33%.",
+      "Webber enemies shuffle positions - maintain flexibility.",
+      "Bleed + Mark synergy: BH marks, Hellion shreds.",
+      "Stress healer critical - Weald has many stress-dealing combats."
+    ]
+  },
+  warrens: {
+    teams: [
+      {
+        label: "Damage Core",
+        main: ["Houndmaster", "Hellion", "Plague Doctor", "Vestal"],
+        roles: ["Debuff", "Frontline", "Support", "Healer"],
+        notes: "Beast focused"
+      },
+      {
+        label: "Loot Team",
+        main: ["Antiquarian", "Highwayman", "Occultist", "Leper"],
+        roles: ["Loot", "Ranged", "Support", "Frontline"],
+        notes: "Max loot team"
+      },
+      {
+        label: "Alternative Core",
+        main: ["Crusader", "Bounty Hunter", "Jester", "Arbalest"],
+        roles: ["Frontline", "Debuff", "Stress Relief", "Ranged"],
+        notes: "Substitute team"
+      }
+    ],
+    focus: ["Bleed", "Blight"],
+    tips: [
+      "Swine enemies are Beast-type - Houndmaster Mark triggers bonus damage.",
+      "Disease is rampant - PD's Battlefield Medicine essential.",
+      "Carrion Eaters spawn from corpses - prevent corpse creation.",
+      "Swinetaur Commanders can generate reinforcements - kill first.",
+      "Pack shorter dungeons to minimize disease."
+    ]
+  },
+  cove: {
+    teams: [
+      {
+        label: "Damage Core",
+        main: ["Hellion", "Arbalest", "Vestal", "Plague Doctor"],
+        roles: ["Frontline", "Ranged", "Healer", "Support"],
+        notes: "Eldritch and shuffle aware"
+      },
+      {
+        label: "Loot Team",
+        main: ["Antiquarian", "Highwayman", "Occultist", "Hellion"],
+        roles: ["Loot", "Ranged", "Support", "Frontline"],
+        notes: "Antiquarian ensures treasure"
+      },
+      {
+        label: "Alternative Core",
+        main: ["Crusader", "Bounty Hunter", "Jester", "Plague Doctor"],
+        roles: ["Frontline", "Debuff", "Stress Relief", "Support"],
+        notes: "Substitute team"
+      }
+    ],
+    focus: ["Pierce", "Eldritch"],
+    tips: [
+      "Cove enemies have 40-60% bleed resist.",
+      "Squiffy Ghast applies massive stress - keep Vestal ready.",
+      "Shuffle is constant - at least 2 heroes with positional flexibility.",
+      "Shieldbreaker's Pierce bypasses high-protection enemies.",
+      "Eerie Coral curio with Medicinal Herbs removes negative quirk."
+    ]
+  }
 };
 
-// UTILITY FUNCTIONS
-function $(id) { return document.getElementById(id); }
-function createEl(tag, cls, inner) { let e = document.createElement(tag); if(cls)e.className=cls; if(inner)e.innerHTML=inner; return e; }
+// ---------------------- BOSSES ---------------------- //
+const BOSSES = [
+  {
+    name: "Bone Commander",
+    region: "ruins",
+    tiers: {
+      apprentice: ["Crusader", "Vestal", "Hellion", "Bounty Hunter"],
+      veteran: ["Crusader", "Plague Doctor", "Hellion", "Occultist"],
+      champion: ["Crusader", "Plague Doctor", "Hellion", "Vestal"]
+    },
+    dlc: false
+  },
+  {
+    name: "The Swine King",
+    region: "warrens",
+    tiers: {
+      apprentice: ["Houndmaster", "Hellion", "Vestal", "Plague Doctor"],
+      veteran: ["Houndmaster", "Hellion", "Plague Doctor", "Occultist"],
+      champion: ["Houndmaster", "Hellion", "Vestal", "Plague Doctor"]
+    },
+    dlc: false
+  },
+  {
+    name: "Prophet of the Cove",
+    region: "cove",
+    tiers: {
+      apprentice: ["Hellion", "Arbalest", "Vestal", "Plague Doctor"],
+      veteran: ["Hellion", "Arbalest", "Plague Doctor", "Occultist"],
+      champion: ["Hellion", "Arbalest", "Vestal", "Plague Doctor"]
+    },
+    dlc: false
+  },
+  {
+    name: "Abomination of the Ruins",
+    region: "ruins",
+    tiers: {
+      apprentice: ["Crusader", "Hellion", "Vestal", "Bounty Hunter"],
+      veteran: ["Crusader", "Hellion", "Plague Doctor", "Occultist"],
+      champion: ["Crusader", "Hellion", "Vestal", "Plague Doctor"]
+    },
+    dlc: true
+  }
+];
 
-// ==================== NAVIGATION ====================
-const tabs = document.querySelectorAll(".nav-tab");
-const panes = document.querySelectorAll(".tab-pane");
+// ---------------------- DARKEST DUNGEON ---------------------- //
+const DARKEST = [
+  {
+    name: "Darkest Dungeon Expedition 1",
+    parties: ["Crusader", "Hellion", "Vestal", "Bounty Hunter"]
+  },
+  {
+    name: "Darkest Dungeon Expedition 2",
+    parties: ["Houndmaster", "Arbalest", "Occultist", "Jester"]
+  }
+];
 
-tabs.forEach(tab=>{
-    tab.addEventListener("click", ()=>{
-        tabs.forEach(t=>t.classList.remove("active"));
-        panes.forEach(p=>p.classList.remove("active"));
-        tab.classList.add("active");
-        $("tab-"+tab.dataset.tab).classList.add("active");
-    });
-});
+// ---------------------- PROVISIONS ---------------------- //
+const PROVISIONS = {
+  short: ["Food x4", "Torches x4", "Shovels x1", "Medicinal Herbs x2"],
+  medium: ["Food x6", "Torches x6", "Shovels x2", "Medicinal Herbs x4"],
+  long: ["Food x8", "Torches x8", "Shovels x3", "Medicinal Herbs x6"]
+};
 
-// ==================== REGION TEAMS ====================
-function renderRegionTeams() {
-    const regions = ["ruins","weald","warrens","cove"];
-    regions.forEach(region=>{
-        const container = $(region+"-team");
-        container.innerHTML="";
-        data.REGIONS[region].teams.forEach((team, idx)=>{
-            const teamDiv = createEl("div","team-card");
-            let title = idx===0 ? "Primary Team" : (team.loot ? "Loot Team" : "Substitute Team");
-            teamDiv.innerHTML = `<div class="team-title">${title}</div><ul>${team.members.map(m=>`<li>${m.name} (${m.class}) - Skills: ${m.skills.join(", ")}</li>`).join("")}</ul>`;
-            container.appendChild(teamDiv);
-        });
-    });
-}
+// ---------------------- HEROES / ROSTER ---------------------- //
+const CLASSES = [
+  "Crusader","Vestal","Hellion","Bounty Hunter","Plague Doctor","Arbalest",
+  "Highwayman","Jester","Houndmaster","Occultist","Leper","Man-at-Arms"
+];
 
-// ==================== BOSSES ====================
-function renderBosses() {
-    const container = $("boss-list");
-    container.innerHTML="";
-    Object.keys(data.BOSSES).forEach(boss=>{
-        const bossDiv = createEl("div","boss-card");
-        bossDiv.innerHTML=`<div class="boss-title">${boss}</div>`;
-        ["Apprentice","Veteran","Champion"].forEach(tier=>{
-            const team = data.BOSSES[boss][tier];
-            if(team){
-                const tierDiv = createEl("div","boss-tier");
-                tierDiv.innerHTML=`<b>${tier}:</b> ${team.map(m=>m.name+" ("+m.class+")").join(", ")}`;
-                bossDiv.appendChild(tierDiv);
-            }
-        });
-        container.appendChild(bossDiv);
-    });
-}
+// ---------------------- QUIRKS ---------------------- //
+const QUIRKS = {
+  positive: [
+    {name:"Unerring",effect:"+5% accuracy",tags:["combat","ranged"]},
+    {name:"Quick Reflexes",effect:"+5% dodge",tags:["combat","defense"]},
+    {name:"Resilient",effect:"+15 stress resist",tags:["stress"]}
+  ],
+  negative: [
+    {name:"Nervous",effect:"+10 stress per turn",tags:["stress"]},
+    {name:"Zoophobia",effect:"Fear of beasts - -5% damage vs beasts",tags:["combat","beast"]},
+    {name:"Claustrophobic",effect:"-5% speed in dungeons",tags:["dungeon"]}
+  ]
+};
 
-// ==================== DARKEST DUNGEON ====================
-function renderDarkest() {
-    const container = $("dd-list");
-    container.innerHTML="";
-    data.DARKEST.forEach(run=>{
-        const runDiv = createEl("div","dd-run");
-        runDiv.innerHTML=`<b>${run.name}</b> - Heroes: ${run.heroes.map(h=>h.name+"("+h.class+")").join(", ")}`;
-        container.appendChild(runDiv);
-    });
-}
-
-// ==================== PROVISIONS ====================
-function renderProvisions() {
-    const provBtns = document.querySelectorAll(".prov-tab");
-    const container = $("prov-content");
-
-    function showProv(type){
-        container.innerHTML="";
-        data.PROVISIONS[type].forEach(item=>{
-            container.appendChild(createEl("div","prov-item",`${item.name} x${item.qty}`));
-        });
-    }
-
-    provBtns.forEach(btn=>{
-        btn.addEventListener("click", ()=>{
-            provBtns.forEach(b=>b.classList.remove("active"));
-            btn.classList.add("active");
-            showProv(btn.dataset.prov);
-        });
-    });
-
-    showProv("short");
-}
-
-// ==================== QUIRKS ====================
-function renderQuirks() {
-    const pos = $("pos-quirks");
-    const neg = $("neg-quirks");
-    pos.innerHTML="";
-    neg.innerHTML="";
-    data.QUIRKS.positive.forEach(q=>pos.appendChild(createEl("div","quirk-item",`<b>${q.name}</b> - ${q.effect} <i>${q.synergy.join(", ")}</i>`)));
-    data.QUIRKS.negative.forEach(q=>neg.appendChild(createEl("div","quirk-item",`<b>${q.name}</b> - ${q.effect} <i>${q.synergy.join(", ")}</i>`)));
-}
-
-// ==================== ROSTER ====================
-function renderRoster() {
-    const grid = $("rosterGrid");
-    grid.innerHTML="";
-    state.roster.forEach((h, idx)=>{
-        const card = createEl("div","hero-card");
-        card.innerHTML=`
-            <div><b>${h.name}</b> (${h.class}) Lv${h.level}</div>
-            <div>Stress: ${h.stress} | Status: ${h.status}</div>
-            <div>+ ${h.posQuirks.join(", ")}</div>
-            <div>- ${h.negQuirks.join(", ")}</div>
-            <button onclick="removeHero(${idx})">Remove</button>
-        `;
-        grid.appendChild(card);
-    });
-}
-
-function saveRoster(){
-    localStorage.setItem("ddRoster",JSON.stringify(state.roster));
-}
-
-function addHero(hero){
-    state.roster.push(hero);
-    saveRoster();
-    renderRoster();
-}
-
-function removeHero(idx){
-    state.roster.splice(idx,1);
-    saveRoster();
-    renderRoster();
-}
-
-// ==================== ESTATE ====================
-function renderEstate(){
-    const grid = $("estate-grid");
-    grid.innerHTML="";
-    Object.keys(data.ESTATE).forEach(build=>{
-        const level = state.estate[build] || 0;
-        const bdiv = createEl("div","estate-card");
-        bdiv.innerHTML=`<div class="building-name">${build}</div><div class="building-level">${"&#x25CF;".repeat(level)}${"&#x25CB;".repeat(data.ESTATE[build].max-level-level)}</div>`;
-        bdiv.addEventListener("click", ()=>{
-            state.estate[build] = (state.estate[build]||0)+1;
-            if(state.estate[build]>data.ESTATE[build].maxLevel) state.estate[build]=0;
-            saveEstate();
-            renderEstate();
-            computeRoute();
-        });
-        grid.appendChild(bdiv);
-    });
-    $("estate-summary").innerText=`Estate: ${state.estateName} | Buildings upgraded: ${Object.values(state.estate).reduce((a,b)=>a+b,0)}`;
-}
-
-function saveEstate(){
-    localStorage.setItem("ddEstate",JSON.stringify(state.estate));
-}
-
-function saveEstateName(){
-    state.estateName = $("estateName").value;
-    localStorage.setItem("ddEstateName",state.estateName);
-}
-
-// ==================== BUILD ROUTE OPTIMIZER ====================
-function computeRoute(){
-    const week = parseInt($("routeWeek").value);
-    const strategy = $("routeStrategy").value;
-    const topN = parseInt($("routeCount").value);
-    const container = $("route-queue");
-    container.innerHTML="";
-
-    const upgrades = Object.keys(data.ESTATE).map(b=>{
-        const current = state.estate[b] || 0;
-        const remaining = data.ESTATE[b].maxLevel - current;
-        return {build:b, remaining, cost:data.ESTATE[b].trinkets, severity:data.ESTATE[b].severity};
-    }).filter(u=>u.remaining>0);
-
-    // simple priority by strategy
-    upgrades.sort((a,b)=>{
-        if(strategy==="speed") return a.severity-b.severity;
-        if(strategy==="economy") return a.cost-b.cost;
-        if(strategy==="darkest") return b.severity-a.severity;
-        return b.severity-a.severity;
-    });
-
-    upgrades.slice(0,topN).forEach(u=>{
-        container.appendChild(createEl("div","route-item",`${u.build} - Remaining: ${u.remaining}, Trinkets: ${u.cost}, Severity: ${u.severity}`));
-    });
-
-    $("route-summary").innerText=`Week ${week} | Strategy: ${strategy}`;
-}
-
-// ==================== DATA EXPORT/IMPORT ====================
-function exportData(){navigator.clipboard.writeText(JSON.stringify({roster:state.roster,estate:state.estate,estateName:state.estateName})); alert("Copied!");}
-function downloadData(){ const blob = new Blob([JSON.stringify({roster:state.roster,estate:state.estate,estateName:state.estateName})], {type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="DD_Guide_Save.json"; a.click();}
-function importData(){try{const json=JSON.parse($("importArea").value); state.roster=json.roster||[]; state.estate=json.estate||{}; state.estateName=json.estateName||"Unnamed"; saveRoster(); saveEstate(); renderAll(); alert("Imported!");}catch(e){alert("Invalid JSON");}}
-function nukeAll(){if(confirm("This will permanently erase all data. Continue?")){localStorage.clear(); state={roster:[],estate:{},estateName:"Unnamed Estate"}; renderAll();}}
-
-// ==================== INITIALIZATION ====================
-function renderAll(){
-    renderRegionTeams();
-    renderBosses();
-    renderDarkest();
-    renderProvisions();
-    renderQuirks();
-    renderRoster();
-    renderEstate();
-}
-
-renderAll();
+// ---------------------- ESTATE BUILDINGS ---------------------- //
+const ESTATE = [
+  {name:"Guild Hall",maxLevel:5,trinketCost:[2,3,5,8,12],severity:["Low","Medium","High","High","Critical"]},
+  {name:"Blacksmith",maxLevel:5,trinketCost:[1,2,4,6,10],severity:["Low","Medium","High","High","Critical"]},
+  {name:"Abbey",maxLevel:3,trinketCost:[2,4,6],severity:["Low","Medium","High"]},
+  {name:"Sanctuary",maxLevel:3,trinketCost:[1,3,5],severity:["Low","Medium","High"]},
+  {name:"Tavern",maxLevel:5,trinketCost:[1,2,4,6,8],severity:["Low","Medium","High","High","Critical"]}
+];
