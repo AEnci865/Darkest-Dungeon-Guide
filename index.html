@@ -1352,6 +1352,8 @@ else if (id===‘buildroute’) { renderEstate(); computeRoute(); }
 else if (id===‘data’) { /* static */ }
 else renderRegion(id);
 initialized[id] = true;
+} else if ([‘ruins’,‘weald’,‘warrens’,‘cove’].indexOf(id) >= 0) {
+renderRegion(id);
 }
 }
 document.getElementById(‘mainNav’).addEventListener(‘click’, function(e) {
@@ -1362,8 +1364,10 @@ document.addEventListener(‘click’, function(e) {
 var pt = e.target.closest(’.prov-tab[data-prov]’);
 if (pt) { document.querySelectorAll(’.prov-tab[data-prov]’).forEach(function(b){b.classList.remove(‘active’);}); pt.classList.add(‘active’); activeProv=pt.dataset.prov; renderProvisions(); }
 });
+document.addEventListener(‘DOMContentLoaded’, function() {
 renderRegion(‘ruins’);
 initialized[‘ruins’] = true;
+});
 
 // –– DATA EXPORT / IMPORT ––
 function exportData() {
@@ -1401,7 +1405,7 @@ alert(‘Import successful! Reload the tabs to see your data.’);
 initialized = {};
 document.getElementById(‘importArea’).value = ‘’;
 renderEstate();
-renderRoster();
+if (initialized[‘roster’]) renderRoster();
 } catch(e) { alert(‘Invalid JSON. Please check and try again.’); }
 }
 function nukeAll() {
