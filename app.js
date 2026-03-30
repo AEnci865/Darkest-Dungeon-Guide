@@ -341,10 +341,8 @@ document.addEventListener(‘click’, function(e) {
 var pt = e.target.closest(’.prov-tab[data-prov]’);
 if (pt) { document.querySelectorAll(’.prov-tab[data-prov]’).forEach(function(b){b.classList.remove(‘active’);}); pt.classList.add(‘active’); activeProv=pt.dataset.prov; renderProvisions(); }
 });
-document.addEventListener(‘DOMContentLoaded’, function() {
 renderRegion(‘ruins’);
 initialized[‘ruins’] = true;
-});
 
 // –– DATA EXPORT / IMPORT ––
 function exportData() {
