@@ -1,5 +1,5 @@
 // ============================================================
-//  data.js — FULL ENDGAME & DLC MASTER DATA
+//  data.js — THE OMNI-ESTATE MASTER DATA (FULL GAME + DLC)
 // ============================================================
 
 var CLASSES = ["Abomination", "Antiquarian", "Arbalest", "Bounty Hunter", "Crusader", "Flagellant", "Grave Robber", "Hellion", "Highwayman", "Houndmaster", "Jester", "Leper", "Man-at-Arms", "Occultist", "Plague Doctor", "Shieldbreaker", "Vestal"];
@@ -43,41 +43,45 @@ var REGIONS = {
   }
 };
 
-var REGION_INTEL = {
-  ruins: { subtitle: "Holy & Blight", tips: ["Undead are immune to Bleed", "Focus backline Bone Courtiers", "Bring Blight & Stun"] },
-  weald: { subtitle: "Bleed & Mark", tips: ["Prioritize Hateful Viragos", "High PROT enemies frequent here", "Bleed resist is essential"] },
-  warrens: { subtitle: "Beast & Bleed", tips: ["Swine Skiver is priority #1", "Bring high Bleed DMG", "Clear corpses to pull backline"] },
-  cove: { subtitle: "Eldritch & Blight", tips: ["Uca Crusher has high PROT", "Bring Blight and Armor Pierce", "Eldritch Haters excel here"] },
-  courtyard: { subtitle: "Bleed & Sustain", tips: ["Vampiric enemies have high Bleed resist", "Bring extra Blood", "Stress is high; bring a Jester"] },
-  farmstead: { subtitle: "Reflection & Endurance", tips: ["Infinite waves of Husks", "Bring Shieldbreaker to ignore PROT", "Sustain is more important than burst"] }
-};
-
 var BOSSES = [
-  { name: "The Necromancer", region: "Ruins", mechanics: ["Summons Skeletons; Moves Back"], teams: [{ label: "Unholy", heroes: "Vestal-PD-HWM-CRU" }], avoid: ["Bleed"] },
+  { name: "The Necromancer", region: "Ruins", mechanics: ["Summons Skeletons; Moves Back"], teams: [{ label: "Unholy", heroes: "VES-PD-HWM-CRU" }], avoid: ["Bleed"] },
   { name: "The Swine Prince", region: "Warrens", mechanics: ["Wilbur marks targets"], teams: [{ label: "Anti-Mark", heroes: "ARB-OCC-HM-MAA" }], avoid: ["Hitting Wilbur"] },
-  { name: "The Hag", region: "Weald", mechanics: ["Into the Pot (Stun/DoT)"], teams: [{ label: "Reach", heroes: "HEL-BH-HWM-VES" }], avoid: ["Rank 1-2 only heroes"] },
-  { name: "The Siren", region: "Cove", mechanics: ["Song of Desire (Charm)"], teams: [{ label: "Dodge/Resist", heroes: "ANT-MAA-SB-OCC" }], avoid: ["Glass Cannons"] },
+  { name: "The Hag", region: "Weald", mechanics: ["Into the Pot"], teams: [{ label: "Reach", heroes: "HEL-BH-HWM-VES" }], avoid: ["Rank 1-2 only heroes"] },
+  { name: "The Siren", region: "Cove", mechanics: ["Song of Desire (Charm)"], teams: [{ label: "Resist", heroes: "ANT-MAA-SB-OCC" }], avoid: ["Glass Cannons"] },
   { name: "The Flesh", region: "Warrens", mechanics: ["Multiple parts; High Blight weak"], teams: [{ label: "DoT Stack", heroes: "PD-OCC-FLA-VES" }], avoid: ["Low Healing"] },
-  { name: "Brigand Pounder", region: "Weald", mechanics: ["Fuseman is priority #1"], teams: [{ label: "Precise", heroes: "PD-BH-HM-VES" }], avoid: ["Ignoring the Matchman"] }
+  { name: "The Prophet", region: "Ruins", mechanics: ["Calamitous Prognosis"], teams: [{ label: "Occultist/MAA", heroes: "VES-PD-OCC-MAA" }], avoid: ["Low reach"] }
 ];
 
 var SPECIAL_BOSSES = [
-  { name: "The Collector", region: "Roaming", mechanics: ["Summons Heads"], teams: [{ label: "Stun/Burst", heroes: "VES-PD-HWM-HEL" }], avoid: ["Low Accuracy"] },
-  { name: "The Shambler", region: "Darkness", mechanics: ["Shuffles party; Shambler Spawns"], teams: [{ label: "Mobile", heroes: "GR-HWM-SB-CRU" }], avoid: ["Static formations"] }
+  { name: "The Collector", region: "Roaming", mechanics: ["Summons Heads"], teams: [{ label: "Stun/Burst", heroes: "VES-PD-HWM-HEL" }], avoid: ["Low ACC"] },
+  { name: "The Shambler", region: "Darkness", mechanics: ["Shuffles party"], teams: [{ label: "Mobile", heroes: "GR-HWM-SB-CRU" }], avoid: ["Static formations"] },
+  { name: "The Fanatic", region: "Crimson Court", mechanics: ["Burning at the Stake"], teams: [{ label: "High DMG", heroes: "VES-HWM-SB-HEL" }], avoid: ["Vampire heavy teams"] }
 ];
 
 var DD_RUNS = [
-  { name: "We Are the Flame", desc: "M1: Horror", team: "PD - HM - CRU - VEST", key: ["Bleed Resist", "Shuffling"], watch: ["Shuffling Horror"] },
+  { name: "We Are the Flame", desc: "M1: Shuffling Horror", team: "PD - HM - CRU - VEST", key: ["Bleed Resist", "Mobility"], watch: ["Shuffling Horror"] },
   { name: "An Unblinkable Eye", desc: "M2: The Cyst", team: "ARB - OCC - HM - MAA", key: ["Guard Support", "Marks"], watch: ["Templar Impaler"] },
   { name: "Belly of the Beast", desc: "M3: Long Map", team: "PD - VES - FLA - HEL", key: ["Sustain", "Exhaustion"], watch: ["Mammoth Cyst"] },
   { name: "Hell is in the Heart", desc: "M4: The End", team: "Any Balanced Team", key: ["Final Confrontation"], watch: ["The Ancestor"] }
 ];
 
 var PROVISIONS = {
-  short: { regions: { ruins: [["Food", 8], ["Torch", 8]], weald: [["Food", 8], ["Shovel", 4]] } },
-  medium: { regions: { ruins: [["Food", 12], ["Torch", 12]], weald: [["Food", 12], ["Shovel", 5]] } },
-  long: { regions: { ruins: [["Food", 16], ["Torch", 16]], weald: [["Food", 16], ["Shovel", 6]] } }
+  short: { regions: { ruins: [["Food", 8], ["Torch", 8]], weald: [["Food", 8], ["Shovel", 4]], cove: [["Food", 8], ["Herbs", 2]], warrens: [["Food", 8], ["Bandage", 2]], courtyard: [["Food", 12], ["Blood", 4]] } },
+  medium: { regions: { ruins: [["Food", 12], ["Torch", 12]], weald: [["Food", 12], ["Shovel", 5]], cove: [["Food", 12], ["Herbs", 3]], warrens: [["Food", 12], ["Bandage", 3]], courtyard: [["Food", 18], ["Blood", 6]] } },
+  long: { regions: { ruins: [["Food", 16], ["Torch", 16]], weald: [["Food", 16], ["Shovel", 6]], cove: [["Food", 16], ["Herbs", 4]], warrens: [["Food", 16], ["Bandage", 4]], courtyard: [["Food", 24], ["Blood", 8]] } }
 };
+
+var POS_QUIRKS = [
+  { name: "Luminous", effect: "+2 SPD, +5 DODGE" },
+  { name: "Hard Skinned", effect: "+10% PROT" },
+  { name: "Quick Reflexes", effect: "+2 SPD" }
+];
+
+var NEG_QUIRKS = [
+  { name: "The Fits", effect: "-2 SPD, -5 ACC" },
+  { name: "Off Guard", effect: "-4 SPD, -5 DODGE (R1)" },
+  { name: "Anemic", effect: "-10% Bleed Resist" }
+];
 
 var BUILDINGS = [
   { id: "stage_coach", name: "Stage Coach", upgrades: [{ label: "Barracks", costs: [8, 12, 18, 24, 32], type: "deed" }] },
